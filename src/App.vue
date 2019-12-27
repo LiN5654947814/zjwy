@@ -17,5 +17,6 @@ export default {
   margin: 0;
   overflow: hidden;
   vertical-align: center;
+  height: 100%;
 }
 </style>

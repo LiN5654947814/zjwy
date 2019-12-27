@@ -40,7 +40,7 @@
         <el-form-item>
           <el-button type="primary"
                      style="width:300px;"
-                     @click="login">登录</el-button>
+                     @click.enter="login">登录</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import { async } from 'q'
 export default {
   name: 'login',
   data () {
@@ -86,6 +87,7 @@ export default {
     },
     // 判断输入的验证码是否正确
     login () {
+      let upCaseCode = this.inputCheck.toUpperCase()
       // 前端判断账户密码是否为空
       if (this.username === '' && this.password === '') {
         this.$message({
@@ -101,8 +103,11 @@ export default {
         }
       }).then(res => {
         if (res.data.state === 200) {
+          // 登录检测成功后设置token
+          const token = localStorage.setItem('token', res.data.token)
           // 账号密码成功然后判断验证码
-          if (this.inputCheck === this.checkCode) {
+          console.log(upCaseCode)
+          if (upCaseCode === this.checkCode) {
             this.$message({
               type: 'success',
               message: '登录成功'
