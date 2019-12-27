@@ -1,10 +1,10 @@
 <template>
   <div>
     <!-- 背景图片 -->
-    <img src="../assets/image/login_background.png">
+    <img src="../../assets/image/login_background.png">
 
     <div class="login-form-icon">
-      <img src="../assets/icon/admin_login.png">
+      <img src="../../assets/icon/admin_login.png">
     </div>
     <!-- 登录表单 -->
     <div class="login-form">
@@ -16,12 +16,15 @@
         <!-- 账号 -->
         <el-form-item label="账号">
           <el-input placeholder="请输入账号"
-                    style="width:300px;"></el-input>
+                    style="width:300px;"
+                    v-model="username"></el-input>
         </el-form-item>
         <!-- 密码 -->
         <el-form-item label="密码">
           <el-input placeholder="请输入密码"
-                    style="width:300px;"></el-input>
+                    style="width:300px;"
+                    v-model="password"
+                    show-password></el-input>
         </el-form-item>
         <!-- 验证码 -->
         <el-form-item>
@@ -51,7 +54,9 @@ export default {
     return {
       // 验证码
       checkCode: '',
-      inputCheck: ''
+      inputCheck: '',
+      username: '',
+      password: ''
     }
   },
   created () {
@@ -81,18 +86,40 @@ export default {
     },
     // 判断输入的验证码是否正确
     login () {
-      this.inputCheck.toUpperCase()
-      if (this.inputCheck === this.checkCode) {
+      // 前端判断账户密码是否为空
+      if (this.username === '' && this.password === '') {
         this.$message({
-          type: 'success',
-          message: '正确'
-        })
-      } else {
-        this.$message({
-          type: 'danger',
-          message: '错误'
+          type: 'warning',
+          message: '账户或密码不能为空'
         })
       }
+      // 发请求
+      this.$axios.get('/login', {
+        params: {
+          username: this.username,
+          password: this.password
+        }
+      }).then(res => {
+        if (res.data.state === 200) {
+          // 账号密码成功然后判断验证码
+          if (this.inputCheck === this.checkCode) {
+            this.$message({
+              type: 'success',
+              message: '登录成功'
+            })
+            setTimeout(() => {
+              this.$router.push('/home')
+            }, 2000)
+          } else {
+            this.$message({
+              type: 'danger',
+              message: '验证码错误'
+            })
+          }
+        } else {
+          this.$message.error('账户或密码错误')
+        }
+      })
     }
   }
 }
