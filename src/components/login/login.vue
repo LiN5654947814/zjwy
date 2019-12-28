@@ -1,13 +1,14 @@
 <template>
-  <div>
+  <div class="login-container">
     <!-- 背景图片 -->
-    <img src="../../assets/image/login_background.png">
+    <img src="../../assets/image/login_background.png"
+         class="login-background">
 
-    <div class="login-form-icon">
-      <img src="../../assets/icon/admin_login.png">
-    </div>
     <!-- 登录表单 -->
     <div class="login-form">
+      <div class="login-form-icon">
+        <img src="../../assets/icon/admin_login.png">
+      </div>
       <div class="login-title">
         至简物业管理系统
       </div>
@@ -27,7 +28,7 @@
                     show-password></el-input>
         </el-form-item>
         <!-- 验证码 -->
-        <el-form-item>
+        <el-form-item label="验证码">
           <el-input placeholder="请输入验证码"
                     style="width:150px;"
                     v-model="inputCheck"></el-input>
@@ -94,6 +95,7 @@ export default {
           type: 'warning',
           message: '账户或密码不能为空'
         })
+        return
       }
       // 发请求
       this.$axios.get('/login', {
@@ -113,7 +115,7 @@ export default {
               message: '登录成功'
             })
             setTimeout(() => {
-              this.$router.push('/home')
+              this.$router.push('/')
             }, 2000)
           } else {
             this.$message({
@@ -132,62 +134,85 @@ export default {
 
 <style lang="scss" scoped>
 .login-form /deep/ .el-form-item {
-  margin-bottom: 5px;
+  margin-bottom: 15px;
 }
 .login-checkCode /deep/ .el-input__inner {
   text-align: center;
 }
 
-.login-form {
-  width: 475px;
-  height: 350px;
-  border-radius: 10px;
-  background-color: #fff;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  position: absolute;
-  .login-title {
-    font-size: 20px;
-    font-weight: 700;
+.login-container {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  .login-background {
     width: 100%;
+  }
+  .login-form {
+    width: 475px;
+    height: 350px;
+    border-radius: 10px;
+    background-color: #fff;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    .login-form-icon {
+      width: 120px;
+      height: 70px;
+      text-align: center;
+      top: -18%;
+      left: 50%;
+      background-color: #fff;
+      border-radius: 50%;
+      transform: translate(-50%, 50%);
+      position: absolute;
+      z-index: 999;
+      img {
+        width: 50%;
+      }
+    }
+    .login-title {
+      font-size: 20px;
+      font-weight: 700;
+      width: 100%;
+      text-align: center;
+      margin-top: 50px;
+      margin-bottom: 30px;
+    }
+    .login-content {
+      width: 440px;
+      height: 260px;
+      border: 1px solid black;
+      margin: 0 auto;
+    }
+    .login-checkCode {
+      font-size: 16px;
+      font-weight: 700;
+      width: 130px;
+      float: right;
+      margin-right: 75px;
+      height: 40px;
+      text-align: center;
+      color: blue;
+      background-color: #cccccc;
+      border: 1px solid #cccccc;
+      cursor: pointer;
+    }
+  }
+  .login-form-icon {
+    width: 120px;
+    height: 70px;
     text-align: center;
-    margin-top: 50px;
-    margin-bottom: 30px;
-  }
-  .login-content {
-    width: 440px;
-    height: 260px;
-    border: 1px solid black;
-    margin: 0 auto;
-  }
-  .login-checkCode {
-    font-size: 16px;
-    font-weight: 700;
-    width: 130px;
-    float: right;
-    margin-right: 75px;
-    height: 40px;
-    text-align: center;
-    color: blue;
-    background-color: #cccccc;
-    border: 1px solid #cccccc;
-    cursor: pointer;
-  }
-}
-.login-form-icon {
-  width: 120px;
-  height: 70px;
-  text-align: center;
-  top: 25%;
-  left: 50%;
-  background-color: #fff;
-  border-radius: 50%;
-  transform: translate(-50%, 50%);
-  position: absolute;
-  z-index: 999;
-  img {
-    width: 50%;
+    top: -20%;
+    left: 50%;
+    background-color: #fff;
+    border-radius: 50%;
+    transform: translate(-50%, 50%);
+    position: absolute;
+    z-index: 999;
+    img {
+      width: 50%;
+    }
   }
 }
 </style>

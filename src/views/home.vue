@@ -1,11 +1,12 @@
 <template>
-  <el-container>
+  <el-container direction="vertical">
     <!-- 头部区域 -->
     <el-header>Header</el-header>
     <!-- 页面主体区域 -->
     <el-container>
       <!-- 侧边栏区域 -->
-      <el-aside width="250px">Aside</el-aside>
+      <el-aside width="230px">
+      </el-aside>
       <!-- 中心信息区域 -->
       <el-main>Main</el-main>
     </el-container>

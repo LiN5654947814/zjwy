@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <router-view>
-    </router-view>
+    <router-view />
   </div>
 </template>
 
@@ -12,11 +11,4 @@ export default {
 </script>
 
 <style>
-* {
-  padding: 0;
-  margin: 0;
-  overflow: hidden;
-  vertical-align: center;
-  height: 100%;
-}
 </style>
