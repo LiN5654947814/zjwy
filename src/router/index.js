@@ -3,7 +3,12 @@ import VueRouter from 'vue-router'
 import Login from '../components/login/login.vue'
 import Home from '../views/home.vue'
 import Main from '../components/main/main.vue'
-
+import Owner from '../components/owner/owner.vue'
+import Estate from '../components/estate/estate.vue'
+import EstateApplication from '../components/estate/estateApplication.vue'
+import Fix from '../components/fix/fix.vue'
+import Parking from '../components/parking/parking.vue'
+import Pay from '../components/pay/pay.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -18,9 +23,46 @@ const routes = [
     component: Home,
     children: [
       {
+        // 首页
         path: '/main',
         name: 'main',
         component: Main
+      },
+      {
+        // 业主管理
+        path: '/owner',
+        name: 'owner',
+        component: Owner
+      },
+      {
+        // 房产列表
+        path: '/estate',
+        name: 'estate',
+        component: Estate
+      },
+      {
+        // 房产销售管理
+        path: '/estateApplication',
+        name: 'estateApplication',
+        component: EstateApplication
+      },
+      {
+        // 报修管理
+        path: '/fix',
+        name: 'fix',
+        component: Fix
+      },
+      {
+        // 车位管理
+        path: '/parking',
+        name: 'parking',
+        component: Parking
+      },
+      {
+        // 费用列表
+        path: '/pay',
+        name: 'pay',
+        component: Pay
       }
     ]
   }

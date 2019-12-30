@@ -115,7 +115,7 @@ export default {
               message: '登录成功'
             })
             setTimeout(() => {
-              this.$router.push('/')
+              this.$router.push({ name: 'main' })
             }, 2000)
           } else {
             this.$message({

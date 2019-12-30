@@ -7,8 +7,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    islogin: false,
-    token: ''
+    localName: '',
+    nextLocalName: ''
   },
   mutations: mutations,
   actions: action,

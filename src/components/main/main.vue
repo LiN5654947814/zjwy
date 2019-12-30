@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- 顶部 车位使用量 保修统计量 收款统计量 -->
+    <!-- 头部 车位使用量 保修统计量 收款统计量 -->
     <div class="admin-header">
       <div class="admin-box"
            v-for="item in headerTab"
@@ -23,7 +23,8 @@
         </div>
       </div>
     </div>
-    <!-- 中部 欠费列表 -->
+    <!-- 中部 公告栏列表 -->
+
   </div>
 </template>
 
@@ -79,7 +80,8 @@ export default {
   justify-content: center;
   .admin-box {
     flex: 1;
-    height: 200px;
+    min-width: 390px;
+    height: 170px;
     margin: 20px;
     border-radius: 5px;
     background-color: #fff;
@@ -114,15 +116,15 @@ export default {
       position: relative;
       .box-content {
         float: left;
-        margin: 30px;
+        margin: 20px 30px 30px 30px;
         font-size: 50px;
         color: red;
       }
       .box-icon {
-        width: 120px;
-        height: 120px;
+        width: 80px;
+        height: 80px;
         right: 20px;
-        top: 50%;
+        top: 40%;
         transform: translate(0, -50%);
         position: absolute;
       }
@@ -130,7 +132,7 @@ export default {
         width: 100%;
         font-weight: 700;
         color: #ccc;
-        bottom: 35px;
+        bottom: 45px;
         left: 25px;
         position: absolute;
         text-align: left;
