@@ -68,7 +68,9 @@
         </el-menu>
       </el-aside>
       <!-- 中心信息区域 -->
-      <el-main>Main</el-main>
+      <el-main>
+        <router-view />
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -77,6 +79,57 @@
 export default {
   data () {
     return {
+      menuList: [
+        {
+          id: '1',
+          title: '首页',
+          icon: 'el-icon-menu',
+          index: '/main'
+        },
+        {
+          id: '2',
+          title: '业主管理',
+          icon: 'el-icon-s-custom',
+          index: '/'
+        },
+        {
+          id: '3',
+          title: '房产管理',
+          icon: 'el-icon-office-building',
+          index: '/',
+          children: [{
+            index: '/',
+            childTitle: '房产列表'
+          },
+          {
+            index: '/',
+            childTitle: '房产销售登记'
+          }
+          ]
+        },
+        {
+          id: '4',
+          title: '车位管理',
+          icon: 'el-icon-edit-outline',
+          index: '/'
+        },
+        {
+          id: '5',
+          title: '保修管理',
+          icon: 'el-icon-document',
+          index: '/'
+        },
+        {
+          id: '6',
+          title: '收费管理',
+          icon: 'el-icon-document-copy',
+          index: '/',
+          children: [{
+            childTitle: '费用列表',
+            index: '/'
+          }]
+        }
+      ]
     }
   },
   methods: {
@@ -101,6 +154,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.el-main /deep/ .el-tabs__nav-scroll {
+  background-color: #fff;
+}
+.el-main /deep/ .el-tabs--top .el-tabs__item {
+  padding-left: 20px !important;
+}
+
 .el-container {
   height: 100%;
 }
@@ -108,6 +168,7 @@ export default {
   background-color: #fff;
   color: #333;
   line-height: 60px;
+  border-bottom: 1px solid #ccc;
   .header-logo {
     float: left;
     width: 50px;
@@ -137,9 +198,11 @@ export default {
 }
 
 .el-main {
-  background-color: #e9eef3;
+  background-color: #f2f0f4;
   color: #333;
   text-align: center;
-  line-height: 160px;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 </style>
