@@ -4,8 +4,18 @@
       <div class="bulletin-title">
         公告栏信息
         <div class="bulletin-color-box">
-          详情
+          编辑
         </div>
+      </div>
+      <div class="bulletin-content">
+        <ul>
+          <li class="bulletin-item"
+              v-for="item in bulletinList"
+              :key="item.id">
+            <div class="bulletin-item-text">{{item.content}}</div>
+            <div class="bulletin-date">{{item.date}}</div>
+          </li>
+        </ul>
       </div>
       <div class="pagination">
         <el-pagination small
@@ -19,19 +29,72 @@
 
 <script>
 export default {
-
+  data () {
+    return {
+      bulletinList: [{
+        id: 1,
+        date: '2019-12-31',
+        content: '我透你吗瑞文，你还逆风局局长，Q都能Q歪来我草你妈11111111111111111111111111111111111111111'
+      }, {
+        id: 2,
+        date: '2019-12-31',
+        content: '我透你吗瑞文，你还逆风局局长，Q都能Q歪来我草你妈11111111111111111111111111111111111111111'
+      }, {
+        id: 3,
+        date: '2019-12-31',
+        content: '我透你吗瑞文，你还逆风局局长，Q都能Q歪来我草你妈11111111111111111111111111111111111111111'
+      }, {
+        id: 4,
+        date: '2019-12-31',
+        content: '我透你吗瑞文，你还逆风局局长，Q都能Q歪来我草你妈11111111111111111111111111111111111111111'
+      }, {
+        id: 5,
+        date: '2019-12-31',
+        content: '我透你吗瑞文，你还逆风局局长，Q都能Q歪来我草你妈11111111111111111111111111111111111111111'
+      }, {
+        id: 6,
+        date: '2019-12-31',
+        content: '我透你吗瑞文，你还逆风局局长，Q都能Q歪来我草你妈11111111111111111111111111111111111111111'
+      }, {
+        id: 7,
+        date: '2019-12-31',
+        content: '我透你吗瑞文，你还逆风局局长，Q都能Q歪来我草你妈11111111111111111111111111111111111111111'
+      }, {
+        id: 8,
+        date: '2019-12-31',
+        content: '我透你吗瑞文，你还逆风局局长，Q都能Q歪来我草你妈11111111111111111111111111111111111111111'
+      }, {
+        id: 9,
+        date: '2019-12-31',
+        content: '我透你吗瑞文，你还逆风局局长，Q都能Q歪来我草你妈11111111111111111111111111111111111111111'
+      }, {
+        id: 10,
+        date: '2019-12-31',
+        content: '我透你吗瑞文，你还逆风局局长，Q都能Q歪来我草你妈11111111111111111111111111111111111111111'
+      }, {
+        id: 11,
+        date: '2019-12-31',
+        content: '我透你吗瑞文，你还逆风局局长，Q都能Q歪来我草你妈11111111111111111111111111111111111111111'
+      }, {
+        id: 12,
+        date: '2019-12-31',
+        content: '我透你吗瑞文，你还逆风局局长，Q都能Q歪来我草你妈11111111111111111111111111111111111111111'
+      }]
+    }
+  }
 }
 </script>
 
 
 <style lang="scss">
 .bulletin {
-  width: 65%;
+  width: 60%;
   margin-left: 20px;
   height: 300px;
   border-radius: 5px;
   background-color: #fff;
   position: relative;
+  overflow: hidden;
   .bulletin-title {
     width: 99%;
     height: 50px;
@@ -54,6 +117,28 @@ export default {
       border-radius: 5px;
       background-color: #ffd700;
       cursor: pointer;
+    }
+  }
+  .bulletin-content {
+    width: 98%;
+    height: 220px;
+    overflow: hidden;
+    .bulletin-item {
+      width: 100%;
+      margin-bottom: 5px;
+      font-size: 19px;
+      .bulletin-item-text {
+        float: left;
+        max-width: 600px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .bulletin-date {
+        float: right;
+        margin-right: 5px;
+        font-size: 15px;
+      }
     }
   }
   .pagination {
