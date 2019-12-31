@@ -6,10 +6,7 @@ import mutations from './mutations'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
-    localName: '',
-    nextLocalName: ''
-  },
+  state: {},
   mutations: mutations,
   actions: action,
   modules: {}

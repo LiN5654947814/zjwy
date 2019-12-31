@@ -1,10 +1,11 @@
 <template>
   <div>
-    <div class="current">
-      <span class="current-text">您现在所在的位置：</span>
-      <span style="cursor:pointer;">{{position}}>></span>
-      <span style="cursor:pointer;">{{title}}</span>
-    </div>
+    您所在的位置：
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/main' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item v-if="title">{{title}}</el-breadcrumb-item>
+      <el-breadcrumb-item v-if="position">{{position}}</el-breadcrumb-item>
+    </el-breadcrumb>
   </div>
 </template>
 
@@ -20,15 +21,4 @@ export default {
 </script>
 
 <style lang="scss">
-.current {
-  width: 100%;
-  height: 32px;
-  line-height: 32px;
-  background-color: #fff;
-  .current-text {
-    font-weight: 700;
-    font-size: 15px;
-    padding-left: 15px;
-  }
-}
 </style>

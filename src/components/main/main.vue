@@ -1,5 +1,6 @@
 <template>
   <div>
+    <header-nav></header-nav>
     <!-- 头部 车位使用量 保修统计量 收款统计量 -->
     <div class="admin-header">
       <div class="admin-box"
@@ -24,12 +25,18 @@
       </div>
     </div>
     <!-- 中部 公告栏列表 -->
-
+    <bulletin></bulletin>
   </div>
 </template>
 
 <script>
+import headerNav from '../headerNav'
+import bulletin from './bulletin'
 export default {
+  components: {
+    headerNav,
+    bulletin
+  },
   data () {
     return {
       headerTab: [{
@@ -66,7 +73,8 @@ export default {
         useData: '13',
         unUseData: '200',
         icon: require('../../assets/icon/parking.png')
-      }]
+      }],
+      title: ''
     }
   }
 
@@ -76,7 +84,7 @@ export default {
 <style lang="scss" scoped>
 .admin-header {
   display: flex;
-  height: 250px;
+  height: 220px;
   justify-content: center;
   .admin-box {
     flex: 1;
