@@ -24,18 +24,24 @@
         </div>
       </div>
     </div>
-    <!-- 中部 公告栏列表 -->
-    <bulletin></bulletin>
+    <div class="admin-container">
+      <!-- 中部 公告栏列表 -->
+      <bulletin></bulletin>
+      <!-- 欠费栏 -->
+      <arrears></arrears>
+    </div>
   </div>
 </template>
 
 <script>
 import headerNav from '../headerNav'
 import bulletin from './bulletin'
+import arrears from './arrears'
 export default {
   components: {
     headerNav,
-    bulletin
+    bulletin,
+    arrears
   },
   data () {
     return {
@@ -147,5 +153,8 @@ export default {
       }
     }
   }
+}
+.admin-container {
+  min-width: 1024px;
 }
 </style>

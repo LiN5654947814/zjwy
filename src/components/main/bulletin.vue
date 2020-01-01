@@ -10,7 +10,7 @@
       <div class="bulletin-content">
         <ul>
           <li class="bulletin-item"
-              v-for="item in bulletinList"
+              v-for="item in currentList"
               :key="item.id">
             <div class="bulletin-item-text">{{item.content}}</div>
             <div class="bulletin-date">{{item.date}}</div>
@@ -20,7 +20,9 @@
       <div class="pagination">
         <el-pagination small
                        layout="prev, pager, next"
-                       :total="100">
+                       :current-page.sync="filters.page"
+                       :page-size="filters.limit"
+                       :total="total">
         </el-pagination>
       </div>
     </div>
@@ -79,8 +81,23 @@ export default {
         id: 12,
         date: '2019-12-31',
         content: '我透你吗瑞文，你还逆风局局长，Q都能Q歪来我草你妈11111111111111111111111111111111111111111'
-      }]
+      }],
+      filters: {
+        page: 0,
+        limit: 7
+      }
     }
+  },
+  computed: {
+    total () {
+      return this.bulletinList.length
+    },
+    currentList () {
+      let ret = this.bulletinList.slice((this.filters.page - 1) * this.filters.limit, this.filters.page * this.filters.limit)
+      return ret
+    }
+  },
+  methods: {
   }
 }
 </script>
@@ -88,6 +105,7 @@ export default {
 
 <style lang="scss">
 .bulletin {
+  float: left;
   width: 60%;
   margin-left: 20px;
   height: 300px;
