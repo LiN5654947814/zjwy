@@ -9,8 +9,10 @@ import EstateApplication from '../components/estate/estateApplication.vue'
 import Fix from '../components/fix/fix.vue'
 import Parking from '../components/parking/parking.vue'
 import Pay from '../components/pay/pay.vue'
-Vue.use(VueRouter)
+import BulletinDetails from '../components/main/bulletinDetails.vue'
+import BulletinModify from '../components/main/bulletinModify.vue'
 
+Vue.use(VueRouter)
 const routes = [
   {
     path: '/login',
@@ -27,6 +29,18 @@ const routes = [
         path: '/main',
         name: 'main',
         component: Main
+      },
+      // 公告详情页
+      {
+        path: '/bulletinDetails/:id',
+        name: 'bulletinDetails',
+        component: BulletinDetails
+      },
+      // 公告编辑页
+      {
+        path: '/bulletinModify',
+        name: 'bulletinModify',
+        component: BulletinModify
       },
       {
         // 业主管理

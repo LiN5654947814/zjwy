@@ -171,9 +171,9 @@ export default {
 }
 .el-main /deep/ .el-breadcrumb {
   font-size: 17px;
-  width: 97%;
+  width: 98%;
   padding: 10px;
-  margin: 5px 0 0 20px;
+  margin: 5px 0 0 10px;
   border-radius: 5px;
   background-color: #fff;
 }

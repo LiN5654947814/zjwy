@@ -1,9 +1,11 @@
 <template>
   <div>
+    <!-- 公告栏 -->
     <div class="bulletin">
       <div class="bulletin-title">
         公告栏信息
-        <div class="bulletin-color-box">
+        <div class="bulletin-color-box"
+             @click="toBulletinList">
           编辑
         </div>
       </div>
@@ -11,7 +13,8 @@
         <ul>
           <li class="bulletin-item"
               v-for="item in currentList"
-              :key="item.id">
+              :key="item.id"
+              @click="getBulletinDetails(item.id)">
             <div class="bulletin-item-text">{{item.content}}</div>
             <div class="bulletin-date">{{item.date}}</div>
           </li>
@@ -85,7 +88,8 @@ export default {
       filters: {
         page: 0,
         limit: 7
-      }
+      },
+      isModify: false
     }
   },
   computed: {
@@ -98,6 +102,16 @@ export default {
     }
   },
   methods: {
+    bulletinModify () {
+      this.isModify = true
+    },
+    getBulletinDetails (id) {
+      this.$router.push('/bulletinDetails/' + id)
+    },
+    // 公告栏编辑页
+    toBulletinList () {
+      this.$router.push('/bulletinModify')
+    }
   }
 }
 </script>
@@ -145,6 +159,7 @@ export default {
       width: 100%;
       margin-bottom: 5px;
       font-size: 19px;
+      cursor: pointer;
       .bulletin-item-text {
         float: left;
         max-width: 600px;

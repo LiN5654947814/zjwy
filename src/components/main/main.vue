@@ -30,6 +30,7 @@
       <!-- 欠费栏 -->
       <arrears></arrears>
     </div>
+    <histogram></histogram>
   </div>
 </template>
 
@@ -37,11 +38,14 @@
 import headerNav from '../headerNav'
 import bulletin from './bulletin'
 import arrears from './arrears'
+import histogram from './histogram'
+
 export default {
   components: {
     headerNav,
     bulletin,
-    arrears
+    arrears,
+    histogram
   },
   data () {
     return {
@@ -155,6 +159,8 @@ export default {
   }
 }
 .admin-container {
+  width: 100%;
   min-width: 1024px;
+  min-height: 300px;
 }
 </style>
