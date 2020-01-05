@@ -108,7 +108,6 @@ export default {
           // 登录检测成功后设置token
           const token = localStorage.setItem('token', res.data.token)
           // 账号密码成功然后判断验证码
-          console.log(upCaseCode)
           if (upCaseCode === this.checkCode) {
             this.$message({
               type: 'success',

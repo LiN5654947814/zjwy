@@ -37,13 +37,14 @@
       </div>
       <div class="bulletin-add-btn">
         <el-button type="success"
-                   size="mini">
+                   size="mini"
+                   @click="bulletinAdd">
           新增
         </el-button>
       </div>
     </div>
     <div class="bulletin-modify"
-         v-show="isModify">
+         v-show="isTextarea">
       <div class="bulletin-modify-content">
         <div class="bulletin-modify-header">
           <div class="bulletin-modify-title">
@@ -60,8 +61,14 @@
         </el-input>
         <div class="bulletin-modify-btn">
           <el-button type="primary"
-                     size="mini">
+                     size="mini"
+                     v-show="isModify">
             修改并保存
+          </el-button>
+          <el-button type="success"
+                     size="mini"
+                     v-show="isAdd">
+            新增
           </el-button>
         </div>
       </div>
@@ -132,7 +139,9 @@ export default {
         limit: 10
       },
       isModify: false,
-      textarea: ''
+      isTextarea: false,
+      isAdd: false,
+      textarea: '',
     }
   },
   computed: {
@@ -146,13 +155,22 @@ export default {
   },
   methods: {
     getBulletin (e) {
+      this.isTextarea = true
       this.isModify = true
       this.textarea = e.content
       console.log(e)
     },
     // 关闭
     closeModify () {
+      this.isTextarea = false
       this.isModify = false
+      this.isAdd = false
+    },
+    // 新增
+    bulletinAdd () {
+      this.textarea = ''
+      this.isTextarea = true
+      this.isAdd = true
     }
   }
 }
