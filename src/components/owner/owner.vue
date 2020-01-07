@@ -9,7 +9,7 @@
                   placeholder="请输入内容"
                   style="width:217px;
                          margin-right:20px;"></el-input>
-        楼层单元：
+        所在楼宇：
         <el-select v-model="currentInfo.houseUnit"
                    placeholder="请选择">
           <el-option v-for="item in houseUnit"
@@ -60,7 +60,7 @@
                            align="center">
           </el-table-column>
           <el-table-column prop="houseUnit"
-                           label="所在单元"
+                           label="所在楼宇单元"
                            width="230"
                            align="center">
           </el-table-column>
@@ -533,6 +533,7 @@ export default {
     },
     // 新增
     addOwner () {
+      this.$router.push('/owner/addowner')
     }
   }
 

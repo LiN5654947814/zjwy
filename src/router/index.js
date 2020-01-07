@@ -11,6 +11,7 @@ import Parking from '../components/parking/parking.vue'
 import Pay from '../components/pay/pay.vue'
 import BulletinDetails from '../components/main/bulletinDetails.vue'
 import BulletinModify from '../components/main/bulletinModify.vue'
+import AddOwner from '../components/owner/addOwner.vue'
 
 Vue.use(VueRouter)
 const routes = [
@@ -47,6 +48,12 @@ const routes = [
         path: '/owner',
         name: 'owner',
         component: Owner
+      },
+      {
+        // 新增业主
+        path: '/owner/addowner',
+        name: 'addowner',
+        component: AddOwner
       },
       {
         // 房产列表
