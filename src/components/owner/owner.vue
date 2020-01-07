@@ -25,17 +25,19 @@
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
                         :default-time="['00:00:00','23:59:59']"
-                        value-format="yyyy-MM-dd HH:mm:ss"
+                        value-format="timestamp"
                         style="margin-right:20px;">
         </el-date-picker>
         <el-button type="primary"
                    @click="serachOwner">
           搜索
         </el-button>
-        <el-button type="warning">
+        <el-button type="warning"
+                   @click='clearSearch'>
           清空
         </el-button>
-        <el-button type="success">
+        <el-button type="success"
+                   @click="addOwner">
           新增
         </el-button>
       </div>
@@ -157,8 +159,10 @@
             </el-form-item>
             <!-- 迁入时间 -->
             <el-form-item label="迁入时间:">
-              <el-input style="width:300px;"
-                        v-model="ownerInfo.moveDate"></el-input>
+              <el-date-picker v-model="ownerInfo.moveDate"
+                              type="date"
+                              placeholder="选择日期">
+              </el-date-picker>
             </el-form-item>
           </el-form>
           <el-button type="primary"
@@ -189,7 +193,7 @@ export default {
           houseUnit: 'A栋-304',
           houseProp: '1',
           ownerParking: '1',
-          moveDate: "2019-12-31"
+          moveDate: "2019-9-14"
         },
         {
           id: '02',
@@ -214,7 +218,124 @@ export default {
           houseUnit: 'A栋-301',
           houseProp: '1',
           ownerParking: '1',
-          moveDate: "2019-11-31"
+          moveDate: "2019-8-20"
+        },
+        {
+          id: '05',
+          ownerName: '梁志斌',
+          ownerPhone: '134458752',
+          houseUnit: 'A栋-204',
+          houseProp: '1',
+          ownerParking: '1',
+          moveDate: "2019-12-20"
+        },
+        {
+          id: '06',
+          ownerName: '孙笑川',
+          ownerPhone: '134458752',
+          houseUnit: 'A栋-304',
+          houseProp: '1',
+          ownerParking: '1',
+          moveDate: "2019-12-31"
+        },
+        {
+          id: '07',
+          ownerName: '孙笑川',
+          ownerPhone: '134458752',
+          houseUnit: 'A栋-304',
+          houseProp: '1',
+          ownerParking: '1',
+          moveDate: "2019-12-31"
+        },
+        {
+          id: '08',
+          ownerName: '孙笑川',
+          ownerPhone: '134458752',
+          houseUnit: 'A栋-304',
+          houseProp: '1',
+          ownerParking: '1',
+          moveDate: "2019-12-31"
+        },
+        {
+          id: '09',
+          ownerName: '孙笑川',
+          ownerPhone: '134458752',
+          houseUnit: 'A栋-304',
+          houseProp: '1',
+          ownerParking: '1',
+          moveDate: "2019-12-31"
+        },
+        {
+          id: '10',
+          ownerName: '孙笑川',
+          ownerPhone: '134458752',
+          houseUnit: 'A栋-304',
+          houseProp: '1',
+          ownerParking: '1',
+          moveDate: "2019-12-31"
+        },
+        {
+          id: '11',
+          ownerName: '孙笑川',
+          ownerPhone: '134458752',
+          houseUnit: 'B栋-304',
+          houseProp: '1',
+          ownerParking: '1',
+          moveDate: "2019-12-31"
+        },
+        {
+          id: '12',
+          ownerName: '孙笑川',
+          ownerPhone: '134458752',
+          houseUnit: 'C栋-304',
+          houseProp: '1',
+          ownerParking: '1',
+          moveDate: "2019-12-31"
+        },
+        {
+          id: '13',
+          ownerName: '孙笑川',
+          ownerPhone: '134458752',
+          houseUnit: 'A栋-304',
+          houseProp: '1',
+          ownerParking: '1',
+          moveDate: "2019-12-31"
+        }
+      ],
+      ownerList_: [
+        {
+          id: '01',
+          ownerName: '孙笑川',
+          ownerPhone: '134458752',
+          houseUnit: 'A栋-304',
+          houseProp: '1',
+          ownerParking: '1',
+          moveDate: "2019-9-14"
+        },
+        {
+          id: '02',
+          ownerName: '李赣',
+          ownerPhone: '134458752',
+          houseUnit: 'B栋-303',
+          houseProp: '1',
+          ownerParking: '1',
+          moveDate: "2019-12-30"
+        }, {
+          id: '03',
+          ownerName: '许昊龙',
+          ownerPhone: '134458752',
+          houseUnit: 'C栋-302',
+          houseProp: '1',
+          ownerParking: '1',
+          moveDate: "2019-12-31"
+        }, {
+          id: '04',
+          ownerName: '深海鱼',
+          ownerPhone: '134458752',
+          houseUnit: 'A栋-301',
+          houseProp: '1',
+          ownerParking: '1',
+          moveDate: "2019-8-20"
         },
         {
           id: '05',
@@ -351,7 +472,7 @@ export default {
     getownerInfo (row) {
       this.isOwner = true
       this.ownerInfo = row
-      console.log(row)
+      this.currentTitle = '编辑'
     },
     // 关闭弹窗
     closePopUp () {
@@ -360,21 +481,58 @@ export default {
     // 按条件搜索业主
     serachOwner () {
       let result = []
-      let keyWrod = JSON.stringify(this.currentInfo)
-      console.log(keyWrod)
-      this.ownerList.forEach((item) => {
-        item = JSON.stringify(item)
-        if (item.indexOf(keyWrod) > -1) {
-          item = JSON.parse(item)
-          result.push(item)
+      console.log(this.currentInfo)
+      let ownerName = this.currentInfo.ownerName
+      let houseUnit = this.currentInfo.houseUnit
+      let moveDate = this.currentInfo.moveDate
+      this.ownerList_.forEach(item => {
+        if (ownerName === '' && houseUnit != '' && moveDate != '') {
+          // 业主名为空 日期 单元不为空
+          if (item.houseUnit.indexOf(houseUnit) > -1 && item.moveDate > moveDate[0] && item.moveDate < moveDate[1]) {
+            result.push(item)
+          }
+          // 业主名为空 单元为空 日期不为空
+        } else if (ownerName === '' && houseUnit === '' && moveDate != '') {
+          if (new Date(item.moveDate).valueOf() >= moveDate[0] && new Date(item.moveDate).valueOf() <= moveDate[1]) {
+            result.push(item)
+          }
+          //  单元为空 业主名 日期不为空
+        } else if (ownerName != '' && houseUnit === '' && moveDate != '') {
+          if (item.ownerName.indexOf(ownerName) > -1 && item.moveDate > moveDate[0] && item.moveDate < moveDate[1]) {
+            result.push(item)
+          }
+          // 日期为空 业主名 单元不为空
+        } else if (ownerName != '' && houseUnit != '' && moveDate === '') {
+          if (item.ownerName.indexOf(ownerName) > -1 && item.houseUnit.indexOf(houseUnit) > -1) {
+            result.push(item)
+          }
+          // 三个都空
+        } else if (ownerName != '' && houseUnit === '' && moveDate === '') {
+          if (item.ownerName.indexOf(ownerName) > -1) {
+            result.push(item)
+          }
+          // 单元不为空 业主名日期都为空
+        } else if (houseUnit != '' && ownerName === '' && moveDate === '') {
+          if (item.houseUnit.indexOf(houseUnit) > -1) {
+            result.push(item)
+          }
         }
       })
       console.log(result)
-      // this.ownerList = result
+      if (ownerName === '' && houseUnit === '' && moveDate === '') {
+        this.ownerList = this.ownerList_
+      } else {
+        this.ownerList = result
+      }
     },
     // 清空
     clearSearch () {
-
+      this.currentInfo.ownerName = ''
+      this.currentInfo.houseUnit = ''
+      this.currentInfo.moveDate = ''
+    },
+    // 新增
+    addOwner () {
     }
   }
 
