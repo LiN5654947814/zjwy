@@ -101,7 +101,7 @@
         </el-pagination>
       </div>
     </div>
-    <!-- 查看业主信息弹窗 -->
+    <!-- 编辑业主信息弹窗 -->
     <div class="popUpbox"
          v-if="isOwner">
       <div class="owner-info">

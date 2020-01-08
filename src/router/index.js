@@ -12,6 +12,7 @@ import Pay from '../components/pay/pay.vue'
 import BulletinDetails from '../components/main/bulletinDetails.vue'
 import BulletinModify from '../components/main/bulletinModify.vue'
 import AddOwner from '../components/owner/addOwner.vue'
+import AddEstate from '../components/estate/addEstate.vue'
 
 Vue.use(VueRouter)
 const routes = [
@@ -60,6 +61,12 @@ const routes = [
         path: '/estate',
         name: 'estate',
         component: Estate
+      },
+      {
+        // 新增房产信息
+        path: '/estate/addEstate',
+        name: 'addEstate',
+        component: AddEstate
       },
       {
         // 房产销售管理

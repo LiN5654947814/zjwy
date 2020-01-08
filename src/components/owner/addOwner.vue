@@ -57,8 +57,8 @@
         </el-form-item>
       </el-form>
       <div class="sumbit-btn">
-        <el-button type="primary">
-          保存
+        <el-button type="success">
+          新增
         </el-button>
         <el-button type="danger"
                    @click="goBack">

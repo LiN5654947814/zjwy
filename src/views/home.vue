@@ -43,7 +43,7 @@
             </template>
             <el-menu-item-group>
               <el-menu-item index="/estate">房产列表</el-menu-item>
-              <el-menu-item index="/estateApplication">房产销售登记</el-menu-item>
+              <el-menu-item index="/estateApplication">房产登记</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <!-- 车位管理 -->
