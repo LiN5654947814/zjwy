@@ -15,16 +15,10 @@
           <el-input style="width:300px;"
                     v-model="houseInfo.houseUnit"></el-input>
         </el-form-item>
-        <!-- 房态 -->
-        <el-form-item label="房态:">
-          <el-select v-model="houseInfo.sale"
-                     placeholder="请选择">
-            <el-option v-for="item in houseSaleSelect"
-                       :key="item.value"
-                       :label="item.value"
-                       :value="item.value">
-            </el-option>
-          </el-select>
+        <!-- 楼层 -->
+        <el-form-item label="楼层:">
+          <el-input style="width:300px;"
+                    v-model="houseInfo.houseArea"></el-input>
         </el-form-item>
         <!-- 户型 -->
         <el-form-item label="户型:">
@@ -41,6 +35,30 @@
         <el-form-item label="面积(m²):">
           <el-input style="width:300px;"
                     v-model="houseInfo.houseArea"></el-input>
+        </el-form-item>
+        <!-- 物业费结算 -->
+        <el-form-item label="物业费:">
+          <span style="font-size:17px;
+                       font-weight:700;">{{housePropCost}}</span>
+        </el-form-item>
+        <el-form-item>
+          <el-checkbox v-model="housePropCostList.clean"
+                       @change="cleanUp()">清洁卫生费用——70</el-checkbox>
+          <el-checkbox v-model="housePropCostList.ecology"
+                       @change="ecologyUp()">绿化养护费用——50</el-checkbox>
+          <el-checkbox v-model="housePropCostList.order"
+                       @change="orderUp()">秩序维护费用——100</el-checkbox>
+        </el-form-item>
+        <!-- 装修 -->
+        <el-form-item label="是否已装修:">
+          <el-select v-model="houseInfo.houseReno"
+                     placeholder="请选择">
+            <el-option v-for="item in houseRenoSelect"
+                       :key="item.value"
+                       :label="item.value"
+                       :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div class="sumbit-btn">
@@ -64,8 +82,8 @@ export default {
   },
   data () {
     return {
-      title: '房产列表',
-      titlePath: '/estate',
+      title: '房产登记',
+      titlePath: '/estateApplication',
       position: '新增房产信息',
       houseInfo: {},
       houseSaleSelect: [
@@ -86,12 +104,49 @@ export default {
         {
           value: '四房一厅'
         }
+      ],
+      // 物业费
+      housePropCost: 0,
+      // 物业费选择
+      housePropCostList: [],
+      // 装修
+      houseRenoSelect: [
+        {
+          value: '已装修'
+        },
+        {
+          value: '未装修'
+        }
       ]
     }
   },
   methods: {
     goBack () {
-      this.$router.push('/estate')
+      this.$router.push('/estateApplication')
+    },
+    cleanUp () {
+      if (this.housePropCostList.clean === true) {
+        this.housePropCost = this.housePropCost + 70
+      }
+      if (this.housePropCostList.clean === false) {
+        this.housePropCost = this.housePropCost - 70
+      }
+    },
+    ecologyUp () {
+      if (this.housePropCostList.ecology === true) {
+        this.housePropCost = this.housePropCost + 50
+      }
+      if (this.housePropCostList.ecology === false) {
+        this.housePropCost = this.housePropCost - 50
+      }
+    },
+    orderUp () {
+      if (this.housePropCostList.order === true) {
+        this.housePropCost = this.housePropCost + 100
+      }
+      if (this.housePropCostList.order === false) {
+        this.housePropCost = this.housePropCost - 100
+      }
     }
   }
 

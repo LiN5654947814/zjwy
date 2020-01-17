@@ -13,6 +13,8 @@ import BulletinDetails from '../components/main/bulletinDetails.vue'
 import BulletinModify from '../components/main/bulletinModify.vue'
 import AddOwner from '../components/owner/addOwner.vue'
 import AddEstate from '../components/estate/addEstate.vue'
+import EstateRegister from '../components/estate/estateResgister.vue'
+import EstateApplicationModify from '../components/estate/estateApplicationModify.vue'
 
 Vue.use(VueRouter)
 const routes = [
@@ -64,7 +66,7 @@ const routes = [
       },
       {
         // 新增房产信息
-        path: '/estate/addEstate',
+        path: '/estate/addEstateApplication',
         name: 'addEstate',
         component: AddEstate
       },
@@ -73,6 +75,12 @@ const routes = [
         path: '/estateApplication',
         name: 'estateApplication',
         component: EstateApplication
+      },
+      {
+        // 房产销售登记
+        path: '/estateRegister',
+        name: 'estateRegister',
+        component: EstateRegister
       },
       {
         // 报修管理

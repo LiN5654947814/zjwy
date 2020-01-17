@@ -33,7 +33,7 @@
         <el-form-item>
           楼层：<el-select v-model="houseInfo.houseFloor"
                      placeholder="请选择">
-            <el-option v-for="item in houseUnitSelect"
+            <el-option v-for="item in housefloorList"
                        :key="item.value"
                        :label="item.value"
                        :value="item.value">
@@ -57,7 +57,8 @@
           <el-button type="warning">
             清空
           </el-button>
-          <el-button type="success">
+          <el-button type="success"
+                     @click="addEstateApplication">
             新增
           </el-button>
         </el-form-item>
@@ -116,25 +117,105 @@
                            label="操作"
                            align="center">
             <template slot-scope="scope">
-              <el-button type="primary">
+              <el-button type="primary"
+                         @click="estateApplicationModify(scope.row)">
                 编辑
               </el-button>
               <el-button type="danger">
                 删除
               </el-button>
-              <el-button type="success">
+              <el-button type="success"
+                         @click="toRegister(scope.row)">
                 登记
               </el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <div class="pagination">
+      <div class="
+                         pagination">
         <el-pagination layout="prev, pager, next"
                        :current-page.sync="filters.page"
                        :page-size="filters.limit"
                        :total="total">
         </el-pagination>
+      </div>
+    </div>
+    <!-- 编辑房产弹窗 -->
+    <div class="popUpbox"
+         v-if="isEstate">
+      <div class="estateApplication-info">
+        <div class="estateApplication-info-header">
+          <div class="estateApplication-header-title">
+            编辑房产信息
+          </div>
+          <img src="../../assets/icon/close.png"
+               class="estateApplication-header-close"
+               @click="closePopUp">
+        </div>
+        <div class="estateApplication-info-container">
+          <el-form label-width="20%">
+            <!-- 楼宇 -->
+            <el-form-item label="楼宇:">
+              <el-input style="width:300px;"
+                        v-model="estateInfo.houseBuilds"></el-input>
+            </el-form-item>
+            <!-- 单元 -->
+            <el-form-item label="单元:">
+              <el-input style="width:300px;"
+                        v-model="estateInfo.houseUnit"></el-input>
+            </el-form-item>
+            <!-- 楼层 -->
+            <el-form-item label="楼层:">
+              <el-input style="width:300px;"
+                        v-model="estateInfo.houseArea"></el-input>
+            </el-form-item>
+            <!-- 户型 -->
+            <el-form-item label="户型:">
+              <el-select v-model="estateInfo.houseApart"
+                         placeholder="请选择">
+                <el-option v-for="item in houseApartSelect"
+                           :key="item.value"
+                           :label="item.value"
+                           :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <!-- 面积 -->
+            <el-form-item label="面积(m²):">
+              <el-input style="width:300px;"
+                        v-model="estateInfo.houseArea"></el-input>
+            </el-form-item>
+            <!-- 物业费结算 -->
+            <el-form-item label="物业费:">
+              <span style="font-size:17px;
+                       font-weight:700;">{}</span>
+            </el-form-item>
+            <el-form-item>
+              <el-checkbox v-model="housePropCostList.clean"
+                           @change="cleanUp()">清洁卫生费用——70</el-checkbox>
+              <el-checkbox v-model="housePropCostList.ecology"
+                           @change="ecologyUp()">绿化养护费用——50</el-checkbox>
+              <el-checkbox v-model="housePropCostList.order"
+                           @change="orderUp()">秩序维护费用——100</el-checkbox>
+            </el-form-item>
+            <!-- 装修 -->
+            <el-form-item label="是否已装修:">
+              <el-select v-model="houseInfo.houseReno"
+                         placeholder="请选择">
+                <el-option v-for="item in houseRenoSelect"
+                           :key="item.value"
+                           :label="item.value"
+                           :value="item.value">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+          <el-button type="primary"
+                     class="sumbit-btn">
+            保存
+          </el-button>
+        </div>
       </div>
     </div>
   </div>
@@ -378,6 +459,35 @@ export default {
           value: '三房一厅'
         }
       ],
+      // 楼层
+      housefloorList: [
+        {
+          value: '1'
+        },
+        {
+          value: '2'
+        },
+        {
+          value: '3'
+        },
+        {
+          value: '4'
+        }
+      ],
+      // 弹窗
+      isEstate: false,
+      // 编辑房产信息
+      estateInfo: {},
+      // 物业费编辑
+      housePropCostList: [],
+      houseRenoSelect: [
+        {
+          value: '已装修'
+        },
+        {
+          value: '未装修'
+        }
+      ]
     }
   },
   computed: {
@@ -406,6 +516,51 @@ export default {
       this.houseUnitSelect = result
       this.houseInfo = Object.assign({}, this.houseInfo, { houseBuilds: value, houseUnit: '' })
     },
+    // 登记房产页面跳转
+    toRegister (row) {
+      this.$router.push({
+        path: '/estateRegister',
+        query: {
+          estateInfo: row
+        }
+      })
+    },
+    // 新增房产信息
+    addEstateApplication () {
+      this.$router.push('/estate/addEstateApplication')
+    },
+    // 编辑房产信息
+    estateApplicationModify (row) {
+      this.isEstate = true
+      this.estateInfo = row
+    },
+    closePopUp () {
+      this.isEstate = false
+    },
+    cleanUp () {
+      if (this.housePropCostList.clean === true) {
+        this.housePropCost = this.housePropCost + 70
+      }
+      if (this.housePropCostList.clean === false) {
+        this.housePropCost = this.housePropCost - 70
+      }
+    },
+    ecologyUp () {
+      if (this.housePropCostList.ecology === true) {
+        this.housePropCost = this.housePropCost + 50
+      }
+      if (this.housePropCostList.ecology === false) {
+        this.housePropCost = this.housePropCost - 50
+      }
+    },
+    orderUp () {
+      if (this.housePropCostList.order === true) {
+        this.housePropCost = this.housePropCost + 100
+      }
+      if (this.housePropCostList.order === false) {
+        this.housePropCost = this.housePropCost - 100
+      }
+    }
   }
 }
 </script>
@@ -450,6 +605,58 @@ export default {
     bottom: 0;
     right: 0;
     position: absolute;
+  }
+}
+.popUpbox {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+  .estateApplication-info {
+    width: 25%;
+    height: 65%;
+    background-color: #fff;
+    border-radius: 5px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    .estateApplication-info-header {
+      height: 50px;
+      width: 100%;
+      border-bottom: 1px solid #ccc;
+      position: relative;
+      .estateApplication-header-title {
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 50px;
+        margin-left: 20px;
+      }
+      .estateApplication-header-close {
+        width: 40px;
+        height: 40px;
+        right: 10px;
+        top: 50%;
+        transform: translate(0, -50%);
+        position: absolute;
+        cursor: pointer;
+      }
+    }
+    .estateApplication-info-container {
+      width: 100%;
+      height: 86%;
+      text-align: left;
+      margin-top: 25px;
+      position: relative;
+      .sumbit-btn {
+        right: 50px;
+        bottom: 0px;
+        position: absolute;
+      }
+    }
   }
 }
 </style>
