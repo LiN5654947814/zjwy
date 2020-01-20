@@ -15,6 +15,7 @@ import AddOwner from '../components/owner/addOwner.vue'
 import AddEstate from '../components/estate/addEstate.vue'
 import EstateRegister from '../components/estate/estateResgister.vue'
 import EstateApplicationModify from '../components/estate/estateApplicationModify.vue'
+import addParking from '../components/parking/addParking.vue'
 
 Vue.use(VueRouter)
 const routes = [
@@ -93,6 +94,12 @@ const routes = [
         path: '/parking',
         name: 'parking',
         component: Parking
+      },
+      {
+        // 新增车位信息
+        path: '/addParking',
+        name: 'addParking',
+        component: addParking
       },
       {
         // 费用列表
