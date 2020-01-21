@@ -43,6 +43,61 @@
       </el-form>
     </div>
     <div class="fix-container">
+      <div class="fix-table">
+        <el-table :data="currentList"
+                  style="width: 100%;
+                  padding-left:5px;"
+                  @selection-change="handleSelectionChange"
+                  :show-overflow-tooltip="true">
+          <el-table-column type="selection"
+                           width="55">
+          </el-table-column>
+          <el-table-column prop="fixTime"
+                           label="报修时间"
+                           width="200"
+                           align="center">
+          </el-table-column>
+          <el-table-column prop="fixContent"
+                           label="报修内容"
+                           width="500"
+                           align="center">
+          </el-table-column>
+          <el-table-column prop="fixOwner"
+                           label="业主"
+                           width="200"
+                           align="center">
+          </el-table-column>
+          <el-table-column prop="fixType"
+                           label="报修状态"
+                           width="200"
+                           align="center">
+          </el-table-column>
+          <el-table-column prop="fixEndTime"
+                           label="修理完成时间"
+                           width="200"
+                           align="center">
+          </el-table-column>
+          <el-table-column label="操作"
+                           align="center">
+            <template slot-scope="scope">
+              <el-button type="primary"
+                         @click="getFixDetail(scope.row)">
+                详情
+              </el-button>
+              <el-button type="danger">
+                删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div class="pagination">
+        <el-pagination layout="prev, pager, next"
+                       :current-page.sync="filters.page"
+                       :page-size="filters.limit"
+                       :total="total">
+        </el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -64,7 +119,97 @@ export default {
         {
           value: '未完成'
         }
-      ]
+      ],
+      fixList: [
+        {
+          fixId: '001',
+          fixTime: '2020-01-21',
+          fixEndTime: '',
+          fixContent: '厕所淤堵',
+          fixOwner: '孙笑川',
+          fixType: '未修理'
+        },
+        {
+          fixId: '002',
+          fixTime: '2020-01-21',
+          fixEndTime: '',
+          fixContent: '厕所淤堵',
+          fixOwner: '孙笑川',
+          fixType: '未修理'
+        },
+        {
+          fixId: '003',
+          fixTime: '2020-01-21',
+          fixEndTime: '',
+          fixContent: '厕所淤堵',
+          fixOwner: '孙笑川',
+          fixType: '未修理'
+        },
+        {
+          fixId: '004',
+          fixTime: '2020-01-21',
+          fixEndTime: '',
+          fixContent: '厕所淤堵',
+          fixOwner: '孙笑川',
+          fixType: '未修理'
+        },
+        {
+          fixId: '005',
+          fixTime: '2020-01-21',
+          fixEndTime: '',
+          fixContent: '厕所淤堵',
+          fixOwner: '孙笑川',
+          fixType: '未修理'
+        },
+        {
+          fixId: '006',
+          fixTime: '2020-01-21',
+          fixEndTime: '',
+          fixContent: '厕所淤堵',
+          fixOwner: '孙笑川',
+          fixType: '未修理'
+        },
+        {
+          fixId: '007',
+          fixTime: '2020-01-21',
+          fixEndTime: '',
+          fixContent: '厕所淤堵',
+          fixOwner: '孙笑川',
+          fixType: '未修理'
+        }
+      ],
+      // 报修信息
+      fixDetail: {},
+      // 分页器
+      filters: {
+        page: 0,
+        limit: 10
+      },
+    }
+  },
+  computed: {
+    total () {
+      return this.fixList.length
+    },
+    currentList () {
+      let ret = this.fixList.slice((this.filters.page - 1) * this.filters.limit, this.filters.page * this.filters.limit)
+      return ret
+    }
+  },
+  methods: {
+    // 勾选
+    handleSelectionChange (val) {
+      this.multipleSelection = val;
+      console.log(this.multipleSelection)
+    },
+    // 跳转详情
+    getFixDetail (row) {
+      this.$router.push({
+        path: '/fixDetail',
+        query: {
+          fixDetail: row
+        }
+      })
     }
   }
 }
@@ -86,5 +231,21 @@ export default {
   line-height: 50px;
   border-radius: 5px;
   background-color: #fff;
+}
+.fix-container {
+  width: 97%;
+  margin: 20px;
+  min-width: 1204px;
+  border-radius: 5px;
+  background-color: #fff;
+  position: relative;
+  .fix-table {
+    min-height: 750px;
+  }
+  .pagination {
+    bottom: 0;
+    right: 0;
+    position: absolute;
+  }
 }
 </style>
