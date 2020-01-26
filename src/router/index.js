@@ -17,6 +17,8 @@ import EstateRegister from '../components/estate/estateResgister.vue'
 import EstateApplicationModify from '../components/estate/estateApplicationModify.vue'
 import addParking from '../components/parking/addParking.vue'
 import FixDetail from '../components/fix/fixDetail.vue'
+import AddPay from '../components/pay/addPay.vue'
+import AddFix from '../components/fix/addFix.vue'
 
 Vue.use(VueRouter)
 const routes = [
@@ -97,6 +99,12 @@ const routes = [
         component: FixDetail
       },
       {
+        // 新增报修信息
+        path: '/addFix',
+        name: 'addFix',
+        component: AddFix
+      },
+      {
         // 车位管理
         path: '/parking',
         name: 'parking',
@@ -113,6 +121,12 @@ const routes = [
         path: '/pay',
         name: 'pay',
         component: Pay
+      },
+      {
+        // 新增费用信息
+        path: '/addPay',
+        name: 'addPay',
+        component: AddPay
       }
     ]
   }

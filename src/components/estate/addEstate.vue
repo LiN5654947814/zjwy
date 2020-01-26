@@ -36,19 +36,6 @@
           <el-input style="width:300px;"
                     v-model="houseInfo.houseArea"></el-input>
         </el-form-item>
-        <!-- 物业费结算 -->
-        <el-form-item label="物业费:">
-          <span style="font-size:17px;
-                       font-weight:700;">{{housePropCost}}</span>
-        </el-form-item>
-        <el-form-item>
-          <el-checkbox v-model="housePropCostList.clean"
-                       @change="cleanUp()">清洁卫生费用——70</el-checkbox>
-          <el-checkbox v-model="housePropCostList.ecology"
-                       @change="ecologyUp()">绿化养护费用——50</el-checkbox>
-          <el-checkbox v-model="housePropCostList.order"
-                       @change="orderUp()">秩序维护费用——100</el-checkbox>
-        </el-form-item>
         <!-- 装修 -->
         <el-form-item label="是否已装修:">
           <el-select v-model="houseInfo.houseReno"

@@ -36,7 +36,8 @@
           <el-button type="warning">
             清空
           </el-button>
-          <el-button type="success">
+          <el-button type="success"
+                     @click="addFix">
             新增
           </el-button>
         </el-form-item>
@@ -210,6 +211,10 @@ export default {
           fixDetail: row
         }
       })
+    },
+    // 新增报修信息
+    addFix () {
+      this.$router.push('/addFix')
     }
   }
 }

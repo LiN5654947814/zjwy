@@ -1,46 +1,46 @@
 <template>
   <div>
     <header-nav :title="title"></header-nav>
-    <div class="owner-container">
-      <div class="owner-select">
-        <span style="margin-right:20px;
+    <div class="owner-select">
+      <span style="margin-right:20px;
                     font-weight:700;">按条件搜索：</span>
-        业主姓名：<el-input v-model="currentInfo.ownerName"
-                  placeholder="请输入内容"
-                  style="width:217px;
+      业主姓名：<el-input v-model="currentInfo.ownerName"
+                placeholder="请输入内容"
+                style="width:217px;
                          margin-right:20px;"></el-input>
-        所在楼宇：
-        <el-select v-model="currentInfo.houseUnit"
-                   placeholder="请选择">
-          <el-option v-for="item in houseUnit"
-                     :key="item.value"
-                     :label="item.label"
-                     :value="item.label">
-          </el-option>
-        </el-select>
-        迁入时间：
-        <el-date-picker v-model="currentInfo.moveDate"
-                        type="daterange"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        :default-time="['00:00:00','23:59:59']"
-                        value-format="timestamp"
-                        style="margin-right:20px;">
-        </el-date-picker>
-        <el-button type="primary"
-                   @click="serachOwner">
-          搜索
-        </el-button>
-        <el-button type="warning"
-                   @click='clearSearch'>
-          清空
-        </el-button>
-        <el-button type="success"
-                   @click="addOwner">
-          新增
-        </el-button>
-      </div>
+      所在楼宇：
+      <el-select v-model="currentInfo.houseUnit"
+                 placeholder="请选择">
+        <el-option v-for="item in houseUnit"
+                   :key="item.value"
+                   :label="item.label"
+                   :value="item.label">
+        </el-option>
+      </el-select>
+      迁入时间：
+      <el-date-picker v-model="currentInfo.moveDate"
+                      type="daterange"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期"
+                      :default-time="['00:00:00','23:59:59']"
+                      value-format="timestamp"
+                      style="margin-right:20px;">
+      </el-date-picker>
+      <el-button type="primary"
+                 @click="serachOwner">
+        搜索
+      </el-button>
+      <el-button type="warning"
+                 @click='clearSearch'>
+        清空
+      </el-button>
+      <el-button type="success"
+                 @click="addOwner">
+        新增
+      </el-button>
+    </div>
+    <div class="owner-container">
       <div class="owner-table">
         <el-table :data="currentList"
                   style="width: 100%;
@@ -546,17 +546,22 @@ export default {
   margin-right: 20px;
 }
 
-.owner-container {
-  width: 98%;
+.owner-select {
+  width: 95%;
+  height: 50px;
   margin: 20px;
+  padding: 20px;
+  line-height: 50px;
+  border-radius: 5px;
+  background-color: #fff;
+}
+.owner-container {
+  width: 97%;
+  margin: 20px;
+  min-width: 1204px;
   border-radius: 5px;
   background-color: #fff;
   position: relative;
-  .owner-select {
-    width: 100%;
-    padding: 20px;
-    height: 50px;
-  }
   .owner-table {
     min-height: 750px;
   }
@@ -566,6 +571,7 @@ export default {
     position: absolute;
   }
 }
+
 .popUpbox {
   width: 100%;
   height: 100%;

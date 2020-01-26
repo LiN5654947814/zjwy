@@ -30,6 +30,11 @@
           </el-select>
         </el-form-item>
         <el-form-item>
+          门牌号：<el-input style="width:150px;
+                                    margin-right:10px;">
+          </el-input>
+        </el-form-item>
+        <el-form-item>
           业主名：<el-input style="width:150px;
                                     margin-right:10px;">
           </el-input>
@@ -154,10 +159,6 @@
             <!-- 所属业主 -->
             <el-form-item label="所属业主:">
               {{houseInfo.houseOwner}}
-            </el-form-item>
-            <!-- 每月管理费 -->
-            <el-form-item label="管理费:">
-              {{houseInfo.houseCost}}
             </el-form-item>
           </el-form>
           <el-button type="primary"
