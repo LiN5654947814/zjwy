@@ -19,6 +19,10 @@ import addParking from '../components/parking/addParking.vue'
 import FixDetail from '../components/fix/fixDetail.vue'
 import AddPay from '../components/pay/addPay.vue'
 import AddFix from '../components/fix/addFix.vue'
+import OwnerHome from '../views/owner_home.vue'
+import OwnerFix from '../components/ownerMain/ownerFix.vue'
+import OwnerApplication from '../components/ownerMain/ownerApplication.vue'
+import OwnerPasswordModify from '../components/ownerMain/ownerPasswordModify.vue'
 
 Vue.use(VueRouter)
 const routes = [
@@ -127,6 +131,31 @@ const routes = [
         path: '/addPay',
         name: 'addPay',
         component: AddPay
+      }
+    ]
+  },
+  {
+    path: '/ownerHome',
+    name: 'ownerHome',
+    component: OwnerHome,
+    children: [
+      {
+        // 业主首页
+        path: '/ownerApplication',
+        name: 'ownerApplication',
+        component: OwnerApplication
+      },
+      {
+        // 业主报修页
+        path: '/ownerFix',
+        name: 'ownerFix',
+        component: OwnerFix
+      },
+      {
+        // 业主修改密码
+        path: '/ownerPasswordModify',
+        name: 'ownerPasswordModify',
+        component: OwnerPasswordModify
       }
     ]
   }
