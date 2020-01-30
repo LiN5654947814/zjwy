@@ -28,18 +28,19 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error)
   }
 )
-axiosInstance.interceptors.request.use(
-  config => {
-    if (localStorage.getItem('token')) {
-      config.headers.commom['token'] = localStorage.getItem('token')
-      console.log(11111111111111)
-    }
-    return config
-  },
-  error => {
-    return Promise.reject(error)
-  }
-)
+axiosInstance.interceptors.request
+  .use
+  // config => {
+  //   if (localStorage.getItem('token')) {
+  //     config.headers.commom['token'] = localStorage.getItem('token')
+  //     console.log(11111111111111)
+  //   }
+  //   return config
+  // },
+  // error => {
+  //   return Promise.reject(error)
+  // }
+  ()
 Vue.prototype.$axios = axiosInstance
 
 new Vue({

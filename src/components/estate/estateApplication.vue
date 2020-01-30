@@ -75,42 +75,37 @@
           </el-table-column>
           <el-table-column prop="houseBuilds"
                            label="楼宇"
-                           width="160"
+                           width="180"
                            align="center">
           </el-table-column>
           <el-table-column prop="houseUnit"
                            label="单元"
-                           width="160"
+                           width="180"
                            align="center">
           </el-table-column>
           <el-table-column prop="houseFloor"
                            label="楼层"
-                           width="160"
+                           width="180"
                            align="center">
           </el-table-column>
           <el-table-column prop="housePlate"
                            label="门牌"
-                           width="160"
+                           width="180"
                            align="center">
           </el-table-column>
           <el-table-column prop="houseApart"
                            label="户型"
-                           width="160"
+                           width="180"
                            align="center">
           </el-table-column>
           <el-table-column prop="houseArea"
                            label="面积(m²)"
-                           width="160"
-                           align="center">
-          </el-table-column>
-          <el-table-column prop="houseCost"
-                           label="物业费用"
-                           width="160"
+                           width="180"
                            align="center">
           </el-table-column>
           <el-table-column prop="houseReno"
                            label="装修"
-                           width="160"
+                           width="180"
                            align="center">
           </el-table-column>
           <el-table-column prop="cost"

@@ -8,15 +8,6 @@
                 placeholder="请输入内容"
                 style="width:217px;
                          margin-right:20px;"></el-input>
-      所在楼宇：
-      <el-select v-model="currentInfo.houseUnit"
-                 placeholder="请选择">
-        <el-option v-for="item in houseUnit"
-                   :key="item.value"
-                   :label="item.label"
-                   :value="item.label">
-        </el-option>
-      </el-select>
       迁入时间：
       <el-date-picker v-model="currentInfo.moveDate"
                       type="daterange"
@@ -39,6 +30,10 @@
                  @click="addOwner">
         新增
       </el-button>
+      <el-button type="danger"
+                 @click="deleteOwnerList">
+        批量删除
+      </el-button>
     </div>
     <div class="owner-container">
       <div class="owner-table">
@@ -51,32 +46,37 @@
           </el-table-column>
           <el-table-column prop="ownerName"
                            label="业主姓名"
-                           width="230"
+                           width="200"
+                           align="center">
+          </el-table-column>
+          <el-table-column prop="ownerSex"
+                           label="性别"
+                           width="200"
                            align="center">
           </el-table-column>
           <el-table-column prop="ownerPhone"
                            label="联系手机号"
-                           width="230"
+                           width="200"
                            align="center">
           </el-table-column>
-          <el-table-column prop="houseUnit"
+          <el-table-column prop="ownerUnit"
                            label="所在楼宇单元"
-                           width="230"
+                           width="200"
                            align="center">
           </el-table-column>
-          <el-table-column prop="houseProp"
+          <el-table-column prop="ownerEstate"
                            label="房产数"
-                           width="230"
+                           width="200"
                            align="center">
           </el-table-column>
           <el-table-column prop="ownerParking"
                            label="车位拥有"
-                           width="230"
+                           width="200"
                            align="center">
           </el-table-column>
-          <el-table-column prop="moveDate"
+          <el-table-column prop="ownerMoveDate"
                            label="迁入时间"
-                           width="230"
+                           width="200"
                            align="center">
           </el-table-column>
           <el-table-column prop="cost"
@@ -86,7 +86,8 @@
                          @click="getownerInfo(scope.row)">
                 编辑
               </el-button>
-              <el-button type="danger">
+              <el-button type="danger"
+                         @click="deleteOwner(scope.row)">
                 删除
               </el-button>
             </template>
@@ -123,9 +124,9 @@
             <!-- 性别 -->
             <el-form-item label="性别:">
               <el-radio v-model="ownerInfo.ownerSex"
-                        label="1">男</el-radio>
+                        label="男">男</el-radio>
               <el-radio v-model="ownerInfo.ownerSex"
-                        label="2">女</el-radio>
+                        label="女">女</el-radio>
             </el-form-item>
             <!-- 手机号 -->
             <el-form-item label="手机号:">
@@ -145,7 +146,7 @@
             <!-- 所在单元 -->
             <el-form-item label="所在单元:">
               <el-input style="width:300px;"
-                        v-model="ownerInfo.houseUnit"></el-input>
+                        v-model="ownerInfo.ownerUnit"></el-input>
             </el-form-item>
             <!-- 车位拥有数 -->
             <el-form-item label="车位数:">
@@ -155,11 +156,11 @@
             <!-- 房产数 -->
             <el-form-item label="房产数:">
               <el-input style="width:300px;"
-                        v-model="ownerInfo.houseProp"></el-input>
+                        v-model="ownerInfo.ownerEstate"></el-input>
             </el-form-item>
             <!-- 迁入时间 -->
             <el-form-item label="迁入时间:">
-              <el-date-picker v-model="ownerInfo.moveDate"
+              <el-date-picker v-model="ownerInfo.ownerMoveDate"
                               type="date"
                               placeholder="选择日期">
               </el-date-picker>
@@ -185,123 +186,7 @@ export default {
     return {
       title: '业主管理',
       isOwner: false,
-      ownerList: [
-        {
-          id: '01',
-          ownerName: '孙笑川',
-          ownerPhone: '134458752',
-          houseUnit: 'A栋-304',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-9-14"
-        },
-        {
-          id: '02',
-          ownerName: '李赣',
-          ownerPhone: '134458752',
-          houseUnit: 'B栋-303',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-30"
-        }, {
-          id: '03',
-          ownerName: '许昊龙',
-          ownerPhone: '134458752',
-          houseUnit: 'C栋-302',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-31"
-        }, {
-          id: '04',
-          ownerName: '深海鱼',
-          ownerPhone: '134458752',
-          houseUnit: 'A栋-301',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-8-20"
-        },
-        {
-          id: '05',
-          ownerName: '梁志斌',
-          ownerPhone: '134458752',
-          houseUnit: 'A栋-204',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-20"
-        },
-        {
-          id: '06',
-          ownerName: '孙笑川',
-          ownerPhone: '134458752',
-          houseUnit: 'A栋-304',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-31"
-        },
-        {
-          id: '07',
-          ownerName: '孙笑川',
-          ownerPhone: '134458752',
-          houseUnit: 'A栋-304',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-31"
-        },
-        {
-          id: '08',
-          ownerName: '孙笑川',
-          ownerPhone: '134458752',
-          houseUnit: 'A栋-304',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-31"
-        },
-        {
-          id: '09',
-          ownerName: '孙笑川',
-          ownerPhone: '134458752',
-          houseUnit: 'A栋-304',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-31"
-        },
-        {
-          id: '10',
-          ownerName: '孙笑川',
-          ownerPhone: '134458752',
-          houseUnit: 'A栋-304',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-31"
-        },
-        {
-          id: '11',
-          ownerName: '孙笑川',
-          ownerPhone: '134458752',
-          houseUnit: 'B栋-304',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-31"
-        },
-        {
-          id: '12',
-          ownerName: '孙笑川',
-          ownerPhone: '134458752',
-          houseUnit: 'C栋-304',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-31"
-        },
-        {
-          id: '13',
-          ownerName: '孙笑川',
-          ownerPhone: '134458752',
-          houseUnit: 'A栋-304',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-31"
-        }
-      ],
+      ownerList: [],
       ownerList_: [
         {
           id: '01',
@@ -452,6 +337,7 @@ export default {
     }
   },
   mounted () {
+    this.getAllOwner()
   },
   computed: {
     total () {
@@ -473,6 +359,15 @@ export default {
       this.isOwner = true
       this.ownerInfo = row
       this.currentTitle = '编辑'
+    },
+    // 请求所有业主信息
+    getAllOwner () {
+      this.$axios.get('/getAllOwner').then(res => {
+        if (res.data.state === 200) {
+          this.ownerList = res.data.owners
+          console.log(this.ownerList)
+        }
+      })
     },
     // 关闭弹窗
     closePopUp () {
@@ -531,9 +426,36 @@ export default {
       this.currentInfo.houseUnit = ''
       this.currentInfo.moveDate = ''
     },
-    // 新增
+    // 新增页面
     addOwner () {
       this.$router.push('/owner/addowner')
+    },
+    // 单个删除业主
+    deleteOwner (row) {
+      this.$confirm('确定要删除该业主信息？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/deleteOwner', {
+          params: {
+            id: row.id,
+            ownerCard: row.ownerCard
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: '删除成功'
+            })
+            this.getAllOwner()
+          }
+        })
+      })
+    },
+    // 批量删除
+    deleteOwnerList () {
+
     }
   }
 

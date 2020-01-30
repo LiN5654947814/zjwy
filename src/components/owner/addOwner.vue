@@ -14,9 +14,9 @@
         <!-- 性别 -->
         <el-form-item label="性别:">
           <el-radio v-model="ownerInfo.ownerSex"
-                    label="1">男</el-radio>
+                    label="男">男</el-radio>
           <el-radio v-model="ownerInfo.ownerSex"
-                    label="2">女</el-radio>
+                    label="女">女</el-radio>
         </el-form-item>
         <!-- 手机号 -->
         <el-form-item label="手机号:">
@@ -36,7 +36,7 @@
         <!-- 所在单元 -->
         <el-form-item label="所在单元:">
           <el-input style="width:300px;"
-                    v-model="ownerInfo.houseUnit"></el-input>
+                    v-model="ownerInfo.ownerUnit"></el-input>
         </el-form-item>
         <!-- 车位拥有数 -->
         <el-form-item label="车位数:">
@@ -46,18 +46,20 @@
         <!-- 房产数 -->
         <el-form-item label="房产数:">
           <el-input style="width:300px;"
-                    v-model="ownerInfo.houseProp"></el-input>
+                    v-model="ownerInfo.ownerEstate"></el-input>
         </el-form-item>
         <!-- 迁入时间 -->
         <el-form-item label="迁入时间:">
-          <el-date-picker v-model="ownerInfo.moveDate"
+          <el-date-picker v-model="ownerInfo.ownerMoveDate"
                           type="date"
+                          value-format="yyyy-MM-dd"
                           placeholder="选择日期">
           </el-date-picker>
         </el-form-item>
       </el-form>
       <div class="sumbit-btn">
-        <el-button type="success">
+        <el-button type="success"
+                   @click="addOwner">
           新增
         </el-button>
         <el-button type="danger"
@@ -87,6 +89,33 @@ export default {
     // 返回
     goBack () {
       this.$router.push('/owner')
+    },
+    // 新增业主信息
+    addOwner () {
+      console.log(this.ownerInfo.ownerMoveDate)
+      this.$axios.post('/addOwner', {
+        params: {
+          ownerCard: this.ownerInfo.ownerCard,
+          ownerPhone: this.ownerInfo.ownerPhone,
+          ownerName: this.ownerInfo.ownerName,
+          ownerSex: this.ownerInfo.ownerSex,
+          ownerEmail: this.ownerInfo.ownerEmail,
+          ownerUnit: this.ownerInfo.ownerEmail,
+          ownerParking: this.ownerInfo.ownerParking,
+          ownerEstate: this.ownerInfo.ownerEstate,
+          ownerMoveDate: this.ownerInfo.ownerMoveDate
+        }
+      }).then(res => {
+        if (res.data.state === 200) {
+          this.$message({
+            type: 'success',
+            message: '添加成功'
+          })
+          setTimeout(() => {
+            this.$router.push({ name: 'owner' })
+          }, 2000)
+        }
+      })
     }
   }
 }
