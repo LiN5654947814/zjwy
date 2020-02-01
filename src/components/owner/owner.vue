@@ -333,7 +333,7 @@ export default {
         moveDate: ''
       },
       // 渲染选中业主信息
-      ownerInfo: {}
+      ownerInfo: {},
     }
   },
   mounted () {
@@ -455,7 +455,31 @@ export default {
     },
     // 批量删除
     deleteOwnerList () {
-
+      if (this.multipleSelection.length == 0) {
+        return
+      }
+      let num = this.multipleSelection.length
+      this.$confirm('确定要删除该' + num + '位业主信息？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/deleteOwners', {
+          params: {
+            deleteOwners: this.multipleSelection
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: '删除成功'
+            })
+            setTimeout(() => {
+              this.getAllOwner()
+            }, 1000)
+          }
+        })
+      })
     }
   }
 
