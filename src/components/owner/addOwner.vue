@@ -33,6 +33,11 @@
           <el-input style="width:300px;"
                     v-model="ownerInfo.ownerEmail"></el-input>
         </el-form-item>
+        <!-- 初始登录密码 -->
+        <el-form-item label="初始登录密码:">
+          <el-input style="width:300px;"
+                    v-model="ownerInfo.originalPassword"></el-input>
+        </el-form-item>
         <!-- 所在单元 -->
         <el-form-item label="所在单元:">
           <el-input style="width:300px;"
@@ -103,7 +108,8 @@ export default {
           ownerUnit: this.ownerInfo.ownerEmail,
           ownerParking: this.ownerInfo.ownerParking,
           ownerEstate: this.ownerInfo.ownerEstate,
-          ownerMoveDate: this.ownerInfo.ownerMoveDate
+          ownerMoveDate: this.ownerInfo.ownerMoveDate,
+          originalPassword: this.ownerInfo.originalPassword
         }
       }).then(res => {
         if (res.data.state === 200) {
@@ -137,7 +143,7 @@ export default {
   position: relative;
   .sumbit-btn {
     position: absolute;
-    right: 30%;
+    right: 10%;
     bottom: 10%;
   }
 }

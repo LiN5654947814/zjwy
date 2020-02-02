@@ -15,7 +15,7 @@
                       start-placeholder="开始日期"
                       end-placeholder="结束日期"
                       :default-time="['00:00:00','23:59:59']"
-                      value-format="timestamp"
+                      value-format="yyyy-MM-dd"
                       style="margin-right:20px;">
       </el-date-picker>
       <el-button type="primary"
@@ -83,7 +83,7 @@
                            label="操作">
             <template slot-scope="scope">
               <el-button type="primary"
-                         @click="getownerInfo(scope.row)">
+                         @click="getOwnerInfo(scope.row)">
                 编辑
               </el-button>
               <el-button type="danger"
@@ -167,7 +167,8 @@
             </el-form-item>
           </el-form>
           <el-button type="primary"
-                     class="sumbit-btn">
+                     class="sumbit-btn"
+                     @click="modifyOwner">
             保存
           </el-button>
         </div>
@@ -187,123 +188,6 @@ export default {
       title: '业主管理',
       isOwner: false,
       ownerList: [],
-      ownerList_: [
-        {
-          id: '01',
-          ownerName: '孙笑川',
-          ownerPhone: '134458752',
-          houseUnit: 'A栋-304',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-9-14"
-        },
-        {
-          id: '02',
-          ownerName: '李赣',
-          ownerPhone: '134458752',
-          houseUnit: 'B栋-303',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-30"
-        }, {
-          id: '03',
-          ownerName: '许昊龙',
-          ownerPhone: '134458752',
-          houseUnit: 'C栋-302',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-31"
-        }, {
-          id: '04',
-          ownerName: '深海鱼',
-          ownerPhone: '134458752',
-          houseUnit: 'A栋-301',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-8-20"
-        },
-        {
-          id: '05',
-          ownerName: '梁志斌',
-          ownerPhone: '134458752',
-          houseUnit: 'A栋-204',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-20"
-        },
-        {
-          id: '06',
-          ownerName: '孙笑川',
-          ownerPhone: '134458752',
-          houseUnit: 'A栋-304',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-31"
-        },
-        {
-          id: '07',
-          ownerName: '孙笑川',
-          ownerPhone: '134458752',
-          houseUnit: 'A栋-304',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-31"
-        },
-        {
-          id: '08',
-          ownerName: '孙笑川',
-          ownerPhone: '134458752',
-          houseUnit: 'A栋-304',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-31"
-        },
-        {
-          id: '09',
-          ownerName: '孙笑川',
-          ownerPhone: '134458752',
-          houseUnit: 'A栋-304',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-31"
-        },
-        {
-          id: '10',
-          ownerName: '孙笑川',
-          ownerPhone: '134458752',
-          houseUnit: 'A栋-304',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-31"
-        },
-        {
-          id: '11',
-          ownerName: '孙笑川',
-          ownerPhone: '134458752',
-          houseUnit: 'B栋-304',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-31"
-        },
-        {
-          id: '12',
-          ownerName: '孙笑川',
-          ownerPhone: '134458752',
-          houseUnit: 'C栋-304',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-31"
-        },
-        {
-          id: '13',
-          ownerName: '孙笑川',
-          ownerPhone: '134458752',
-          houseUnit: 'A栋-304',
-          houseProp: '1',
-          ownerParking: '1',
-          moveDate: "2019-12-31"
-        }
-      ],
       // 房屋单元
       houseUnit: [
         {
@@ -330,7 +214,7 @@ export default {
       currentInfo: {
         ownerName: '',
         houseUnit: '',
-        moveDate: ''
+        moveDate: []
       },
       // 渲染选中业主信息
       ownerInfo: {},
@@ -354,11 +238,45 @@ export default {
       this.multipleSelection = val;
       console.log(this.multipleSelection)
     },
-    // 编辑业主
-    getownerInfo (row) {
+    // 查看当前业主信息
+    getOwnerInfo (row) {
       this.isOwner = true
       this.ownerInfo = row
+      console.log(this.ownerInfo)
       this.currentTitle = '编辑'
+    },
+    // 编辑业主
+    modifyOwner () {
+      this.$confirm('确定要修改该业主信息？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/modifyOwner', {
+          params: {
+            id: this.ownerInfo.id,
+            ownerCard: this.ownerInfo.ownerCard,
+            ownerPhone: this.ownerInfo.ownerPhone,
+            ownerName: this.ownerInfo.ownerName,
+            ownerSex: this.ownerInfo.ownerSex,
+            ownerEmail: this.ownerInfo.ownerEmail,
+            ownerUnit: this.ownerInfo.ownerEmail,
+            ownerParking: this.ownerInfo.ownerParking,
+            ownerEstate: this.ownerInfo.ownerEstate,
+            ownerMoveDate: this.ownerInfo.ownerMoveDate,
+            originalPassword: this.ownerInfo.originalPassword
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: '修改成功'
+            })
+            this.isOwner = false
+            this.getAllOwner()
+          }
+        })
+      })
     },
     // 请求所有业主信息
     getAllOwner () {
@@ -375,56 +293,24 @@ export default {
     },
     // 按条件搜索业主
     serachOwner () {
-      let result = []
-      console.log(this.currentInfo)
-      let ownerName = this.currentInfo.ownerName
-      let houseUnit = this.currentInfo.houseUnit
-      let moveDate = this.currentInfo.moveDate
-      this.ownerList_.forEach(item => {
-        if (ownerName === '' && houseUnit != '' && moveDate != '') {
-          // 业主名为空 日期 单元不为空
-          if (item.houseUnit.indexOf(houseUnit) > -1 && item.moveDate > moveDate[0] && item.moveDate < moveDate[1]) {
-            result.push(item)
-          }
-          // 业主名为空 单元为空 日期不为空
-        } else if (ownerName === '' && houseUnit === '' && moveDate != '') {
-          if (new Date(item.moveDate).valueOf() >= moveDate[0] && new Date(item.moveDate).valueOf() <= moveDate[1]) {
-            result.push(item)
-          }
-          //  单元为空 业主名 日期不为空
-        } else if (ownerName != '' && houseUnit === '' && moveDate != '') {
-          if (item.ownerName.indexOf(ownerName) > -1 && item.moveDate > moveDate[0] && item.moveDate < moveDate[1]) {
-            result.push(item)
-          }
-          // 日期为空 业主名 单元不为空
-        } else if (ownerName != '' && houseUnit != '' && moveDate === '') {
-          if (item.ownerName.indexOf(ownerName) > -1 && item.houseUnit.indexOf(houseUnit) > -1) {
-            result.push(item)
-          }
-          // 三个都空
-        } else if (ownerName != '' && houseUnit === '' && moveDate === '') {
-          if (item.ownerName.indexOf(ownerName) > -1) {
-            result.push(item)
-          }
-          // 单元不为空 业主名日期都为空
-        } else if (houseUnit != '' && ownerName === '' && moveDate === '') {
-          if (item.houseUnit.indexOf(houseUnit) > -1) {
-            result.push(item)
-          }
+      this.currentInfo.moveDate[0]
+      this.$axios.post('/searchOwner', {
+        params: {
+          ownerName: this.currentInfo.ownerName,
+          ownerMoveDate: this.currentInfo.moveDate
+        }
+      }).then(res => {
+        if (res.data.state === 200) {
+          this.ownerList = res.data.ownerInfo
         }
       })
-      console.log(result)
-      if (ownerName === '' && houseUnit === '' && moveDate === '') {
-        this.ownerList = this.ownerList_
-      } else {
-        this.ownerList = result
-      }
     },
     // 清空
     clearSearch () {
       this.currentInfo.ownerName = ''
       this.currentInfo.houseUnit = ''
       this.currentInfo.moveDate = ''
+      this.getAllOwner()
     },
     // 新增页面
     addOwner () {
