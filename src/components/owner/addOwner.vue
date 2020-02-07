@@ -38,11 +38,6 @@
           <el-input style="width:300px;"
                     v-model="ownerInfo.originalPassword"></el-input>
         </el-form-item>
-        <!-- 所在单元 -->
-        <el-form-item label="所在单元:">
-          <el-input style="width:300px;"
-                    v-model="ownerInfo.ownerUnit"></el-input>
-        </el-form-item>
         <!-- 车位拥有数 -->
         <el-form-item label="车位数:">
           <el-input style="width:300px;"
@@ -52,14 +47,6 @@
         <el-form-item label="房产数:">
           <el-input style="width:300px;"
                     v-model="ownerInfo.ownerEstate"></el-input>
-        </el-form-item>
-        <!-- 迁入时间 -->
-        <el-form-item label="迁入时间:">
-          <el-date-picker v-model="ownerInfo.ownerMoveDate"
-                          type="date"
-                          value-format="yyyy-MM-dd"
-                          placeholder="选择日期">
-          </el-date-picker>
         </el-form-item>
       </el-form>
       <div class="sumbit-btn">
@@ -105,10 +92,8 @@ export default {
           ownerName: this.ownerInfo.ownerName,
           ownerSex: this.ownerInfo.ownerSex,
           ownerEmail: this.ownerInfo.ownerEmail,
-          ownerUnit: this.ownerInfo.ownerEmail,
           ownerParking: this.ownerInfo.ownerParking,
           ownerEstate: this.ownerInfo.ownerEstate,
-          ownerMoveDate: this.ownerInfo.ownerMoveDate,
           originalPassword: this.ownerInfo.originalPassword
         }
       }).then(res => {

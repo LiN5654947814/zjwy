@@ -336,6 +336,7 @@ export default {
             this.ownerList = []
           }
         }
+
       })
     },
     // 清空
@@ -351,6 +352,7 @@ export default {
     },
     // 单个删除业主
     deleteOwner (row) {
+      console.log(row.estate)
       this.$confirm('确定要删除该业主信息？', '提示', {
         confirmButtonText: '确定',
         canceButtonText: '取消',

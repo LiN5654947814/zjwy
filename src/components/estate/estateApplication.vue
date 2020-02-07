@@ -73,37 +73,37 @@
           <el-table-column type="selection"
                            width="55">
           </el-table-column>
-          <el-table-column prop="houseBuilds"
+          <el-table-column prop="estateBuilds"
                            label="楼宇"
                            width="180"
                            align="center">
           </el-table-column>
-          <el-table-column prop="houseUnit"
+          <el-table-column prop="estateUnit"
                            label="单元"
                            width="180"
                            align="center">
           </el-table-column>
-          <el-table-column prop="houseFloor"
+          <el-table-column prop="estateFloor"
                            label="楼层"
                            width="180"
                            align="center">
           </el-table-column>
-          <el-table-column prop="housePlate"
+          <el-table-column prop="estatePlate"
                            label="门牌"
                            width="180"
                            align="center">
           </el-table-column>
-          <el-table-column prop="houseApart"
+          <el-table-column prop="estateApart"
                            label="户型"
                            width="180"
                            align="center">
           </el-table-column>
-          <el-table-column prop="houseArea"
+          <el-table-column prop="estateArea"
                            label="面积(m²)"
                            width="180"
                            align="center">
           </el-table-column>
-          <el-table-column prop="houseReno"
+          <el-table-column prop="estateReno"
                            label="装修"
                            width="180"
                            align="center">
@@ -153,37 +153,36 @@
             <!-- 楼宇 -->
             <el-form-item label="楼宇:">
               <el-input style="width:300px;"
-                        v-model="estateInfo.houseBuilds"></el-input>
+                        v-model="estateInfo.estateBuilds"></el-input>
             </el-form-item>
             <!-- 单元 -->
             <el-form-item label="单元:">
               <el-input style="width:300px;"
-                        v-model="estateInfo.houseUnit"></el-input>
+                        v-model="estateInfo.estateUnit"></el-input>
             </el-form-item>
             <!-- 楼层 -->
             <el-form-item label="楼层:">
               <el-input style="width:300px;"
-                        v-model="estateInfo.houseArea"></el-input>
+                        v-model="estateInfo.estateFloor"></el-input>
+            </el-form-item>
+            <!-- 门牌 -->
+            <el-form-item label="门牌:">
+              <el-input style="width:300px;"
+                        v-model="estateInfo.estatePlate"></el-input>
             </el-form-item>
             <!-- 户型 -->
             <el-form-item label="户型:">
-              <el-select v-model="estateInfo.houseApart"
-                         placeholder="请选择">
-                <el-option v-for="item in houseApartSelect"
-                           :key="item.value"
-                           :label="item.value"
-                           :value="item.value">
-                </el-option>
-              </el-select>
+              <el-input style="width:300px;"
+                        v-model="estateInfo.estateApart"></el-input>
             </el-form-item>
             <!-- 面积 -->
             <el-form-item label="面积(m²):">
               <el-input style="width:300px;"
-                        v-model="estateInfo.houseArea"></el-input>
+                        v-model="estateInfo.estateArea"></el-input>
             </el-form-item>
             <!-- 装修 -->
             <el-form-item label="是否已装修:">
-              <el-select v-model="houseInfo.houseReno"
+              <el-select v-model="estateInfo.estateReno"
                          placeholder="请选择">
                 <el-option v-for="item in houseRenoSelect"
                            :key="item.value"
@@ -215,152 +214,7 @@ export default {
       // 房产信息
       houseInfo: {},
       // 未售房产
-      houseList: [
-        {
-          id: '01',
-          houseBuilds: 'A栋',
-          houseUnit: 'A',
-          houseFloor: '1',
-          housePlate: '101',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseCost: '500',
-          moveDate: '2019-12-31',
-          houseReno: '已装修'
-        },
-        {
-          id: '02',
-          houseBuilds: 'A栋',
-          houseUnit: 'A',
-          houseFloor: '1',
-          housePlate: '102',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseCost: '500',
-          moveDate: '2019-12-31',
-          houseReno: '已装修'
-        },
-        {
-          id: '03',
-          houseBuilds: 'A栋',
-          houseUnit: 'B',
-          houseFloor: '1',
-          housePlate: '101',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseCost: '500',
-          moveDate: '2019-12-31',
-          houseReno: '已装修'
-        },
-        {
-          id: '04',
-          houseBuilds: 'A栋',
-          houseUnit: 'B',
-          houseFloor: '2',
-          housePlate: '201',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseCost: '500',
-          moveDate: '2019-12-31',
-          houseReno: '已装修'
-        },
-        {
-          id: '05',
-          houseBuilds: 'A栋',
-          houseUnit: 'B',
-          houseFloor: '2',
-          housePlate: '201',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseCost: '500',
-          moveDate: '2019-12-31',
-          houseReno: '已装修'
-        },
-        {
-          id: '06',
-          houseBuilds: 'B栋',
-          houseUnit: 'A',
-          houseFloor: '1',
-          housePlate: '101',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseCost: '500',
-          moveDate: '2019-12-31',
-          houseReno: '已装修'
-        },
-        {
-          id: '07',
-          houseBuilds: 'B栋',
-          houseUnit: 'A',
-          houseFloor: '1',
-          housePlate: '102',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseCost: '500',
-          moveDate: '2019-12-31',
-          houseReno: '已装修'
-        },
-        {
-          id: '08',
-          houseBuilds: 'B栋',
-          houseUnit: 'B',
-          houseFloor: '1',
-          housePlate: '101',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseCost: '500',
-          moveDate: '2019-12-31',
-          houseReno: '已装修'
-        },
-        {
-          id: '09',
-          houseBuilds: 'B栋',
-          houseUnit: 'B',
-          houseFloor: '2',
-          housePlate: '201',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseCost: '500',
-          moveDate: '2019-12-31',
-          houseReno: '已装修'
-        },
-        {
-          id: '10',
-          houseBuilds: 'B栋',
-          houseUnit: 'C',
-          houseFloor: '1',
-          housePlate: '101',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseCost: '500',
-          moveDate: '2019-12-31',
-          houseReno: '已装修'
-        },
-        {
-          id: '11',
-          houseBuilds: 'B栋',
-          houseUnit: 'C',
-          houseFloor: '1',
-          housePlate: '102',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseCost: '500',
-          moveDate: '2019-12-31',
-          houseReno: '已装修'
-        },
-        {
-          id: '12',
-          houseBuilds: 'C栋',
-          houseUnit: 'C',
-          houseFloor: '2',
-          housePlate: '201',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseCost: '500',
-          moveDate: '2019-12-31',
-          houseReno: '已装修'
-        }
-      ],
+      houseList: [],
       // 分页器
       filters: {
         page: 0,
@@ -481,6 +335,9 @@ export default {
       return ret
     }
   },
+  mounted () {
+    this.getAllUnSaleEstate()
+  },
   methods: {
     // 勾选
     handleSelectionChange (val) {
@@ -497,6 +354,14 @@ export default {
       })
       this.houseUnitSelect = result
       this.houseInfo = Object.assign({}, this.houseInfo, { houseBuilds: value, houseUnit: '' })
+    },
+    // 获取所有未销售房产
+    getAllUnSaleEstate () {
+      this.$axios.get('/getAllUnSaleEstate').then(res => {
+        if (res.data.state === 200) {
+          this.houseList = res.data.estate
+        }
+      })
     },
     // 登记房产页面跳转
     toRegister (row) {
@@ -518,30 +383,6 @@ export default {
     },
     closePopUp () {
       this.isEstate = false
-    },
-    cleanUp () {
-      if (this.housePropCostList.clean === true) {
-        this.housePropCost = this.housePropCost + 70
-      }
-      if (this.housePropCostList.clean === false) {
-        this.housePropCost = this.housePropCost - 70
-      }
-    },
-    ecologyUp () {
-      if (this.housePropCostList.ecology === true) {
-        this.housePropCost = this.housePropCost + 50
-      }
-      if (this.housePropCostList.ecology === false) {
-        this.housePropCost = this.housePropCost - 50
-      }
-    },
-    orderUp () {
-      if (this.housePropCostList.order === true) {
-        this.housePropCost = this.housePropCost + 100
-      }
-      if (this.housePropCostList.order === false) {
-        this.housePropCost = this.housePropCost - 100
-      }
     }
   }
 }
