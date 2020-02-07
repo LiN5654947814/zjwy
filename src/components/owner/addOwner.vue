@@ -120,6 +120,12 @@ export default {
           setTimeout(() => {
             this.$router.push({ name: 'owner' })
           }, 2000)
+        } else if (res.data.state === 401) {
+          this.$message({
+            type: 'error',
+            message: res.data.message
+          })
+          return
         }
       })
     }

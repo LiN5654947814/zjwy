@@ -59,44 +59,39 @@
           <el-table-column type="selection"
                            width="55">
           </el-table-column>
-          <el-table-column prop="houseBuilds"
+          <el-table-column prop="estateBuilds"
                            label="楼宇"
-                           width="160"
+                           width="180"
                            align="center">
           </el-table-column>
-          <el-table-column prop="houseUnit"
+          <el-table-column prop="estateUnit"
                            label="单元"
-                           width="160"
+                           width="180"
                            align="center">
           </el-table-column>
-          <el-table-column prop="houseFloor"
+          <el-table-column prop="estateFloor"
                            label="楼层"
-                           width="160"
+                           width="180"
                            align="center">
           </el-table-column>
-          <el-table-column prop="housePlate"
+          <el-table-column prop="estatePlate"
                            label="门牌"
-                           width="160"
+                           width="180"
                            align="center">
           </el-table-column>
-          <el-table-column prop="houseArea"
+          <el-table-column prop="estateArea"
                            label="面积(m²)"
-                           width="160"
+                           width="180"
                            align="center">
           </el-table-column>
-          <el-table-column prop="houseOwner"
+          <el-table-column prop="estateOwner"
                            label="业主"
-                           width="160"
+                           width="180"
                            align="center">
           </el-table-column>
-          <el-table-column prop="houseCost"
-                           label="管理费"
-                           width="160"
-                           align="center">
-          </el-table-column>
-          <el-table-column prop="moveDate"
+          <el-table-column prop="ownerMoveDate"
                            label="迁入时间"
-                           width="160"
+                           width="180"
                            align="center">
           </el-table-column>
           <el-table-column prop="cost"
@@ -445,6 +440,9 @@ export default {
       return ret
     }
   },
+  mounted () {
+    this.getRegisterEstate()
+  },
   methods: {
     // 勾选
     handleSelectionChange (val) {
@@ -479,6 +477,16 @@ export default {
     closePopUp () {
       this.isEstate = false
       this.houseInfo = {}
+    },
+    // 获取已登记的房产信息
+    getRegisterEstate () {
+      this.$axios.get('/getAllRegisterEstate').then(res => {
+        if (res.data.state === 200) {
+          this.houseList = res.data.estate
+          console.log(this.houseList)
+          // this.houseList.estateMoveDate = res.data.estate[0].owner.ownerMoveDate
+        }
+      })
     }
   }
 }

@@ -35,11 +35,6 @@
                     v-model="estateInfo.houseArea"
                     disabled></el-input>
         </el-form-item>
-        <el-form-item label="基础物业费">
-          <el-input style="width:300px;"
-                    v-model="estateInfo.houseCost"
-                    disabled></el-input>
-        </el-form-item>
         <el-form-item label="装修情况">
           <el-input style="width:300px;"
                     v-model="estateInfo.houseReno"

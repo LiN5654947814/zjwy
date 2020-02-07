@@ -146,7 +146,8 @@
             <!-- 所在单元 -->
             <el-form-item label="所在单元:">
               <el-input style="width:300px;"
-                        v-model="ownerInfo.ownerUnit"></el-input>
+                        v-model="ownerInfo.ownerUnit"
+                        disabled></el-input>
             </el-form-item>
             <!-- 车位拥有数 -->
             <el-form-item label="车位数:">
@@ -162,7 +163,8 @@
             <el-form-item label="迁入时间:">
               <el-date-picker v-model="ownerInfo.ownerMoveDate"
                               type="date"
-                              placeholder="选择日期">
+                              placeholder="选择日期"
+                              disabled="">
               </el-date-picker>
             </el-form-item>
           </el-form>
@@ -260,10 +262,8 @@ export default {
             ownerName: this.ownerInfo.ownerName,
             ownerSex: this.ownerInfo.ownerSex,
             ownerEmail: this.ownerInfo.ownerEmail,
-            ownerUnit: this.ownerInfo.ownerEmail,
             ownerParking: this.ownerInfo.ownerParking,
             ownerEstate: this.ownerInfo.ownerEstate,
-            ownerMoveDate: this.ownerInfo.ownerMoveDate,
             originalPassword: this.ownerInfo.originalPassword
           }
         }).then(res => {
@@ -274,6 +274,11 @@ export default {
             })
             this.isOwner = false
             this.getAllOwner()
+          } else if (res.data.state === 401) {
+            this.$message({
+              type: 'error',
+              message: res.data.message
+            })
           }
         })
       })
@@ -283,7 +288,12 @@ export default {
       this.$axios.get('/getAllOwner').then(res => {
         if (res.data.state === 200) {
           this.ownerList = res.data.owners
-          console.log(this.ownerList)
+          this.ownerList.forEach(item => {
+            if (item.estate != null) {
+              item.ownerMoveDate = item.estate.ownerMoveDate
+              item.ownerUnit = item.estate.estateBuilds + '-' + item.estate.estateUnit + '-' + item.estate.estatePlate
+            }
+          })
         }
       })
     },
@@ -301,7 +311,30 @@ export default {
         }
       }).then(res => {
         if (res.data.state === 200) {
-          this.ownerList = res.data.ownerInfo
+          let currentList = []
+          currentList = res.data.ownerInfo
+          if (currentList.length != 0) {
+            currentList.forEach(item => {
+              if (item.owner != null && item.owner) {
+                item.id = item.owner.id
+                item.ownerName = item.owner.ownerName
+                item.ownerSex = item.owner.ownerSex
+                item.ownerPhone = item.owner.ownerPhone
+                item.ownerParking = item.owner.ownerParking
+                item.ownerEstate = item.owner.ownerEstate
+                item.ownerCard = item.owner.ownerCard
+                item.ownerEmail = item.owner.ownerEmail
+                item.ownerUnit = item.estateBuilds + '-' + item.estateUnit + '-' + item.estatePlate
+              }
+              if (item.estate != null && item.estate) {
+                item.ownerMoveDate = item.estate.ownerMoveDate
+                item.ownerUnit = item.estate.estateBuilds + '-' + item.estate.estateUnit + '-' + item.estate.estatePlate
+              }
+              this.ownerList = currentList
+            })
+          } else {
+            this.ownerList = []
+          }
         }
       })
     },
