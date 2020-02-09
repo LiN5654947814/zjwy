@@ -146,7 +146,8 @@
             <!-- 所在单元 -->
             <el-form-item label="所在单元:">
               <el-select v-model="ownerInfo.ownerUnit"
-                         placeholder="请选择">
+                         placeholder="请选择"
+                         @change="changeUnit">
                 <el-option v-for="item in houseUnit"
                            :key="item.value"
                            :label="item.value"
@@ -171,7 +172,7 @@
                               placeholder="选择日期"
                               disabled=""
                               style="width:300px;
-                              margin-right:50px;">
+                              margin-right:80px;">
               </el-date-picker>
               <span style="font-size:10px;">（注：若业主拥有多个房产则以第一套登记迁入时间为主）</span>
             </el-form-item>
@@ -240,9 +241,12 @@ export default {
       this.ownerInfo = row
       console.log(this.ownerInfo)
       this.currentTitle = '编辑'
-      row.estates.forEach(item => {
-        this.houseUnit.push({ value: item.estateBuilds + '-' + item.estateUnit + '-' + item.estatePlate })
+      row.estates.forEach((item, index) => {
+        this.houseUnit.push({ id: index, value: item.estateBuilds + '-' + item.estateUnit + '-' + item.estatePlate })
       })
+    },
+    changeUnit () {
+      this.$forceUpdate()
     },
     // 编辑业主
     modifyOwner () {
@@ -299,6 +303,7 @@ export default {
     closePopUp () {
       this.isOwner = false
       this.houseUnit = []
+      this.getAllOwner()
     },
     // 按条件搜索业主
     serachOwner () {
@@ -356,7 +361,7 @@ export default {
         canceButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if (row.estate) {
+        if (row.estates) {
           this.$message({
             type: 'error',
             message: '请解绑所选业主名下房产信息'
@@ -390,19 +395,30 @@ export default {
         canceButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.post('/deleteOwners', {
-          params: {
-            deleteOwners: this.multipleSelection
-          }
-        }).then(res => {
-          if (res.data.state === 200) {
-            this.$message({
-              type: 'success',
-              message: '删除成功'
-            })
+        this.multipleSelection.forEach(owner => {
+          if (owner.estates) {
             setTimeout(() => {
-              this.getAllOwner()
-            }, 1000)
+              this.$message({
+                type: 'error',
+                message: `请解绑业主(` + owner.ownerName + `)名下房产信息`
+              })
+            }, 500)
+          } else {
+            this.$axios.post('/deleteOwners', {
+              params: {
+                deleteOwners: this.multipleSelection
+              }
+            }).then(res => {
+              if (res.data.state === 200) {
+                this.$message({
+                  type: 'success',
+                  message: '删除成功'
+                })
+                setTimeout(() => {
+                  this.getAllOwner()
+                }, 1000)
+              }
+            })
           }
         })
       })

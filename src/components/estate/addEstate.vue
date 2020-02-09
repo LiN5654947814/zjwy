@@ -7,18 +7,36 @@
       <el-form label-width="20%">
         <!-- 楼宇 -->
         <el-form-item label="楼宇:">
-          <el-input style="width:300px;"
-                    v-model="houseInfo.estateBuilds"></el-input>
+          <el-select v-model="houseInfo.estateBuilds"
+                     placeholder="请选择">
+            <el-option v-for="item in buildSelect"
+                       :key="item.value"
+                       :label="item.value"
+                       :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
         <!-- 单元 -->
         <el-form-item label="单元:">
-          <el-input style="width:300px;"
-                    v-model="houseInfo.estateUnit"></el-input>
+          <el-select v-model="houseInfo.estateUnit"
+                     placeholder="请选择">
+            <el-option v-for="item in unitSelect"
+                       :key="item.value"
+                       :label="item.value"
+                       :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
         <!-- 楼层 -->
         <el-form-item label="楼层:">
-          <el-input style="width:300px;"
-                    v-model="houseInfo.estateFloor"></el-input>
+          <el-select v-model="houseInfo.estateFloor"
+                     placeholder="请选择">
+            <el-option v-for="item in floorSelect"
+                       :key="item.value"
+                       :label="item.value"
+                       :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
         <!-- 门牌 -->
         <el-form-item label="门牌:">
@@ -81,14 +99,36 @@ export default {
       houseInfo: {
         estateResgister: '未登记'
       },
-      houseSaleSelect: [
+      // 楼宇
+      buildSelect: [
         {
-          value: '已销售'
+          value: 'A栋'
         },
         {
-          value: '未销售'
+          value: 'B栋'
+        },
+        {
+          value: 'C栋'
         }
       ],
+      // 单元
+      unitSelect: [
+        {
+          value: 'A区'
+        },
+        {
+          value: 'B区'
+        },
+        {
+          value: 'C区'
+        },
+        {
+          value: 'D区'
+        }
+      ],
+      // 楼层
+      floorSelect: [],
+      // 户型
       houseApartSelect: [
         {
           value: '两房一厅'
@@ -115,9 +155,18 @@ export default {
       ]
     }
   },
+  mounted () {
+    this.mountedFloor()
+  },
   methods: {
     goBack () {
       this.$router.push('/estateApplication')
+    },
+    // 渲染楼层数
+    mountedFloor () {
+      for (let i = 1; i <= 15; i++) {
+        this.floorSelect.push({ value: i })
+      }
     },
     // 新增未登记房产
     addEstate () {

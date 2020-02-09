@@ -11,19 +11,18 @@
         </el-form-item>
         <el-form-item>
           楼宇：<el-select v-model="houseInfo.houseBuilds"
-                     placeholder="请选择"
-                     @change="getUnitSelect">
-            <el-option v-for="item in houseSelect"
-                       :key="item.id"
-                       :label="item.label"
-                       :value="item.label">
+                     placeholder="请选择">
+            <el-option v-for="item in buildSelect"
+                       :key="item.value"
+                       :label="item.value"
+                       :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
           单元：<el-select v-model="houseInfo.houseUnit"
                      placeholder="请选择">
-            <el-option v-for="item in houseUnitSelect"
+            <el-option v-for="item in unitSelect"
                        :key="item.value"
                        :label="item.value"
                        :value="item.value">
@@ -33,7 +32,7 @@
         <el-form-item>
           楼层：<el-select v-model="houseInfo.houseFloor"
                      placeholder="请选择">
-            <el-option v-for="item in housefloorList"
+            <el-option v-for="item in floorSelect"
                        :key="item.value"
                        :label="item.value"
                        :value="item.value">
@@ -51,7 +50,8 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">
+          <el-button type="primary"
+                     @click="searchEstateApplication">
             搜索
           </el-button>
           <el-button type="warning">
@@ -221,69 +221,32 @@ export default {
         limit: 10
       },
       // 楼宇选择器
-      houseSelect: [
+      buildSelect: [
         {
-          id: '01',
-          label: 'A栋',
-          children: [
-            {
-              value: 'A'
-            }, {
-              value: 'B'
-            },
-            {
-              value: 'C'
-            }
-          ]
+          value: 'A栋'
         },
         {
-          id: '02',
-          label: 'B栋',
-          children: [
-            {
-              value: 'A'
-            },
-            {
-              value: 'B'
-            },
-            {
-              value: 'C'
-            },
-            {
-              value: 'D'
-            }
-          ]
+          value: 'B栋'
         },
         {
-          id: '03',
-          label: 'C栋',
-          children: [
-            {
-              value: 'A'
-            },
-            {
-              value: 'B'
-            },
-            {
-              value: 'C'
-            },
-            {
-              value: 'D'
-            },
-            {
-              value: '105'
-            },
-            {
-              value: '201'
-            },
-            {
-              value: '202'
-            }
-          ]
+          value: 'C栋'
         }
       ],
       // 单元选择器
-      houseUnitSelect: [],
+      unitSelect: [
+        {
+          value: 'A区'
+        },
+        {
+          value: 'B区'
+        },
+        {
+          value: 'C区'
+        },
+        {
+          value: 'D区'
+        }
+      ],
       // 户型
       houseApartSelect: [
         {
@@ -296,20 +259,7 @@ export default {
         }
       ],
       // 楼层
-      housefloorList: [
-        {
-          value: '1'
-        },
-        {
-          value: '2'
-        },
-        {
-          value: '3'
-        },
-        {
-          value: '4'
-        }
-      ],
+      floorSelect: [],
       // 弹窗
       isEstate: false,
       // 编辑房产信息
@@ -337,6 +287,7 @@ export default {
   },
   mounted () {
     this.getAllUnSaleEstate()
+    this.mountedFloor()
   },
   methods: {
     // 勾选
@@ -344,16 +295,14 @@ export default {
       this.multipleSelection = val;
       console.log(this.multipleSelection)
     },
+    // 渲染楼层数
+    mountedFloor () {
+      for (let i = 1; i <= 15; i++) {
+        this.floorSelect.push({ value: i })
+      }
+    },
     // 单元选择器联动
     getUnitSelect (value) {
-      let result = []
-      this.houseSelect.forEach(item => {
-        if (item.label === this.houseInfo.houseBuilds) {
-          result = item.children
-        }
-      })
-      this.houseUnitSelect = result
-      this.houseInfo = Object.assign({}, this.houseInfo, { houseBuilds: value, houseUnit: '' })
     },
     // 获取所有未销售房产
     getAllUnSaleEstate () {
@@ -383,6 +332,18 @@ export default {
     },
     closePopUp () {
       this.isEstate = false
+    },
+    // 搜索未登记房产信息
+    searchEstateApplication () {
+      this.$axios.post('/searchEstateApplication', {
+        params: {
+          houseInfo: this.houseInfo
+        }
+      }).then(res => {
+        if (res.data.state === 200) {
+          console.log(res.data)
+        }
+      })
     }
   }
 }
