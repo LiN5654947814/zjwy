@@ -43,11 +43,6 @@
           <el-input style="width:300px;"
                     v-model="ownerInfo.ownerParking"></el-input>
         </el-form-item>
-        <!-- 房产数 -->
-        <el-form-item label="房产数:">
-          <el-input style="width:300px;"
-                    v-model="ownerInfo.ownerEstate"></el-input>
-        </el-form-item>
       </el-form>
       <div class="sumbit-btn">
         <el-button type="success"
@@ -93,7 +88,6 @@ export default {
           ownerSex: this.ownerInfo.ownerSex,
           ownerEmail: this.ownerInfo.ownerEmail,
           ownerParking: this.ownerInfo.ownerParking,
-          ownerEstate: this.ownerInfo.ownerEstate,
           originalPassword: this.ownerInfo.originalPassword
         }
       }).then(res => {

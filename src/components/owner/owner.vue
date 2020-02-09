@@ -145,9 +145,14 @@
             </el-form-item>
             <!-- 所在单元 -->
             <el-form-item label="所在单元:">
-              <el-input style="width:300px;"
-                        v-model="ownerInfo.ownerUnit"
-                        disabled></el-input>
+              <el-select v-model="ownerInfo.ownerUnit"
+                         placeholder="请选择">
+                <el-option v-for="item in houseUnit"
+                           :key="item.value"
+                           :label="item.value"
+                           :value="item.value">
+                </el-option>
+              </el-select>
             </el-form-item>
             <!-- 车位拥有数 -->
             <el-form-item label="车位数:">
@@ -164,8 +169,11 @@
               <el-date-picker v-model="ownerInfo.ownerMoveDate"
                               type="date"
                               placeholder="选择日期"
-                              disabled="">
+                              disabled=""
+                              style="width:300px;
+                              margin-right:50px;">
               </el-date-picker>
+              <span style="font-size:10px;">（注：若业主拥有多个房产则以第一套登记迁入时间为主）</span>
             </el-form-item>
           </el-form>
           <el-button type="primary"
@@ -191,20 +199,7 @@ export default {
       isOwner: false,
       ownerList: [],
       // 房屋单元
-      houseUnit: [
-        {
-          value: '选项一',
-          label: 'A栋'
-        },
-        {
-          value: '选项二',
-          label: 'B栋'
-        },
-        {
-          value: '选项三',
-          label: 'C栋'
-        }
-      ],
+      houseUnit: [],
       moveDate: [],
       filters: {
         page: 0,
@@ -215,7 +210,6 @@ export default {
       // 搜索条件
       currentInfo: {
         ownerName: '',
-        houseUnit: '',
         moveDate: []
       },
       // 渲染选中业主信息
@@ -246,6 +240,9 @@ export default {
       this.ownerInfo = row
       console.log(this.ownerInfo)
       this.currentTitle = '编辑'
+      row.estates.forEach(item => {
+        this.houseUnit.push({ value: item.estateBuilds + '-' + item.estateUnit + '-' + item.estatePlate })
+      })
     },
     // 编辑业主
     modifyOwner () {
@@ -289,9 +286,10 @@ export default {
         if (res.data.state === 200) {
           this.ownerList = res.data.owners
           this.ownerList.forEach(item => {
-            if (item.estate != null) {
-              item.ownerMoveDate = item.estate.ownerMoveDate
-              item.ownerUnit = item.estate.estateBuilds + '-' + item.estate.estateUnit + '-' + item.estate.estatePlate
+            if (item.estates) {
+              item.ownerMoveDate = item.estates[0].ownerMoveDate
+              item.ownerUnit = item.estates[0].estateBuilds + '-' + item.estates[0].estateUnit + '-' + item.estates[0].estatePlate
+              item.ownerEstate = item.estates.length
             }
           })
         }
@@ -300,6 +298,7 @@ export default {
     // 关闭弹窗
     closePopUp () {
       this.isOwner = false
+      this.houseUnit = []
     },
     // 按条件搜索业主
     serachOwner () {
@@ -342,7 +341,6 @@ export default {
     // 清空
     clearSearch () {
       this.currentInfo.ownerName = ''
-      this.currentInfo.houseUnit = ''
       this.currentInfo.moveDate = ''
       this.getAllOwner()
     },
@@ -358,20 +356,27 @@ export default {
         canceButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.post('/deleteOwner', {
-          params: {
-            id: row.id,
-            ownerCard: row.ownerCard
-          }
-        }).then(res => {
-          if (res.data.state === 200) {
-            this.$message({
-              type: 'success',
-              message: '删除成功'
-            })
-            this.getAllOwner()
-          }
-        })
+        if (row.estate) {
+          this.$message({
+            type: 'error',
+            message: '请解绑所选业主名下房产信息'
+          })
+        } else {
+          this.$axios.post('/deleteOwner', {
+            params: {
+              id: row.id,
+              ownerCard: row.ownerCard
+            }
+          }).then(res => {
+            if (res.data.state === 200) {
+              this.$message({
+                type: 'success',
+                message: '删除成功'
+              })
+              this.getAllOwner()
+            }
+          })
+        }
       })
     },
     // 批量删除
@@ -485,7 +490,7 @@ export default {
       position: relative;
       .sumbit-btn {
         right: 50px;
-        bottom: 0px;
+        bottom: -5px;
         position: absolute;
       }
     }
