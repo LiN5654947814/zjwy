@@ -341,7 +341,7 @@ export default {
         }
       }).then(res => {
         if (res.data.state === 200) {
-          console.log(res.data)
+          this.houseList = res.data.estates
         }
       })
     }
