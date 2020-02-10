@@ -1,7 +1,7 @@
 <template>
   <div>
     <header-nav :title="title"></header-nav>
-    <!-- 房产表 -->
+    <!-- 房产搜索 -->
     <div class="estate-application-select">
       <el-form>
         <el-form-item>
@@ -54,7 +54,8 @@
                      @click="searchEstateApplication">
             搜索
           </el-button>
-          <el-button type="warning">
+          <el-button type="warning"
+                     @click="clearSearch">
             清空
           </el-button>
           <el-button type="success"
@@ -64,6 +65,7 @@
         </el-form-item>
       </el-form>
     </div>
+    <!-- 房产表 -->
     <div class="estate-application-container">
       <div class="estate-application-table">
         <el-table :data="currentList"
@@ -152,18 +154,36 @@
           <el-form label-width="20%">
             <!-- 楼宇 -->
             <el-form-item label="楼宇:">
-              <el-input style="width:300px;"
-                        v-model="estateInfo.estateBuilds"></el-input>
+              <el-select v-model="estateInfo.estateBuilds"
+                         placeholder="请选择">
+                <el-option v-for="item in buildSelect"
+                           :key="item.value"
+                           :label="item.value"
+                           :value="item.value">
+                </el-option>
+              </el-select>
             </el-form-item>
             <!-- 单元 -->
             <el-form-item label="单元:">
-              <el-input style="width:300px;"
-                        v-model="estateInfo.estateUnit"></el-input>
+              <el-select v-model="estateInfo.estateUnit"
+                         placeholder="请选择">
+                <el-option v-for="item in unitSelect"
+                           :key="item.value"
+                           :label="item.value"
+                           :value="item.value">
+                </el-option>
+              </el-select>
             </el-form-item>
             <!-- 楼层 -->
             <el-form-item label="楼层:">
-              <el-input style="width:300px;"
-                        v-model="estateInfo.estateFloor"></el-input>
+              <el-select v-model="estateInfo.estateFloor"
+                         placeholder="请选择">
+                <el-option v-for="item in floorSelect"
+                           :key="item.value"
+                           :label="item.value"
+                           :value="item.value">
+                </el-option>
+              </el-select>
             </el-form-item>
             <!-- 门牌 -->
             <el-form-item label="门牌:">
@@ -193,7 +213,8 @@
             </el-form-item>
           </el-form>
           <el-button type="primary"
-                     class="sumbit-btn">
+                     class="sumbit-btn"
+                     @click="modifyEstateApplication">
             保存
           </el-button>
         </div>
@@ -330,8 +351,37 @@ export default {
       this.isEstate = true
       this.estateInfo = row
     },
+    // 提交保存编辑的信息
+    modifyEstateApplication () {
+      this.$confirm('确定要修改该业主信息？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/modifyEstateApplication', {
+          params: {
+            estateInfo: this.estateInfo
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+            this.isEstate = false
+            this.getAllUnSaleEstate()
+          } else if (res.data.state === 401) {
+            this.$message({
+              type: 'error',
+              message: res.data.message
+            })
+          }
+        })
+      })
+    },
     closePopUp () {
       this.isEstate = false
+      this.getAllUnSaleEstate()
     },
     // 搜索未登记房产信息
     searchEstateApplication () {
@@ -344,6 +394,10 @@ export default {
           this.houseList = res.data.estates
         }
       })
+    },
+    // 清空搜索
+    clearSearch () {
+      this.houseInfo = []
     }
   }
 }
