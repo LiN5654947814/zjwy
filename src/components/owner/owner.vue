@@ -290,7 +290,7 @@ export default {
         if (res.data.state === 200) {
           this.ownerList = res.data.owners
           this.ownerList.forEach(item => {
-            if (item.estates) {
+            if (item.estates.length != 0) {
               item.ownerMoveDate = item.estates[0].ownerMoveDate
               item.ownerUnit = item.estates[0].estateBuilds + '-' + item.estates[0].estateUnit + '-' + item.estates[0].estatePlate
               item.ownerEstate = item.estates.length
@@ -396,7 +396,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.multipleSelection.forEach(owner => {
-          if (owner.estates) {
+          if (owner.estates.length != 0) {
             setTimeout(() => {
               this.$message({
                 type: 'error',

@@ -100,27 +100,48 @@ export default {
     // 新增登记房产
     addEstateRegister () {
       this.estateInfo.estateResgister = '已登记'
-      this.$axios.post('/estateRegister', {
-        params: {
-          id: this.estateInfo.id,
-          estateBuilds: this.estateInfo.estateBuilds,
-          estateUnit: this.estateInfo.estateUnit,
-          estateFloor: this.estateInfo.estateFloor,
-          estatePlate: this.estateInfo.estatePlate,
-          estateApart: this.estateInfo.estateApart,
-          estateArea: this.estateInfo.estateArea,
-          estateReno: this.estateInfo.estateReno,
-          estateResgister: this.estateInfo.estateResgister,
-          estateOwner: this.estateInfo.estateOwner,
-          estateOwnerCard: this.estateInfo.estateOwnerCard,
-          ownerMoveDate: this.estateInfo.estateMoveDate,
-          estateContent: this.estateInfo.estateContent
-        }
-      }).then(res => {
-        if (res.data.state === 200) {
-          console.log(res.data)
-        }
+      this.$confirm('确定要为该业主登记当前房产？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/estateRegister', {
+          params: {
+            id: this.estateInfo.id,
+            estateBuilds: this.estateInfo.estateBuilds,
+            estateUnit: this.estateInfo.estateUnit,
+            estateFloor: this.estateInfo.estateFloor,
+            estatePlate: this.estateInfo.estatePlate,
+            estateApart: this.estateInfo.estateApart,
+            estateArea: this.estateInfo.estateArea,
+            estateReno: this.estateInfo.estateReno,
+            estateResgister: this.estateInfo.estateResgister,
+            estateOwner: this.estateInfo.estateOwner,
+            estateOwnerCard: this.estateInfo.estateOwnerCard,
+            ownerMoveDate: this.estateInfo.estateMoveDate,
+            estateContent: this.estateInfo.estateContent
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+            setTimeout(() => {
+              this.$router.push({ name: 'estateApplication' })
+            }, 500)
+          } else {
+            if (res.data.state === 401) {
+              this.$message({
+                type: 'error',
+                message: res.data.message
+              })
+              return
+            }
+          }
+        })
       })
+
     }
   }
 }

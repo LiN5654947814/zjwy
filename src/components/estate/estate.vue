@@ -9,20 +9,19 @@
                          font-size:17px;">按条件搜索：</span>
         </el-form-item>
         <el-form-item>
-          楼宇：<el-select v-model="houseInfo.houseBuilds"
-                     placeholder="请选择"
-                     @change="getUnitSelect">
-            <el-option v-for="item in houseSelect"
-                       :key="item.id"
-                       :label="item.label"
-                       :value="item.label">
+          楼宇：<el-select v-model="searchInfo.estateBuilds"
+                     placeholder="请选择">
+            <el-option v-for="item in buildSelect"
+                       :key="item.value"
+                       :label="item.value"
+                       :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          单元：<el-select v-model="houseInfo.houseUnit"
+          单元：<el-select v-model="searchInfo.estateUnit"
                      placeholder="请选择">
-            <el-option v-for="item in houseUnitSelect"
+            <el-option v-for="item in unitSelect"
                        :key="item.value"
                        :label="item.value"
                        :value="item.value">
@@ -31,16 +30,19 @@
         </el-form-item>
         <el-form-item>
           门牌号：<el-input style="width:150px;
-                                    margin-right:10px;">
+                                    margin-right:10px;"
+                    v-model="searchInfo.estatePlate">
           </el-input>
         </el-form-item>
         <el-form-item>
           业主名：<el-input style="width:150px;
-                                    margin-right:10px;">
+                                    margin-right:10px;"
+                    v-model="searchInfo.estateOwner">
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">
+          <el-button type="primary"
+                     @click="searchRegisterEstate">
             搜索
           </el-button>
           <el-button type="warning"
@@ -100,10 +102,11 @@
             <template slot-scope="scope">
               <el-button type="primary"
                          @click="getownerInfo(scope.row)">
-                编辑
+                查看
               </el-button>
-              <el-button type="danger">
-                删除
+              <el-button type="danger"
+                         @click="reliveRegister(scope.row)">
+                解除登记
               </el-button>
             </template>
           </el-table-column>
@@ -123,7 +126,7 @@
       <div class="estate-info">
         <div class="estate-info-header">
           <div class="estate-header-title">
-            查看房产信息
+            查看房产登记信息
           </div>
           <img src="../../assets/icon/close.png"
                class="estate-header-close"
@@ -133,33 +136,33 @@
           <el-form label-width="40%">
             <!-- 楼宇 -->
             <el-form-item label="楼宇:">
-              {{houseInfo.houseBuilds}}
+              {{houseInfo.estateBuilds}}
             </el-form-item>
             <!-- 单元 -->
             <el-form-item label="单元:">
-              {{houseInfo.houseUnit}}
+              {{houseInfo.estateUnit}}
             </el-form-item>
             <!-- 房态 -->
             <el-form-item label="房态:">
-              {{houseInfo.houseSale}}
+              {{houseInfo.estateResgister}}
             </el-form-item>
             <!-- 户型 -->
             <el-form-item label="户型:">
-              {{houseInfo.houseApart}}
+              {{houseInfo.estateApart}}
             </el-form-item>
             <!-- 面积 -->
             <el-form-item label="面积(m²):">
-              {{houseInfo.houseArea}}
+              {{houseInfo.estateArea}}
             </el-form-item>
             <!-- 所属业主 -->
             <el-form-item label="所属业主:">
-              {{houseInfo.houseOwner}}
+              {{houseInfo.estateOwner}}
+            </el-form-item>
+            <!-- 联系方式 -->
+            <el-form-item label="备注:">
+              {{houseInfo.estateContent}}
             </el-form-item>
           </el-form>
-          <el-button type="primary"
-                     class="sumbit-btn">
-            保存
-          </el-button>
         </div>
       </div>
     </div>
@@ -177,243 +180,39 @@ export default {
       title: '房产管理',
       // 房产信息
       houseInfo: {},
-      houseList: [
-        {
-          id: '01',
-          houseBuilds: 'A栋',
-          houseUnit: 'A',
-          houseFloor: '1',
-          housePlate: '101',
-          houseSale: '已销售',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseOwner: '孙笑川',
-          houseCost: '500',
-          moveDate: '2019-12-31'
-
-        }, {
-          id: '02',
-          houseBuilds: 'A栋',
-          houseUnit: 'A',
-          houseFloor: '1',
-          housePlate: '102',
-          houseSale: '已销售',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseOwner: '李赣',
-          houseCost: '500',
-          moveDate: '2019-12-31'
-        }, {
-          id: '03',
-          houseBuilds: 'A栋',
-          houseUnit: 'A',
-          houseFloor: '1',
-          housePlate: '103',
-          houseSale: '已销售',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseOwner: '梁志斌',
-          houseCost: '500',
-          moveDate: '2019-12-31'
-        }, {
-          id: '04',
-          houseBuilds: 'B栋',
-          houseUnit: 'A',
-          houseFloor: '1',
-          housePlate: '101',
-          houseSale: '已销售',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseOwner: '深海鱼',
-          houseCost: '500',
-          moveDate: '2019-12-31'
-        }, {
-          id: '05',
-          houseBuilds: 'B栋',
-          houseUnit: 'B',
-          houseFloor: '2',
-          housePlate: '201',
-          houseSale: '已销售',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseOwner: '许昊龙',
-          houseCost: '500',
-          moveDate: '2019-12-31'
-        }, {
-          id: '06',
-          houseBuilds: 'B栋',
-          houseUnit: 'A',
-          houseFloor: '2',
-          housePlate: '202',
-          houseSale: '未销售',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseOwner: '',
-          houseCost: '0',
-          moveDate: '2019-12-31'
-        }, {
-          id: '07',
-          houseBuilds: 'B栋',
-          houseUnit: 'B',
-          houseFloor: '1',
-          housePlate: '104',
-          houseSale: '未销售',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseOwner: '',
-          houseCost: '0',
-          moveDate: '2019-12-31'
-        }, {
-          id: '08',
-          houseBuilds: 'C栋',
-          houseUnit: 'A',
-          houseFloor: '1',
-          housePlate: '105',
-          houseSale: '已销售',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseOwner: '韩金龙',
-          houseCost: '500',
-          moveDate: '2019-12-31'
-        }, {
-          id: '09',
-          houseBuilds: 'C栋',
-          houseUnit: 'B',
-          houseFloor: '3',
-          housePlate: '301',
-          houseSale: '未销售',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseOwner: '',
-          houseCost: '0',
-          moveDate: '2019-12-31'
-        }, {
-          id: '10',
-          houseBuilds: 'C栋',
-          houseUnit: 'B',
-          houseFloor: '1',
-          housePlate: '101',
-          houseSale: '未销售',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseOwner: '',
-          houseCost: '500',
-          moveDate: '2019-12-31'
-        }, {
-          id: '11',
-          houseBuilds: 'C栋',
-          houseUnit: 'A',
-          houseFloor: '4',
-          housePlate: '401',
-          houseSale: '未销售',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseOwner: '',
-          houseCost: '500',
-          moveDate: '2019-12-31'
-        }, {
-          id: '12',
-          houseBuilds: 'C栋',
-          houseUnit: 'B',
-          houseFloor: '1',
-          housePlate: '101',
-          houseSale: '未销售',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseOwner: '',
-          houseCost: '500',
-          moveDate: '2019-12-31'
-        }, {
-          id: '13',
-          houseBuilds: 'C栋',
-          houseUnit: 'A',
-          houseFloor: '2',
-          housePlate: '203',
-          houseSale: '未销售',
-          houseApart: '三房一厅',
-          houseArea: '102',
-          houseOwner: '',
-          houseCost: '500',
-          moveDate: '2019-12-31'
-        }
-      ],
+      houseList: [],
       // 分页器
       filters: {
         page: 0,
         limit: 10
       },
+      // 搜索对象
+      searchInfo: {},
       // 楼宇选择器
-      houseSelect: [
+      buildSelect: [
         {
-          id: '01',
-          label: 'A栋',
-          children: [
-            {
-              value: 'A'
-            }, {
-              value: 'B'
-            },
-            {
-              value: 'C'
-            }
-          ]
+          value: 'A栋'
         },
         {
-          id: '02',
-          label: 'B栋',
-          children: [
-            {
-              value: 'A'
-            },
-            {
-              value: 'B'
-            },
-            {
-              value: 'C'
-            },
-            {
-              value: 'D'
-            }
-          ]
+          value: 'B栋'
         },
         {
-          id: '03',
-          label: 'C栋',
-          children: [
-            {
-              value: 'A'
-            },
-            {
-              value: 'B'
-            },
-            {
-              value: 'C'
-            },
-            {
-              value: 'D'
-            },
-            {
-              value: '105'
-            },
-            {
-              value: '201'
-            },
-            {
-              value: '202'
-            }
-          ]
+          value: 'C栋'
         }
       ],
       // 单元选择器
-      houseUnitSelect: [],
-      // 房态
-      houseSaleSelect: [
+      unitSelect: [
         {
-          id: '01',
-          value: '未销售'
-        }, {
-          id: '01',
-          value: '已销售'
+          value: 'A区'
+        },
+        {
+          value: 'B区'
+        },
+        {
+          value: 'C区'
+        },
+        {
+          value: 'D区'
         }
       ],
       // 户型
@@ -450,19 +249,20 @@ export default {
       console.log(this.multipleSelection)
     },
     // 单元选择器联动
-    getUnitSelect (value) {
-      let result = []
-      this.houseSelect.forEach(item => {
-        if (item.label === this.houseInfo.houseBuilds) {
-          result = item.children
-        }
-      })
-      this.houseUnitSelect = result
-      this.houseInfo = Object.assign({}, this.houseInfo, { houseBuilds: value, houseUnit: '' })
-    },
+    // getUnitSelect (value) {
+    //   let result = []
+    //   this.houseSelect.forEach(item => {
+    //     if (item.label === this.houseInfo.houseBuilds) {
+    //       result = item.children
+    //     }
+    //   })
+    //   this.houseUnitSelect = result
+    //   this.houseInfo = Object.assign({}, this.houseInfo, { houseBuilds: value, houseUnit: '' })
+    // },
     // 清空按钮
     clearSearch () {
-      this.houseInfo = {}
+      this.searchInfo = {}
+      this.getRegisterEstate()
     },
     // 新增房产信息
     addEstate () {
@@ -485,6 +285,45 @@ export default {
           this.houseList = res.data.estate
           console.log(this.houseList)
           // this.houseList.estateMoveDate = res.data.estate[0].owner.ownerMoveDate
+        }
+      })
+    },
+    // 解除绑定
+    reliveRegister (estateInfo) {
+      this.$confirm('确定要解除此业主与此房产的登记？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('reliveRegister', {
+          params: {
+            estateInfo: estateInfo
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+            this.getRegisterEstate()
+          } else {
+            this.$message({
+              type: 'error',
+              message: res.data.state
+            })
+          }
+        })
+      })
+    },
+    // 搜索已登记的房产信息
+    searchRegisterEstate () {
+      this.$axios.post('/searchRegisterApplication', {
+        params: {
+          searchInfo: this.searchInfo
+        }
+      }).then(res => {
+        if (res.data.state == 200) {
+          this.houseList = res.data.estates
         }
       })
     }

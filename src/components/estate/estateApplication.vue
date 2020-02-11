@@ -7,11 +7,12 @@
         <el-form-item>
           <span style="margin-right:20px;
                          font-weight:700;
-                         font-size:17px;">按条件搜索当前未售房产：</span>
+                         font-size:17px;">按条件搜索当前未售房产:</span>
         </el-form-item>
         <el-form-item>
           楼宇：<el-select v-model="houseInfo.houseBuilds"
-                     placeholder="请选择">
+                     placeholder="请选择"
+                     style="width:200px;">
             <el-option v-for="item in buildSelect"
                        :key="item.value"
                        :label="item.value"
@@ -21,7 +22,8 @@
         </el-form-item>
         <el-form-item>
           单元：<el-select v-model="houseInfo.houseUnit"
-                     placeholder="请选择">
+                     placeholder="请选择"
+                     style="width:200px;">
             <el-option v-for="item in unitSelect"
                        :key="item.value"
                        :label="item.value"
@@ -31,7 +33,8 @@
         </el-form-item>
         <el-form-item>
           楼层：<el-select v-model="houseInfo.houseFloor"
-                     placeholder="请选择">
+                     placeholder="请选择"
+                     style="width:200px;">
             <el-option v-for="item in floorSelect"
                        :key="item.value"
                        :label="item.value"
@@ -61,6 +64,10 @@
           <el-button type="success"
                      @click="addEstateApplication">
             新增
+          </el-button>
+          <el-button type="danger"
+                     @click="deleteEstateApplicationList">
+            批量删除
           </el-button>
         </el-form-item>
       </el-form>
@@ -118,7 +125,8 @@
                          @click="estateApplicationModify(scope.row)">
                 编辑
               </el-button>
-              <el-button type="danger">
+              <el-button type="danger"
+                         @click="deleteEstateApplication(scope.row)">
                 删除
               </el-button>
               <el-button type="success"
@@ -398,6 +406,54 @@ export default {
     // 清空搜索
     clearSearch () {
       this.houseInfo = []
+    },
+    // 删除单个未登记房产信息
+    deleteEstateApplication (row) {
+      this.$confirm('确定要删除该房产信息？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/deleteEstateApplication', {
+          params: {
+            estateId: row.id
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+            this.getAllUnSaleEstate()
+          }
+        })
+      })
+    },
+    // 批量删除
+    deleteEstateApplicationList () {
+      let estateList = []
+      estateList = this.multipleSelection
+      this.$confirm('确定要删除多条房产信息？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/deleteEstateApplicationList', {
+          params: {
+            estateList: estateList
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+            setTimeout(() => {
+              this.getAllUnSaleEstate()
+            }, 500)
+          }
+        })
+      })
     }
   }
 }
