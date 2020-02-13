@@ -3,7 +3,7 @@
     <headerNav :title="title"
                :position="position"></headerNav>
     <!-- 搜索 -->
-    <div class="parking-select">
+    <div class="parkingApplication-select">
       <el-form>
         <el-form-item>
           <span style="margin-right:20px;
@@ -16,44 +16,22 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          车位类型：<el-select v-model="parkingInfo.parkingType"
-                     placeholder="请选择">
-            <el-option v-for="item in parkingSelect"
-                       :key="item.value"
-                       :label="item.value"
-                       :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          租赁时间： <el-date-picker v-model="parkingInfo.PayDate"
-                          type="daterange"
-                          range-separator="至"
-                          start-placeholder="开始日期"
-                          end-placeholder="结束日期"
-                          :default-time="['00:00:00','23:59:59']"
-                          value-format="yyyy-MM-dd"
-                          style="margin-right:20px;">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item>
-          业主名：<el-input style="width:150px;
-                                    margin-right:10px;">
-          </el-input>
-        </el-form-item>
-        <el-form-item>
           <el-button type="primary">
             搜索
           </el-button>
           <el-button type="warning">
             清空
           </el-button>
+          <el-button type="success"
+                     @click="addParking">
+            新增
+          </el-button>
         </el-form-item>
       </el-form>
     </div>
     <!-- 列表 -->
-    <div class="parking-container">
-      <div class="parking-table">
+    <div class="parkingApplication-container">
+      <div class="parkingApplication-table">
         <el-table :data="currentList"
                   style="width: 100%;
                   padding-left:5px;"
@@ -96,11 +74,16 @@
               <el-button type="danger">
                 删除
               </el-button>
+              <el-button type="success"
+                         @click="toRegister(scope.row)">
+                登记
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <div class="pagination">
+      <div class="
+                         pagination">
         <el-pagination layout="prev, pager, next"
                        :current-page.sync="filters.page"
                        :page-size="filters.limit"
@@ -129,18 +112,20 @@
             </el-form-item>
             <!-- 车位类型 -->
             <el-form-item label="车位类型:">
-              <el-input style="width:300px;"
-                        v-model="parkingInfo.parkingType"></el-input>
-            </el-form-item>
-            <!-- 车位位置 -->
-            <el-form-item label="车位位置:">
-              <el-input style="width:300px;"
-                        v-model="parkingInfo.parkingLocation"></el-input>
+              <el-select v-model="parkingInfo.parkingType"
+                         placeholder="请选择">
+                <el-option v-for="item in parkingTypeSelect"
+                           :key="item.value"
+                           :label="item.value"
+                           :value="item.value">
+                </el-option>
+              </el-select>
             </el-form-item>
             <!-- 车位租赁开始时间 -->
             <el-form-item label="车位租赁开始时间:">
               <el-date-picker v-model="parkingInfo.parkingStartTime"
                               type="date"
+                              value-format="yyyy-MM-dd"
                               placeholder="选择日期">
               </el-date-picker>
 
@@ -149,6 +134,7 @@
             <el-form-item label="车位租赁结束时间:">
               <el-date-picker v-model="parkingInfo.parkingEndTime"
                               type="date"
+                              value-format="yyyy-MM-dd"
                               placeholder="选择日期">
               </el-date-picker>
             </el-form-item>
@@ -159,8 +145,9 @@
             </el-form-item>
           </el-form>
           <el-button type="primary"
-                     class="sumbit-btn">
-            保存
+                     class="sumbit-btn"
+                     @click="parkingRegister">
+            提交
           </el-button>
         </div>
       </div>
@@ -177,24 +164,23 @@ export default {
   data () {
     return {
       title: '车位管理',
-      position: '私有车位',
-      parkingSelect: [
-        {
-          value: '私有'
-        },
-        {
-          value: '公有'
-        }
-      ],
-      parkingInfo: [],
+      position: '公有车位',
       // 分页器
       filters: {
         page: 0,
         limit: 10
       },
-      // 模拟数据
       parkingList: [],
-      isParking: false
+      parkingInfo: {},
+      isParking: false,
+      parkingTypeSelect: [
+        {
+          'value': '公有'
+        },
+        {
+          'value': '私有'
+        }
+      ]
     }
   },
   computed: {
@@ -206,34 +192,61 @@ export default {
       return ret
     }
   },
+  mounted () {
+    this.getAllParking()
+  },
   methods: {
     // 勾选
     handleSelectionChange (val) {
       this.multipleSelection = val;
       console.log(this.multipleSelection)
     },
-    // 编辑弹窗
     getParkingInfo (row) {
       this.parkingInfo = row
       this.isParking = true
       console.log(row)
     },
+    // 新增车位信息
+    addParking () {
+      this.$router.push('/addParking')
+    },
+    // 获取所有车位信息
+    getAllParking () {
+      this.$axios.get('/getAllParking').then(res => {
+        if (res.data.state === 200) {
+          this.parkingList = res.data.parkingList
+        }
+      })
+    },
     // 关闭弹窗
     closePopUp () {
       this.isParking = false
     },
+    // 跳转登记车位信息页面
+    toRegister (row) {
+      console.log(row)
+      row.parkingType = '私有'
+      let parkingInfo = JSON.stringify(row)
+      this.$router.push({
+        name: 'parkingRegister',
+        query: {
+          parkingInfo: parkingInfo
+        }
+      })
+    }
   }
+
 }
 </script>
 
 <style lang="scss" scoped>
-.parking-select /deep/ .el-select {
+.parkingApplication-select /deep/ .el-select {
   margin-right: 10px;
 }
-.parking-select /deep/ .el-form-item {
+.parkingApplication-select /deep/ .el-form-item {
   float: left;
 }
-.parking-select {
+.parkingApplication-select {
   width: 95%;
   height: 50px;
   margin: 20px;
@@ -242,14 +255,15 @@ export default {
   border-radius: 5px;
   background-color: #fff;
 }
-.parking-container {
+
+.parkingApplication-container {
   width: 97%;
   margin: 20px;
   min-width: 1204px;
   border-radius: 5px;
   background-color: #fff;
   position: relative;
-  .parking-table {
+  .parkingApplication-table {
     min-height: 750px;
   }
   .pagination {

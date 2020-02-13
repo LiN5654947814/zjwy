@@ -16,6 +16,7 @@ import AddEstate from '../components/estate/addEstate.vue'
 import EstateRegister from '../components/estate/estateResgister.vue'
 import EstateApplicationModify from '../components/estate/estateApplicationModify.vue'
 import addParking from '../components/parking/addParking.vue'
+import parkingApplication from '../components/parking/parkingApplication.vue'
 import FixDetail from '../components/fix/fixDetail.vue'
 import AddPay from '../components/pay/addPay.vue'
 import AddFix from '../components/fix/addFix.vue'
@@ -23,6 +24,7 @@ import OwnerHome from '../views/owner_home.vue'
 import OwnerFix from '../components/ownerMain/ownerFix.vue'
 import OwnerApplication from '../components/ownerMain/ownerApplication.vue'
 import OwnerPasswordModify from '../components/ownerMain/ownerPasswordModify.vue'
+import parkingRegister from '../components/parking/parkingRegister.vue'
 
 Vue.use(VueRouter)
 const routes = [
@@ -109,16 +111,28 @@ const routes = [
         component: AddFix
       },
       {
-        // 车位管理
+        // 公有车位管理
         path: '/parking',
         name: 'parking',
         component: Parking
+      },
+      {
+        // 私有车位
+        path: '/parkingApplication',
+        name: 'parkingApplication',
+        component: parkingApplication
       },
       {
         // 新增车位信息
         path: '/addParking',
         name: 'addParking',
         component: addParking
+      },
+      {
+        // 登记车位
+        path: '/parkingRegister',
+        name: 'parkingRegister',
+        component: parkingRegister
       },
       {
         // 费用列表

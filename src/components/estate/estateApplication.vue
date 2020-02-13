@@ -343,10 +343,11 @@ export default {
     },
     // 登记房产页面跳转
     toRegister (row) {
+      let estateInfo = JSON.stringify(row)
       this.$router.push({
         path: '/estateRegister',
         query: {
-          estateInfo: row
+          estateInfo: estateInfo
         }
       })
     },

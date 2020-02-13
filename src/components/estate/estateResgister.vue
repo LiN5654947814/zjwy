@@ -92,7 +92,7 @@ export default {
   },
   methods: {
     getEstateInfo () {
-      this.estateInfo = this.$route.query.estateInfo
+      this.estateInfo = JSON.parse(this.$route.query.estateInfo)
     },
     goBack () {
       this.$router.push('/estateApplication')

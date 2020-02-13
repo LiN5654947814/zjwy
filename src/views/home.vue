@@ -47,10 +47,16 @@
             </el-menu-item-group>
           </el-submenu>
           <!-- 车位管理 -->
-          <el-menu-item index="/parking">
-            <i class="el-icon-edit-outline"></i>
-            <span slot="title">车位管理</span>
-          </el-menu-item>
+          <el-submenu index="/parking">
+            <template slot="title">
+              <i class="el-icon-edit-outline"></i>
+              <span slot="title">车位管理</span>
+            </template>
+            <el-menu-item-group>
+              <el-menu-item index="/parking">私有车位</el-menu-item>
+              <el-menu-item index="/parkingApplication">公有车位</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
           <!-- 保修管理 -->
           <el-menu-item index="/fix">
             <i class="el-icon-document"></i>
