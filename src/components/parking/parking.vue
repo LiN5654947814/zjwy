@@ -17,13 +17,9 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          租赁时间： <el-date-picker v-model="parkingSearch.payDate"
-                          type="daterange"
-                          range-separator="至"
-                          start-placeholder="开始日期"
-                          end-placeholder="结束日期"
-                          :default-time="['00:00:00','23:59:59']"
+          租赁开始时间： <el-date-picker v-model="parkingSearch.parkingStartTime"
                           value-format="yyyy-MM-dd"
+                          placeholder="选择日期"
                           style="margin-right:20px;">
           </el-date-picker>
         </el-form-item>
@@ -38,7 +34,8 @@
                      @click="searchRegisterParking">
             搜索
           </el-button>
-          <el-button type="warning">
+          <el-button type="warning"
+                     @click="clearUp">
             清空
           </el-button>
         </el-form-item>

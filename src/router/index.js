@@ -25,6 +25,7 @@ import OwnerFix from '../components/ownerMain/ownerFix.vue'
 import OwnerApplication from '../components/ownerMain/ownerApplication.vue'
 import OwnerPasswordModify from '../components/ownerMain/ownerPasswordModify.vue'
 import parkingRegister from '../components/parking/parkingRegister.vue'
+import complaint from '../components/complaint/complaint.vue'
 
 Vue.use(VueRouter)
 const routes = [
@@ -109,6 +110,12 @@ const routes = [
         path: '/addFix',
         name: 'addFix',
         component: AddFix
+      },
+      {
+        // 投诉管理
+        path: '/complaint',
+        name: 'complaint',
+        component: complaint
       },
       {
         // 公有车位管理

@@ -9,7 +9,7 @@
                          font-size:17px;">按条件搜索：</span>
         </el-form-item>
         <el-form-item>
-          报修状态：<el-select v-model="fixInfo.houseUnit"
+          报修状态：<el-select v-model="fixInfo.fixState"
                      placeholder="请选择">
             <el-option v-for="item in fixStateSelect"
                        :key="item.value"
@@ -19,21 +19,25 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          报修提交时间： <el-date-picker v-model="fixInfo.fixTime"
+          报修提交时间： <el-date-picker v-model="fixInfo.fixStartTime"
+                          value-format="yyyy-MM-dd"
                           type="date"
                           placeholder="选择日期">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
           业主名：<el-input style="width:150px;
-                                    margin-right:10px;">
+                                    margin-right:10px;"
+                    v-model="fixInfo.fixOwner">
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">
+          <el-button type="primary"
+                     @click="searchFix">
             搜索
           </el-button>
-          <el-button type="warning">
+          <el-button type="warning"
+                     @click="clearUp">
             清空
           </el-button>
           <el-button type="success"
@@ -49,11 +53,12 @@
                   style="width: 100%;
                   padding-left:5px;"
                   @selection-change="handleSelectionChange"
-                  :show-overflow-tooltip="true">
+                  :show-overflow-tooltip="true"
+                  :cell-style="cellStyle">
           <el-table-column type="selection"
                            width="55">
           </el-table-column>
-          <el-table-column prop="fixTime"
+          <el-table-column prop="fixStartTime"
                            label="报修时间"
                            width="200"
                            align="center">
@@ -68,7 +73,7 @@
                            width="200"
                            align="center">
           </el-table-column>
-          <el-table-column prop="fixType"
+          <el-table-column prop="fixState"
                            label="报修状态"
                            width="200"
                            align="center">
@@ -105,6 +110,7 @@
 
 <script>
 import headerNav from '../headerNav'
+const Base64 = require('js-base64').Base64
 export default {
   components: {
     headerNav
@@ -112,7 +118,7 @@ export default {
   data () {
     return {
       title: "报修管理",
-      fixInfo: [],
+      fixInfo: {},
       fixStateSelect: [
         {
           value: '已完成'
@@ -121,64 +127,7 @@ export default {
           value: '未完成'
         }
       ],
-      fixList: [
-        {
-          fixId: '001',
-          fixTime: '2020-01-21',
-          fixEndTime: '',
-          fixContent: '厕所淤堵',
-          fixOwner: '孙笑川',
-          fixType: '未修理'
-        },
-        {
-          fixId: '002',
-          fixTime: '2020-01-21',
-          fixEndTime: '',
-          fixContent: '厕所淤堵',
-          fixOwner: '孙笑川',
-          fixType: '未修理'
-        },
-        {
-          fixId: '003',
-          fixTime: '2020-01-21',
-          fixEndTime: '',
-          fixContent: '厕所淤堵',
-          fixOwner: '孙笑川',
-          fixType: '未修理'
-        },
-        {
-          fixId: '004',
-          fixTime: '2020-01-21',
-          fixEndTime: '',
-          fixContent: '厕所淤堵',
-          fixOwner: '孙笑川',
-          fixType: '未修理'
-        },
-        {
-          fixId: '005',
-          fixTime: '2020-01-21',
-          fixEndTime: '',
-          fixContent: '厕所淤堵',
-          fixOwner: '孙笑川',
-          fixType: '未修理'
-        },
-        {
-          fixId: '006',
-          fixTime: '2020-01-21',
-          fixEndTime: '',
-          fixContent: '厕所淤堵',
-          fixOwner: '孙笑川',
-          fixType: '未修理'
-        },
-        {
-          fixId: '007',
-          fixTime: '2020-01-21',
-          fixEndTime: '',
-          fixContent: '厕所淤堵',
-          fixOwner: '孙笑川',
-          fixType: '未修理'
-        }
-      ],
+      fixList: [],
       // 报修信息
       fixDetail: {},
       // 分页器
@@ -187,6 +136,9 @@ export default {
         limit: 10
       },
     }
+  },
+  mounted () {
+    this.getAllFixList()
   },
   computed: {
     total () {
@@ -205,16 +157,53 @@ export default {
     },
     // 跳转详情
     getFixDetail (row) {
+      let fixInfo = Base64.encode(JSON.stringify(row))
       this.$router.push({
         path: '/fixDetail',
         query: {
-          fixDetail: row
+          fixDetail: fixInfo
         }
       })
     },
     // 新增报修信息
     addFix () {
-      this.$router.push('/addFix')
+    },
+    // 获取所有的报修信息
+    getAllFixList () {
+      this.$axios.get('/getAllFix').then(res => {
+        if (res.data.state === 200) {
+          this.fixList = res.data.fixList
+        }
+      })
+    },
+    //按条件搜索报修信息
+    searchFix () {
+      this.$axios.post('/searchFix', {
+        params: {
+          fixInfo: this.fixInfo
+        }
+      }).then(res => {
+        if (res.data.state === 200) {
+          this.fixList = res.data.fixList
+        }
+      })
+    },
+    // 清空
+    clearUp () {
+      this.fixInfo = {}
+    },
+    cellStyle (row, column, rowIndex, columnIndex) {
+      if (row.column.label === '报修状态' && row.row.fixState === '已完成') {
+        return {
+          color: 'green',
+          'font-weight': '700'
+        }
+      } else if (row.column.label === '报修状态' && row.row.fixState === '未完成') {
+        return {
+          color: 'red',
+          'font-weight': '700'
+        }
+      }
     }
   }
 }

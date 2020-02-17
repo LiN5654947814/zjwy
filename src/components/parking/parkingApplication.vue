@@ -86,8 +86,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <div class="
-                         pagination">
+      <div class="pagination">
         <el-pagination layout="prev, pager, next"
                        :current-page.sync="filters.page"
                        :page-size="filters.limit"

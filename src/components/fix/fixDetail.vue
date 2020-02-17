@@ -13,14 +13,15 @@
           </el-form-item>
           <!-- 报修时间 -->
           <el-form-item label="报修时间:">
-            <el-date-picker v-model="fixDetail.fixTime"
+            <el-date-picker v-model="fixDetail.fixStartTime"
                             type="date"
+                            value-format="yyyy-MM-dd"
                             placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
           <!-- 报修状态 -->
           <el-form-item label="报修状态:">
-            <el-select v-model="fixDetail.fixType"
+            <el-select v-model="fixDetail.fixState"
                        placeholder="请选择">
               <el-option v-for="item in fixStateSelect"
                          :key="item.value"
@@ -33,16 +34,22 @@
           <el-form-item label="完成时间:">
             <el-date-picker v-model="fixDetail.fixEndTime"
                             type="date"
+                            value-format="yyyy-MM-dd"
                             placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
         </el-form>
       </div>
-      <div class="fixDetail-content">
-        {{fixDetail.fixContent}}
-      </div>
+
+      <el-input type="textarea"
+                :rows="15"
+                placeholder="请输入内容"
+                style="margin-bottom:20px;"
+                v-model="fixDetail.fixContent">
+      </el-input>
       <div class="fixDetail-btn">
-        <el-button type="primary">
+        <el-button type="primary"
+                   @click="modifyFixDetail">
           变更
         </el-button>
         <el-button type="danger"
@@ -56,6 +63,7 @@
 
 <script>
 import headerNav from '../headerNav'
+const Base64 = require('js-base64').Base64
 export default {
   components: {
     headerNav
@@ -74,6 +82,7 @@ export default {
           value: '未完成'
         }
       ],
+      isInput: false
     }
   },
   mounted () {
@@ -81,12 +90,32 @@ export default {
   },
   methods: {
     getFixDetail () {
-      this.fixDetail = this.$route.query.fixDetail
-      console.log(this.fixDetail)
+      this.fixDetail = JSON.parse(Base64.decode(this.$route.query.fixDetail))
+      if (this.fixDetail.fixState === '已完成') {
+        this.isInput = true
+      }
     },
     // 返回
     goBack () {
       this.$router.push('/fix')
+    },
+    // 变更信息
+    modifyFixDetail () {
+      this.$confirm('确定要变更报修信息？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/modifyFixDetail', {
+          params: {
+            fixDetail: this.fixDetail
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            console.log(res.data)
+          }
+        })
+      })
     }
   }
 }
