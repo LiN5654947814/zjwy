@@ -295,6 +295,9 @@ export default {
               item.ownerUnit = item.estates[0].estateBuilds + '-' + item.estates[0].estateUnit + '-' + item.estates[0].estatePlate
               item.ownerEstate = item.estates.length
             }
+            if (item.parkings) {
+              item.ownerParking = item.parkings.length
+            }
           })
         }
       })

@@ -12,21 +12,12 @@
         </el-form-item>
         <el-form-item>
           车位编号：<el-input style="width:150px;
-                                    margin-right:10px;">
+                                    margin-right:10px;"
+                    v-model="parkingSearch.parkingNum">
           </el-input>
         </el-form-item>
         <el-form-item>
-          车位类型：<el-select v-model="parkingInfo.parkingType"
-                     placeholder="请选择">
-            <el-option v-for="item in parkingSelect"
-                       :key="item.value"
-                       :label="item.value"
-                       :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          租赁时间： <el-date-picker v-model="parkingInfo.PayDate"
+          租赁时间： <el-date-picker v-model="parkingSearch.payDate"
                           type="daterange"
                           range-separator="至"
                           start-placeholder="开始日期"
@@ -38,11 +29,13 @@
         </el-form-item>
         <el-form-item>
           业主名：<el-input style="width:150px;
-                                    margin-right:10px;">
+                                    margin-right:10px;"
+                    v-model="parkingSearch.parkingOwner">
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">
+          <el-button type="primary"
+                     @click="searchRegisterParking">
             搜索
           </el-button>
           <el-button type="warning">
@@ -93,8 +86,9 @@
                          @click="getParkingInfo(scope.row)">
                 编辑
               </el-button>
-              <el-button type="danger">
-                删除
+              <el-button type="danger"
+                         @click="reliveRegister(scope.row)">
+                解除登记
               </el-button>
             </template>
           </el-table-column>
@@ -132,11 +126,6 @@
               <el-input style="width:300px;"
                         v-model="parkingInfo.parkingType"></el-input>
             </el-form-item>
-            <!-- 车位位置 -->
-            <el-form-item label="车位位置:">
-              <el-input style="width:300px;"
-                        v-model="parkingInfo.parkingLocation"></el-input>
-            </el-form-item>
             <!-- 车位租赁开始时间 -->
             <el-form-item label="车位租赁开始时间:">
               <el-date-picker v-model="parkingInfo.parkingStartTime"
@@ -159,8 +148,9 @@
             </el-form-item>
           </el-form>
           <el-button type="primary"
-                     class="sumbit-btn">
-            保存
+                     class="sumbit-btn"
+                     @click="modifyParkingInfo">
+            提交
           </el-button>
         </div>
       </div>
@@ -192,10 +182,13 @@ export default {
         page: 0,
         limit: 10
       },
-      // 模拟数据
+      parkingSearch: {},
       parkingList: [],
       isParking: false
     }
+  },
+  mounted () {
+    this.getAllRegisterParking()
   },
   computed: {
     total () {
@@ -222,6 +215,65 @@ export default {
     closePopUp () {
       this.isParking = false
     },
+    // 获取所有私有车位
+    getAllRegisterParking () {
+      this.$axios.get('/getAllRegisterParking').then(res => {
+        if (res.data.state === 200) {
+          this.parkingList = res.data.parkingList
+        }
+      })
+    },
+    // 解除登记
+    reliveRegister (row) {
+      this.$confirm('确定要解除该业主与此车位的登记信息？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/reliveParking', {
+          params: {
+            parkingInfo: row
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+            this.getAllRegisterParking()
+          }
+        })
+      })
+    },
+    // // 编辑登记车位
+    // modifyParkingInfo () {
+    //   this.$axios.post('/modifyRegisterParking', {
+    //     params: {
+    //       parkingInfo: this.parkingInfo
+    //     }
+    //   }).then(res => {
+    //     if (res.data.state === 200) {
+    //       console.log(res.data)
+    //     }
+    //   })
+    // }
+
+    // 搜索私有车位
+    searchRegisterParking () {
+      this.$axios.post('/searchRegisterParking', {
+        params: {
+          parkingSearch: this.parkingSearch
+        }
+      }).then(res => {
+        if (res.data.state === 200) {
+          this.parkingList = res.data.parkingList
+        }
+      })
+    },
+    // 清空搜索
+    clearUp () {
+      this.parkingSearch = {}
+    }
   }
 }
 </script>

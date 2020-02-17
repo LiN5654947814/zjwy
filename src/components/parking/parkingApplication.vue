@@ -12,19 +12,26 @@
         </el-form-item>
         <el-form-item>
           车位编号：<el-input style="width:150px;
-                                    margin-right:10px;">
+                                    margin-right:10px;"
+                    v-model="keyWrods">
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">
+          <el-button type="primary"
+                     @click="searchPakring">
             搜索
           </el-button>
-          <el-button type="warning">
+          <el-button type="warning"
+                     @click="clearUp">
             清空
           </el-button>
           <el-button type="success"
                      @click="addParking">
             新增
+          </el-button>
+          <el-button type="danger"
+                     @click="deleteParkingList">
+            批量删除
           </el-button>
         </el-form-item>
       </el-form>
@@ -67,11 +74,8 @@
           <el-table-column label="操作"
                            align="center">
             <template slot-scope="scope">
-              <el-button type="primary"
-                         @click="getParkingInfo(scope.row)">
-                编辑
-              </el-button>
-              <el-button type="danger">
+              <el-button type="danger"
+                         @click="deleteParkingApplication(scope.row)">
                 删除
               </el-button>
               <el-button type="success"
@@ -172,6 +176,7 @@ export default {
       },
       parkingList: [],
       parkingInfo: {},
+      keyWrods: '',
       isParking: false,
       parkingTypeSelect: [
         {
@@ -232,6 +237,67 @@ export default {
         query: {
           parkingInfo: parkingInfo
         }
+      })
+    },
+    // 搜索车位信息
+    searchPakring () {
+      this.$axios.post('/searchParking', {
+        params: {
+          keyWrods: this.keyWrods
+        }
+      }).then(res => {
+        if (res.data.state === 200) {
+          this.parkingList = res.data.parkingList
+        }
+      })
+    },
+    // 清空
+    clearUp () {
+      this.keyWrods = ''
+    },
+    // 删除车位信息
+    deleteParkingApplication (row) {
+      this.$confirm('确定要删除该车位信息？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/deleteParking', {
+          params: {
+            parkingInfo: row
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+            this.getAllParking()
+          }
+        })
+      })
+    },
+    // 批量删除
+    deleteParkingList () {
+      let parkingList = this.multipleSelection
+      this.$confirm('确定要删除所选的车位信息？', '确定', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/deleteParkingList', {
+          params: {
+            parkingList: parkingList
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+            this.getAllParking()
+          }
+        })
       })
     }
   }
