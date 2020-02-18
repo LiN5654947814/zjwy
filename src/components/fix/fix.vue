@@ -9,7 +9,7 @@
                          font-size:17px;">按条件搜索：</span>
         </el-form-item>
         <el-form-item>
-          报修状态：<el-select v-model="fixInfo.fixState"
+          报修状态：<el-select v-model="fixSearch.fixState"
                      placeholder="请选择">
             <el-option v-for="item in fixStateSelect"
                        :key="item.value"
@@ -19,7 +19,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          报修提交时间： <el-date-picker v-model="fixInfo.fixStartTime"
+          报修提交时间： <el-date-picker v-model="fixSearch.fixStartTime"
                           value-format="yyyy-MM-dd"
                           type="date"
                           placeholder="选择日期">
@@ -28,7 +28,7 @@
         <el-form-item>
           业主名：<el-input style="width:150px;
                                     margin-right:10px;"
-                    v-model="fixInfo.fixOwner">
+                    v-model="fixSearch.fixOwner">
           </el-input>
         </el-form-item>
         <el-form-item>
@@ -43,6 +43,10 @@
           <el-button type="success"
                      @click="addFix">
             新增
+          </el-button>
+          <el-button type="danger"
+                     @click="deleteFixList">
+            批量删除
           </el-button>
         </el-form-item>
       </el-form>
@@ -90,7 +94,8 @@
                          @click="getFixDetail(scope.row)">
                 详情
               </el-button>
-              <el-button type="danger">
+              <el-button type="danger"
+                         @click="deleteFix(scope.row)">
                 删除
               </el-button>
             </template>
@@ -119,6 +124,7 @@ export default {
     return {
       title: "报修管理",
       fixInfo: {},
+      fixSearch: {},
       fixStateSelect: [
         {
           value: '已完成'
@@ -167,6 +173,7 @@ export default {
     },
     // 新增报修信息
     addFix () {
+      this.$router.push({ name: 'addFix' })
     },
     // 获取所有的报修信息
     getAllFixList () {
@@ -180,7 +187,7 @@ export default {
     searchFix () {
       this.$axios.post('/searchFix', {
         params: {
-          fixInfo: this.fixInfo
+          fixInfo: this.clearUp
         }
       }).then(res => {
         if (res.data.state === 200) {
@@ -190,7 +197,7 @@ export default {
     },
     // 清空
     clearUp () {
-      this.fixInfo = {}
+      this.clearUp = {}
     },
     cellStyle (row, column, rowIndex, columnIndex) {
       if (row.column.label === '报修状态' && row.row.fixState === '已完成') {
@@ -204,6 +211,50 @@ export default {
           'font-weight': '700'
         }
       }
+    },
+    // 删除
+    deleteFix (row) {
+      this.$confirm('确定要删除此信息？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/deleteFix', {
+          params: {
+            fixInfo: row
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+            this.getAllFixList()
+          }
+        })
+      })
+    },
+    // 批量删除
+    deleteFixList () {
+      this.$confirm('确定要删除' + this.multipleSelection.length + '条报修信息？', '确定', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/deleteFixList', {
+          params: {
+            fixList: this.multipleSelection
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+            this.getAllFixList()
+          }
+        })
+      })
     }
   }
 }

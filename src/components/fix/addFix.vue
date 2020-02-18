@@ -11,14 +11,15 @@
           </el-form-item>
           <!-- 报修时间 -->
           <el-form-item label="报修时间:">
-            <el-date-picker v-model="fixInfo.fixTime"
+            <el-date-picker v-model="fixInfo.fixStartTime"
                             type="date"
+                            value-format="yyyy-MM-dd"
                             placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
           <!-- 报修状态 -->
           <el-form-item label="报修状态:">
-            <el-select v-model="fixInfo.fixType"
+            <el-select v-model="fixInfo.fixState"
                        placeholder="请选择">
               <el-option v-for="item in fixStateSelect"
                          :key="item.value"
@@ -36,11 +37,17 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="fixInfo-content">
-        {{fixInfo.fixContent}}
-      </div>
+
+      <el-input type="textarea"
+                :rows="15"
+                placeholder="请输入内容"
+                style="margin-bottom:20px;"
+                v-model="fixInfo.fixContent">
+      </el-input>
+
       <div class="fixInfo-btn">
-        <el-button type="success">
+        <el-button type="success"
+                   @click="addFix">
           新增
         </el-button>
         <el-button type="danger"
@@ -61,7 +68,7 @@ export default {
   data () {
     return {
       title: '新增报修信息',
-      fixInfo: [],
+      fixInfo: {},
       fixStateSelect: [
         {
           value: '已完成'
@@ -76,6 +83,22 @@ export default {
     // 返回
     goBack () {
       this.$router.push('/fix')
+    },
+    // 新增报修信息
+    addFix () {
+      this.$axios.post('/addFix', {
+        params: {
+          fixInfo: this.fixInfo
+        }
+      }).then(res => {
+        if (res.data.state === 200) {
+          this.$message({
+            type: 'success',
+            message: res.data.message
+          })
+          this.$router.push('/fix')
+        }
+      })
     }
   }
 
