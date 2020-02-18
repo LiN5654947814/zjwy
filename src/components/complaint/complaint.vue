@@ -9,11 +9,23 @@
                          font-weight:700;
                          font-size:17px;">按条件搜索：</span>
         </el-form-item>
+        <!-- 业主名 -->
         <el-form-item>
           业主名：<el-input style="width:150px;
                                     margin-right:10px;"
                     v-model="complaintInfo.complaintOwner">
           </el-input>
+        </el-form-item>
+        <!-- 投诉类型 -->
+        <el-form-item>
+          投诉类型：<el-select v-model="complaintInfo.complaintType"
+                     placeholder="请选择">
+            <el-option v-for="item in complaintSelect"
+                       :key="item.value"
+                       :label="item.value"
+                       :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button type="primary">
@@ -37,36 +49,44 @@
           <el-table-column type="selection"
                            width="55">
           </el-table-column>
-          <el-table-column prop="parkingNum"
+          <el-table-column prop="complaintTime"
                            label="投诉日期"
                            width="230"
                            align="center">
           </el-table-column>
-          <el-table-column prop="parkingType"
+          <el-table-column prop="complaintType"
                            label="投诉类型"
                            width="230"
                            align="center">
           </el-table-column>
-          <el-table-column prop="parkingStartTime"
+          <el-table-column prop="complaintContent"
                            label="投诉内容"
                            width="230"
                            align="center">
           </el-table-column>
-          <el-table-column prop="parkingEndTime"
+          <el-table-column prop="complaintOwner"
                            label="投诉业主"
+                           width="230"
+                           align="center">
+          </el-table-column>
+          <el-table-column prop="complainOwnerUnit"
+                           label="所在单元"
                            width="230"
                            align="center">
           </el-table-column>
           <el-table-column label="操作"
                            align="center">
             <template slot-scope="scope">
+              <el-button type="primary">
+                详情
+              </el-button>
+              <el-button type="success"
+                         @click="toReply(scope.row)">
+                回复
+              </el-button>
               <el-button type="danger"
                          @click="deleteParkingApplication(scope.row)">
                 删除
-              </el-button>
-              <el-button type="success"
-                         @click="toRegister(scope.row)">
-                登记
               </el-button>
             </template>
           </el-table-column>
@@ -84,6 +104,7 @@
 </template>
 
 <script>
+const Base64 = require('js-base64').Base64
 import headerNav from '../headerNav'
 export default {
   components: {
@@ -94,12 +115,31 @@ export default {
       title: '投诉管理',
       complaintInfo: {},
       complaintList: [],
+      // 投诉类型
+      complaintSelect: [
+        {
+          value: '维修投诉'
+        },
+        {
+          value: '扰民投诉'
+        },
+        {
+          value: '安全投诉'
+        },
+        {
+          value: '停车管理的投诉'
+        }
+
+      ],
       // 分页器
       filters: {
         page: 0,
         limit: 10
       },
     }
+  },
+  mounted () {
+    this.getAllComplaint()
   },
   computed: {
     total () {
@@ -108,6 +148,27 @@ export default {
     currentList () {
       let ret = this.complaintList.slice((this.filters.page - 1) * this.filters.limit, this.filters.page * this.filters.limit)
       return ret
+    }
+  },
+  methods: {
+    // 获取所有投诉信息
+    getAllComplaint () {
+      this.$axios.get('/getAllComplaint').then(res => {
+        if (res.data.state === 200) {
+          this.complaintList = res.data.complaintList
+        }
+      })
+    },
+    // 回复跳转
+    toReply (row) {
+      let complaintInfo = Base64.encode(JSON.stringify(row))
+      console.log(complaintInfo)
+      this.$router.push({
+        path: '/complaintReply',
+        query: {
+          complaintInfo: complaintInfo
+        }
+      })
     }
   }
 }

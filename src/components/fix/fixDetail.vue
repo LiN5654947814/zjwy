@@ -40,7 +40,6 @@
           </el-form-item>
         </el-form>
       </div>
-
       <el-input type="textarea"
                 :rows="15"
                 placeholder="请输入内容"
