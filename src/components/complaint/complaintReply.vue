@@ -44,12 +44,22 @@
         <div class="reply-header">
           回复信息
         </div>
-        <el-input type="textarea"
-                  :rows="10"
-                  style="margin-bottom:20px;"
-                  v-model="complaintInfo.complaintContent"
-                  disabled>
-        </el-input>
+        <div class="reply-content">
+          <el-input type="textarea"
+                    :rows="13"
+                    style="margin-bottom:20px;"
+                    v-model="complaintInfo.complaintReply">
+          </el-input>
+        </div>
+      </div>
+      <div class="complaint-btn">
+        <el-button type="primary">
+          回复
+        </el-button>
+        <el-button type="danger"
+                   @click="goBack">
+          返回
+        </el-button>
       </div>
     </div>
   </div>
@@ -73,8 +83,13 @@ export default {
     this.getComplaintInfo()
   },
   methods: {
+    // 获取跳转信息
     getComplaintInfo () {
       this.complaintInfo = JSON.parse(Base64.decode(this.$route.query.complaintInfo))
+    },
+    // 返回
+    goBack () {
+      this.$router.push('/complaint')
     }
   }
 
@@ -120,6 +135,16 @@ export default {
       font-size: 20px;
       font-weight: 700;
     }
+    .reply-content {
+      margin-top: 10px;
+      height: 200px;
+      padding: 15px;
+    }
+  }
+  .complaint-btn {
+    position: absolute;
+    right: 50px;
+    bottom: 20px;
   }
 }
 </style>

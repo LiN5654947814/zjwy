@@ -11,11 +11,12 @@
         </el-form-item>
         <el-form-item>
           业主姓名：<el-input style="width:150px;
-                                    margin-right:10px;">
+                                    margin-right:10px;"
+                    v-model="paySearch.payOwner">
           </el-input>
         </el-form-item>
         <el-form-item>
-          缴费状态：<el-select v-model="payInfo.parkingLocation"
+          缴费状态：<el-select v-model="paySearch.parkingLocation"
                      placeholder="请选择">
             <el-option v-for="item in payState"
                        :key="item.value"
@@ -25,14 +26,11 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          时间：<el-date-picker v-model="payInfo.payDate"
-                          type="daterange"
-                          range-separator="至"
-                          start-placeholder="开始日期"
-                          end-placeholder="结束日期"
-                          :default-time="['00:00:00','23:59:59']"
-                          value-format="timestamp"
-                          style="margin-right:20px;">
+          缴费月份： <el-date-picker v-model="paySearch.payDate"
+                          type="month"
+                          placeholder="选择月"
+                          style="margin-right:20px;"
+                          value-format="yyyy-MM">
           </el-date-picker>
         </el-form-item>
         <el-form-item>
@@ -202,6 +200,7 @@ export default {
     return {
       title: '收费管理',
       payInfo: [],
+      paySearch: {},
       payList: [
         {
           id: '001',

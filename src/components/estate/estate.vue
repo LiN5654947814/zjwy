@@ -248,17 +248,6 @@ export default {
       this.multipleSelection = val;
       console.log(this.multipleSelection)
     },
-    // 单元选择器联动
-    // getUnitSelect (value) {
-    //   let result = []
-    //   this.houseSelect.forEach(item => {
-    //     if (item.label === this.houseInfo.houseBuilds) {
-    //       result = item.children
-    //     }
-    //   })
-    //   this.houseUnitSelect = result
-    //   this.houseInfo = Object.assign({}, this.houseInfo, { houseBuilds: value, houseUnit: '' })
-    // },
     // 清空按钮
     clearSearch () {
       this.searchInfo = {}

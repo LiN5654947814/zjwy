@@ -42,7 +42,7 @@
               <span>房产管理</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="/estate">房产列表</el-menu-item>
+              <el-menu-item index="/estate">已登记房产</el-menu-item>
               <el-menu-item index="/estateApplication">房产登记</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
