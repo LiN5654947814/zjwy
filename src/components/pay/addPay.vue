@@ -8,6 +8,16 @@
           <el-input style="width:300px;"
                     v-model="payInfo.payOwner"></el-input>
         </el-form-item>
+        <!-- 手机号 -->
+        <el-form-item label="手机号:">
+          <el-input style="width:300px;"
+                    v-model="payInfo.payOwnerPhone"></el-input>
+        </el-form-item>
+        <!-- 所在单元 -->
+        <el-form-item label="所在单元:">
+          <el-input style="width:300px;"
+                    v-model="payInfo.payOwnerUnit"></el-input>
+        </el-form-item>
         <!-- 电梯使用费 -->
         <el-form-item label="电梯使用费:">
           <el-input style="width:300px;"
@@ -22,19 +32,13 @@
           <el-input style="width:300px;"
                     v-model="payInfo.payLighting"></el-input>
         </el-form-item>
-        <!-- 费用续费时间 -->
-        <el-form-item label="续费时间:">
-          <el-date-picker v-model="payInfo.payStartTime"
-                          type="date"
-                          placeholder="选择日期">
-          </el-date-picker>
-
-        </el-form-item>
-        <!-- 费用到期时间 -->
-        <el-form-item label="到期时间:">
-          <el-date-picker v-model="payInfo.payEndTime"
-                          type="date"
-                          placeholder="选择日期">
+        <!-- 应缴月 -->
+        <el-form-item label="应费月份：:">
+          <el-date-picker v-model="payInfo.payDate"
+                          type="month"
+                          placeholder="选择月"
+                          style="margin-right:20px;"
+                          value-format="yyyy-MM">
           </el-date-picker>
         </el-form-item>
         <!-- 缴费状态 -->
@@ -51,7 +55,8 @@
         <el-form-item>
           <el-button type="danger"
                      @click="goBack">返回</el-button>
-          <el-button type="success">新增</el-button>
+          <el-button type="success"
+                     @click="addPay">新增</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -67,7 +72,7 @@ export default {
   data () {
     return {
       title: '添加收费信息',
-      payInfo: [],
+      payInfo: {},
       payState: [
         {
           value: '已缴费'
@@ -82,6 +87,30 @@ export default {
     // 返回
     goBack () {
       this.$router.push('/pay')
+    },
+    // 新增
+    addPay () {
+      this.$axios.post('/addPay', {
+        params: {
+          payInfo: this.payInfo
+        }
+      }).then(res => {
+        if (res.data.state === 200) {
+          this.$message({
+            type: 'success',
+            message: res.data.message
+          })
+          setTimeout(() => {
+            this.$router.push('/pay')
+          }, 500)
+        } else if (res.data.state === 401) {
+          this.$message({
+            type: 'error',
+            message: res.data.message
+          })
+          return
+        }
+      })
     }
   }
 }

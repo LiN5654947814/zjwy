@@ -16,7 +16,7 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          缴费状态：<el-select v-model="paySearch.parkingLocation"
+          缴费状态：<el-select v-model="paySearch.payState "
                      placeholder="请选择">
             <el-option v-for="item in payState"
                        :key="item.value"
@@ -34,15 +34,21 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary">
+          <el-button type="primary"
+                     @click="searchPay">
             搜索
           </el-button>
-          <el-button type="warning">
+          <el-button type="warning"
+                     @click="clearUp">
             清空
           </el-button>
           <el-button type="success"
                      @click="addPay">
             新增
+          </el-button>
+          <el-button type="danger"
+                     @click="deletePayList">
+            批量删除
           </el-button>
         </el-form-item>
       </el-form>
@@ -51,61 +57,67 @@
     <div class="pay-container">
       <div class="pay-table">
         <el-table :data="currentList"
-                  style="width: 170%;
+                  style="width: 200%;
                   padding-left:5px;"
+                  :cell-style="cellStyle"
                   @selection-change="handleSelectionChange">
           <el-table-column type="selection"
                            width="55">
           </el-table-column>
           <el-table-column prop="payOwner"
                            label="业主"
-                           width="170"
+                           width="160"
+                           align="center">
+          </el-table-column>
+          <el-table-column prop="payOwnerUnit"
+                           label="所在单元"
+                           width="160"
                            align="center">
           </el-table-column>
           <el-table-column prop="payElevator"
                            label="电梯使用费"
-                           width="170"
+                           width="160"
                            align="center">
           </el-table-column>
           <el-table-column prop="payGarbage"
                            label="垃圾清运费"
-                           width="170"
+                           width="160"
                            align="center">
           </el-table-column>
           <el-table-column prop="payLighting"
                            label="公摊照明费"
-                           width="170"
+                           width="160"
                            align="center">
           </el-table-column>
-          <el-table-column prop="payStartTime"
+          <el-table-column prop="payDate"
                            label="续费时间"
-                           width="170"
-                           align="center">
-          </el-table-column>
-          <el-table-column prop="payEndTime"
-                           label="到期时间"
-                           width="170"
+                           width="160"
                            align="center">
           </el-table-column>
           <el-table-column prop="payState"
                            label="状态"
-                           width="170"
+                           width="160"
                            align="center">
           </el-table-column>
-          <el-table-column prop="payState"
+          <el-table-column prop="payCount"
                            label="合计"
-                           width="170"
+                           width="160"
                            align="center">
           </el-table-column>
           <el-table-column label="操作"
-                           width="170"
+                           width="300"
                            align="center">
             <template slot-scope="scope">
+              <el-button type="warning"
+                         @click="payStateChange(scope.row)">
+                标记已缴
+              </el-button>
               <el-button type="primary"
                          @click="payModify(scope.row)">
-                编辑
+                催缴
               </el-button>
-              <el-button type="danger">
+              <el-button type="danger"
+                         @click="deletePay(scope.row)">
                 删除
               </el-button>
             </template>
@@ -154,19 +166,12 @@
                         v-model="payInfo.payLighting"></el-input>
             </el-form-item>
             <!-- 费用续费时间 -->
-            <el-form-item label="续费时间:">
-              <el-date-picker v-model="payInfo.payStartTime"
+            <el-form-item label="该缴月:">
+              <el-date-picker v-model="payInfo.payDate"
                               type="date"
                               placeholder="选择日期">
               </el-date-picker>
 
-            </el-form-item>
-            <!-- 费用到期时间 -->
-            <el-form-item label="到期时间:">
-              <el-date-picker v-model="payInfo.payEndTime"
-                              type="date"
-                              placeholder="选择日期">
-              </el-date-picker>
             </el-form-item>
             <!-- 缴费状态 -->
             <el-form-item label="状态:">
@@ -201,118 +206,7 @@ export default {
       title: '收费管理',
       payInfo: [],
       paySearch: {},
-      payList: [
-        {
-          id: '001',
-          payOwner: '孙笑川',
-          payGarbage: '50',
-          payElevator: '50',
-          payLighting: '50',
-          payState: '正常',
-          payStartTime: '2020-01-01',
-          payEndTime: '2020-01-31'
-        },
-        {
-          id: '002',
-          payOwner: '孙笑川',
-          payGarbage: '50',
-          payElevator: '50',
-          payLighting: '50',
-          payState: '正常',
-          payStartTime: '2020-01-01',
-          payEndTime: '2020-01-31'
-        },
-        {
-          id: '003',
-          payOwner: '孙笑川',
-          payGarbage: '50',
-          payElevator: '50',
-          payLighting: '50',
-          payState: '正常',
-          payStartTime: '2020-01-01',
-          payEndTime: '2020-01-31'
-        },
-        {
-          id: '004',
-          payOwner: '孙笑川',
-          payGarbage: '50',
-          payElevator: '50',
-          payLighting: '50',
-          payState: '正常',
-          payStartTime: '2020-01-01',
-          payEndTime: '2020-01-31'
-        },
-        {
-          id: '005',
-          payOwner: '孙笑川',
-          payGarbage: '50',
-          payElevator: '50',
-          payLighting: '50',
-          payState: '正常',
-          payStartTime: '2020-01-01',
-          payEndTime: '2020-01-31'
-        },
-        {
-          id: '006',
-          payOwner: '孙笑川',
-          payGarbage: '50',
-          payElevator: '50',
-          payLighting: '50',
-          payState: '正常',
-          payStartTime: '2020-01-01',
-          payEndTime: '2020-01-31'
-        },
-        {
-          id: '007',
-          payOwner: '孙笑川',
-          payGarbage: '50',
-          payElevator: '50',
-          payLighting: '50',
-          payState: '正常',
-          payStartTime: '2020-01-01',
-          payEndTime: '2020-01-31'
-        },
-        {
-          id: '008',
-          payOwner: '孙笑川',
-          payGarbage: '50',
-          payElevator: '50',
-          payLighting: '50',
-          payState: '正常',
-          payStartTime: '2020-01-01',
-          payEndTime: '2020-01-31'
-        },
-        {
-          id: '009',
-          payOwner: '孙笑川',
-          payGarbage: '50',
-          payElevator: '50',
-          payLighting: '50',
-          payState: '正常',
-          payStartTime: '2020-01-01',
-          payEndTime: '2020-01-31'
-        },
-        {
-          id: '010',
-          payOwner: '孙笑川',
-          payGarbage: '50',
-          payElevator: '50',
-          payLighting: '50',
-          payState: '正常',
-          payStartTime: '2020-01-01',
-          payEndTime: '2020-01-31'
-        },
-        {
-          id: '011',
-          payOwner: '孙笑川',
-          payGarbage: '50',
-          payElevator: '50',
-          payLighting: '50',
-          payState: '正常',
-          payStartTime: '2020-01-01',
-          payEndTime: '2020-01-31'
-        }
-      ],
+      payList: [],
       payState: [
         {
           value: '已缴费'
@@ -327,6 +221,9 @@ export default {
       },
       isPay: false
     }
+  },
+  mounted () {
+    this.getAllPay()
   },
   computed: {
     total () {
@@ -347,6 +244,19 @@ export default {
     addPay () {
       this.$router.push('/addPay')
     },
+    cellStyle (row, column, rowIndex, columnIndex) {
+      if (row.column.label === '状态' && row.row.payState === '已缴费') {
+        return {
+          color: 'green',
+          'font-weight': '700'
+        }
+      } else if (row.column.label === '状态' && row.row.payState === '未缴费') {
+        return {
+          color: 'red',
+          'font-weight': '700'
+        }
+      }
+    },
     // 编辑信息
     payModify (row) {
       this.isPay = true
@@ -355,6 +265,99 @@ export default {
     // 关闭弹窗
     closePopUp () {
       this.isPay = false
+    },
+    // 获取所有收费信息
+    getAllPay () {
+      this.$axios.get('/getAllPay').then(res => {
+        if (res.data.state === 200) {
+          this.payList = res.data.payList
+          this.payList.forEach(item => {
+            item.payCount = item.payGarbage + item.payLighting + item.payElevator
+          })
+        }
+      })
+    },
+    // 按条件搜索
+    searchPay () {
+      this.$axios.post('/searchPay', {
+        params: {
+          paySearch: this.paySearch
+        }
+      }).then(res => {
+        if (res.data.state === 200) {
+          this.payList = res.data.payList
+          this.payList.forEach(item => {
+            item.payCount = item.payGarbage + item.payLighting + item.payElevator
+          })
+        }
+      })
+    },
+    // 清空
+    clearUp () {
+      this.paySearch = {}
+    },
+    // 标记已缴
+    payStateChange (row) {
+      this.$confirm('确定已收取该业主的费用？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('./payStateChange', {
+          params: {
+            payInfo: row
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.getAllPay()
+          }
+        })
+      })
+    },
+    // 删除单条缴费信息
+    deletePay (row) {
+      this.$confirm('确定要删除该条信息？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/deletePay', {
+          params: {
+            payInfo: row
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+            this.getAllPay()
+          }
+        })
+      })
+    },
+    // 批量删除信息
+    deletePayList () {
+      let payList = this.multipleSelection
+      this.$confirm('确定要删除' + this.multipleSelection.length + '条缴费信息？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/deletePayList', {
+          params: {
+            payList: payList
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+            this.getAllPay()
+          }
+        })
+      })
     }
   }
 }
