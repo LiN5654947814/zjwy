@@ -289,16 +289,21 @@ export default {
       this.$axios.get('/getAllOwner').then(res => {
         if (res.data.state === 200) {
           this.ownerList = res.data.owners
-          this.ownerList.forEach(item => {
-            if (item.estates.length != 0) {
-              item.ownerMoveDate = item.estates[0].ownerMoveDate
-              item.ownerUnit = item.estates[0].estateBuilds + '-' + item.estates[0].estateUnit + '-' + item.estates[0].estatePlate
-              item.ownerEstate = item.estates.length
-            }
-            if (item.parkings) {
-              item.ownerParking = item.parkings.length
+          this.ownerList.forEach((item, index) => {
+            if (item.author === false) {
+              if (item.estates.length != 0) {
+                item.ownerMoveDate = item.estates[0].ownerMoveDate
+                item.ownerUnit = item.estates[0].estateBuilds + '-' + item.estates[0].estateUnit + '-' + item.estates[0].estatePlate
+                item.ownerEstate = item.estates.length
+              }
+              if (item.parkings) {
+                item.ownerParking = item.parkings.length
+              }
+            } else if (item.author === true) {
+              this.ownerList.splice(index, 1)
             }
           })
+
         }
       })
     },
@@ -364,7 +369,7 @@ export default {
         canceButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if (row.estates) {
+        if (row.estates.length != 0) {
           this.$message({
             type: 'error',
             message: '请解绑所选业主名下房产信息'

@@ -86,7 +86,6 @@ export default {
     reCheckCode () {
       this.createCode()
     },
-    // 判断输入的验证码是否正确
     login () {
       let upCaseCode = this.inputCheck.toUpperCase()
       // 前端判断账户密码是否为空
@@ -97,25 +96,16 @@ export default {
         })
         return
       }
-      if (this.username === 'lsh' && this.password === 'lsh') {
-        const token = localStorage.setItem('token', '123')
-        if (upCaseCode === this.checkCode) {
-          this.$message({
-            type: 'success',
-            message: '登录成功'
-          })
-          setTimeout(() => {
-            this.$router.push({ name: 'ownerHome' })
-          }, 2000)
-        } else {
-          this.$message({
-            type: 'danger',
-            message: '验证码错误'
-          })
-        }
+      // 判断验证码 
+      else if (upCaseCode != this.checkCode) {
+        this.$message({
+          type: 'warning',
+          message: '验证码错误'
+        })
+        return
       } else {
-        // 发请求
-        this.$axios.get('/login', {
+        // 发起登录请求
+        this.$axios.post('/login', {
           params: {
             username: this.username,
             password: this.password
@@ -124,28 +114,32 @@ export default {
           if (res.data.state === 200) {
             // 登录检测成功后设置token
             const token = localStorage.setItem('token', res.data.token)
-            // 账号密码成功然后判断验证码
-            if (upCaseCode === this.checkCode) {
+            // 判断权限
+            if (res.data.author === true) {
               this.$message({
                 type: 'success',
-                message: '登录成功'
+                message: '登录成功，你的身份为管理员'
               })
               setTimeout(() => {
-                this.$router.push({ name: 'main' })
-              }, 2000)
-            } else {
+                this.$router.push('/main')
+              }, 1000)
+            } else if (res.data.author == false) {
               this.$message({
-                type: 'danger',
-                message: '验证码错误'
+                type: 'success',
+                message: '登录成功，你的身份为业主'
               })
+              setTimeout(() => {
+                this.$router.push('/ownerApplication')
+              }, 1000)
             }
           } else {
-            this.$message.error('账户或密码错误')
+            this.$message({
+              type: 'error',
+              message: '用户名或密码错误'
+            })
           }
         })
-
       }
-
     }
   }
 }

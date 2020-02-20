@@ -87,7 +87,7 @@ export default {
           ownerName: this.ownerInfo.ownerName,
           ownerSex: this.ownerInfo.ownerSex,
           ownerEmail: this.ownerInfo.ownerEmail,
-          ownerParking: this.ownerInfo.ownerParking,
+          author: false,
           originalPassword: this.ownerInfo.originalPassword
         }
       }).then(res => {
