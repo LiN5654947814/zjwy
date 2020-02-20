@@ -224,10 +224,10 @@ export default {
         if (res.data.state === 200) {
           this.complaintList = res.data.complaintList
           this.complaintList.forEach(item => {
-            if (item.redState === '0') {
+            if (item.readState === false) {
               item.complaintState = '未读'
             }
-            else if (item.redState === '1') {
+            else if (item.readState === true) {
               item.complaintState = '已读'
             }
           })
@@ -285,7 +285,7 @@ export default {
     },
     // 标记已读
     redStateChange (row) {
-      this.$axios.post('/redStateChange', {
+      this.$axios.post('/readStateChange', {
         params: {
           complaint: row
         }

@@ -27,6 +27,8 @@ import OwnerPasswordModify from '../components/ownerMain/ownerPasswordModify.vue
 import parkingRegister from '../components/parking/parkingRegister.vue'
 import complaint from '../components/complaint/complaint.vue'
 import complaintReply from '../components/complaint/complaintReply.vue'
+import ownerComplaint from '../components/ownerMain/ownerComplaint.vue'
+import ownerFixDetail from '../components/ownerMain/ownerFixDetail.vue'
 
 Vue.use(VueRouter)
 const routes = [
@@ -184,6 +186,18 @@ const routes = [
         path: '/ownerPasswordModify',
         name: 'ownerPasswordModify',
         component: OwnerPasswordModify
+      },
+      {
+        // 业主投诉页
+        path: '/ownerComplaint',
+        name: 'ownerComplaint',
+        component: ownerComplaint
+      },
+      {
+        // 业主报修详情页
+        path: '/ownerFixDetail',
+        name: 'ownerFixDetail',
+        component: ownerFixDetail
       }
     ]
   }

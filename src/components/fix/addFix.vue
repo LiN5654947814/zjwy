@@ -6,8 +6,18 @@
         <el-form label-width="40%">
           <!-- 业主 -->
           <el-form-item label="业主:">
-            <el-input style="width:200px;"
+            <el-input style="width:180px;"
                       v-model="fixInfo.fixOwner"></el-input>
+          </el-form-item>
+          <!-- 所在单元 -->
+          <el-form-item label="所在单元:">
+            <el-input style="width:180px;"
+                      v-model="fixInfo.fixOwnerUnit"></el-input>
+          </el-form-item>
+          <!-- 联系方式 -->
+          <el-form-item label="联系电话:">
+            <el-input style="width:180px;"
+                      v-model="fixInfo.fixOwnerPhone"></el-input>
           </el-form-item>
           <!-- 报修时间 -->
           <el-form-item label="报修时间:">
@@ -32,6 +42,8 @@
           <el-form-item label="完成时间:">
             <el-date-picker v-model="fixInfo.fixEndTime"
                             type="date"
+                            value-format="yyyy-MM-dd"
+                            style="width:180px;"
                             placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
@@ -107,7 +119,7 @@ export default {
 
 <style lang="scss" scoped>
 .fixInfo-container /deep/ .el-select {
-  margin-right: 50px;
+  margin-right: 10px;
 }
 .fixInfo-container /deep/ .el-form-item {
   float: left;

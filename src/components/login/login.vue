@@ -128,6 +128,13 @@ export default {
                 type: 'success',
                 message: '登录成功，你的身份为业主'
               })
+              let ownerInfo = {
+                author: res.data.author,
+                ownerName: res.data.ownerName,
+                ownerPhone: res.data.ownerPhone,
+                ownerCard: res.data.ownerCard
+              }
+              sessionStorage.setItem('owner', JSON.stringify(ownerInfo))
               setTimeout(() => {
                 this.$router.push('/ownerApplication')
               }, 1000)

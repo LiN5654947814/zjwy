@@ -6,16 +6,20 @@
       <div class="password-form">
         <el-form label-width="40%">
           <el-form-item label="原密码:">
-            <el-input style="width:300px;"></el-input>
+            <el-input style="width:300px;"
+                      v-model="inputOriginalPassword"></el-input>
           </el-form-item>
           <el-form-item label="新密码:">
-            <el-input style="width:300px;"></el-input>
+            <el-input style="width:300px;"
+                      v-model="newPassword"></el-input>
           </el-form-item>
           <el-form-item label="确认新密码:">
-            <el-input style="width:300px;"></el-input>
+            <el-input style="width:300px;"
+                      v-model="newPassword_"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary">修改</el-button>
+            <el-button type="primary"
+                       @click="modifyPassword">修改</el-button>
             <el-button type="danger"
                        @click="goBack">返回</el-button>
           </el-form-item>
@@ -33,12 +37,53 @@ export default {
   },
   data () {
     return {
-      title: '修改密码'
+      title: '修改密码',
+      inputOriginalPassword: '',
+      newPassword: '',
+      newPassword_: ''
     }
   },
   methods: {
     goBack () {
       this.$router.push('/ownerApplication')
+    },
+    // 修改密码
+    modifyPassword () {
+      let ownerInfo = JSON.parse(sessionStorage.getItem('owner'))
+      ownerInfo.inputOriginalPassword = this.inputOriginalPassword
+      ownerInfo.newPassword = this.newPassword
+      this.$confirm('确定要修改密码？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        if (this.newPassword != this.newPassword_) {
+          this.$message({
+            type: 'warning',
+            message: '新密码不一致'
+          })
+          return
+        } else {
+          this.$axios.post('/modifyPassword', {
+            params: {
+              ownerInfo: ownerInfo
+            }
+          }).then(res => {
+            if (res.data.state === 200) {
+              this.$message({
+                type: 'success',
+                message: res.data.message
+              })
+              this.$router.push('/ownerApplication')
+            } else if (res.data.state === 401) {
+              this.$message({
+                type: 'error',
+                message: res.data.message
+              })
+            }
+          })
+        }
+      })
     }
   }
 

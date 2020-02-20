@@ -35,6 +35,11 @@
             <i class="el-icon-document"></i>
             <span slot="title">报修管理</span>
           </el-menu-item>
+          <!-- 投诉管理 -->
+          <el-menu-item index="/ownerComplaint">
+            <i class="el-icon-document"></i>
+            <span slot="title">投诉管理</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
       <!-- 中心信息区域 -->

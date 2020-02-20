@@ -37,13 +37,13 @@
       <div class="ownerApplicaiton-info-container">
         <el-form label-width="30%">
           <el-form-item label="姓名:">
-            {{ownerInfo.onwerName}}
+            {{ownerInfo.ownerName}}
           </el-form-item>
           <el-form-item label="联系电话:">
-            {{ownerInfo.onwerTele}}
+            {{ownerInfo.ownerPhone}}
           </el-form-item>
           <el-form-item label="居住单位:">
-            {{ownerInfo.houseUnit}}
+            {{ownerInfo.ownerUnit}}
           </el-form-item>
           <el-form-item label="车位拥有量:">
             {{ownerInfo.ownerParking}}
@@ -161,14 +161,7 @@ export default {
         page: 0,
         limit: 7
       },
-      ownerInfo: {
-        onwerName: '孙笑川',
-        onwerTele: '13225448765',
-        houseUnit: 'A栋-A-304',
-        houseProp: '1',
-        ownerParking: '1',
-        moveDate: "2019-9-14"
-      },
+      ownerInfo: {},
       ownerPay: [
         {
           id: '001',
@@ -183,6 +176,9 @@ export default {
       ]
     }
   },
+  created () {
+    this.getOwner()
+  },
   computed: {
     total () {
       return this.bulletinList.length
@@ -195,6 +191,24 @@ export default {
   methods: {
     passwordModify () {
       this.$router.push('/ownerPasswordModify')
+    },
+    // 获取业主信息
+    getOwner () {
+      let ownerInfo = JSON.parse(sessionStorage.getItem('owner'))
+      this.$axios.post('getOwner', {
+        params: {
+          ownerInfo: ownerInfo
+        }
+      }).then(res => {
+        if (res.data.state === 200) {
+          let owner = {}
+          owner = res.data.owner
+          owner.ownerUnit = owner.estates[0].estateBuilds + '-' + owner.estates[0].estateUnit + '-' + owner.estates[0].estatePlate
+          owner.ownerParking = owner.parkings.length
+          owner.moveDate = owner.estates[0].ownerMoveDate
+          this.ownerInfo = owner
+        }
+      })
     }
   }
 }

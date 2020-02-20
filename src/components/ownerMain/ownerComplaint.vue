@@ -1,57 +1,69 @@
 <template>
   <div>
     <header-nav :title="title"></header-nav>
-    <div class="owner-fix-container">
-      <div class="fix-select">
-        <div class="fix-select-item"
+    <div class="owner-complaint-container">
+      <div class="complaint-select">
+        <div class="complaint-select-item"
              @click="handleSelect(1)"
-             :class="[isSelect === 1?'':'is-active']">提交报修</div>
-        <div class="fix-select-item"
-             @click="handleSelect(2),getAllOwnerFix()"
-             :class="[isSelect === 2?'':'is-active']">我的报修</div>
+             :class="[isSelect === 1?'':'is-active']">提交投诉</div>
+        <div class="complaint-select-item"
+             @click="handleSelect(2)"
+             :class="[isSelect === 2?'':'is-active']">我的投诉</div>
       </div>
-      <!-- 提交报修 -->
-      <div class="owner-fix-add"
+      <!-- 提交投诉 -->
+      <div class="owner-complaint-add"
            v-if="isSelect === 1">
         <el-form label-width="100px">
           <!-- 业主 -->
           <el-form-item label="业主:">
             <el-input style="width:200px;"
-                      v-model="fixInfo.fixOwner"></el-input>
+                      v-model="complaintInfo.complaintOwner"></el-input>
           </el-form-item>
-          <!-- 报修时间 -->
+          <!-- 投诉类型 -->
+          <el-form-item label="投诉类型：">
+            <el-select v-model="complaintInfo.complaintType"
+                       placeholder="请选择">
+              <el-option v-for="item in complaintSelect"
+                         :key="item.value"
+                         :label="item.value"
+                         :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <!-- 投诉日期 -->
           <el-form-item label="报修提交时间:">
-            <el-date-picker v-model="fixInfo.fixTime"
+            <el-date-picker v-model="complaintInfo.complaintTime"
                             type="date"
                             placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
           <!-- 房屋单位 -->
           <el-form-item label="填写房屋单位:">
-            <el-input style="width:200px">
+            <el-input style="width:200px"
+                      v-model="complaintInfo.complaintUnit">
             </el-input>
             <span style="color:#ccc;font-size:13px;margin-right:10px;"> (x栋x区x层xxx门牌)</span>
           </el-form-item>
         </el-form>
-        <div class="owner-fix-content">
+        <div class="owner-complaint-content">
           <el-input type="textarea"
                     :rows="12"
                     placeholder="请输入内容"
                     v-model="textarea">
           </el-input>
         </div>
-        <div class="owner-fix-btn">
+        <div class="owner-complaint-btn">
           <el-button type="primary"
                      size="mini">
-            提交报修
+            提交投诉
           </el-button>
         </div>
       </div>
       <!-- 报修列表 -->
-      <div class="owner-fix-list"
+      <div class="owner-complaint-list"
            v-if="isSelect === 2">
-        <div class="owner-fix-table">
-          <el-table :data="currentList"
+        <div class="owner-complaint-table">
+          <el-table :data="ownerPay"
                     style="width: 200%;
                   padding-left:5px;">
             <el-table-column prop="fixOwner"
@@ -64,11 +76,11 @@
                              width="750"
                              :show-overflow-tooltip="true">
             </el-table-column>
-            <el-table-column prop="fixStartTime"
+            <el-table-column prop="fixTime"
                              label="提交时间"
                              align="center">
             </el-table-column>
-            <el-table-column prop="fixState"
+            <el-table-column prop="fixType"
                              label="状态"
                              align="center">
             </el-table-column>
@@ -76,22 +88,7 @@
                              label="完成时间"
                              align="center">
             </el-table-column>
-            <el-table-column prop="cost"
-                             label="操作">
-              <template slot-scope="scope">
-                <el-button type="primary">
-                  详情
-                </el-button>
-              </template>
-            </el-table-column>
           </el-table>
-        </div>
-        <div class="pagination">
-          <el-pagination layout="prev, pager, next"
-                         :current-page.sync="filters.page"
-                         :page-size="filters.limit"
-                         :total="total">
-          </el-pagination>
         </div>
       </div>
     </div>
@@ -106,66 +103,52 @@ export default {
   },
   data () {
     return {
-      title: '报修提交',
+      title: '投诉提交',
       isSelect: 1,
-      fixInfo: [],
+      complaintInfo: [],
       textarea: '',
-      ownerFixList: [],
-      filters: {
-        page: 0,
-        limit: 10
-      },
-    }
-  },
-  mounted () {
-  },
-  computed: {
-    total () {
-      return this.ownerFixList.length
-    },
-    currentList () {
-      let ret = this.ownerFixList.slice((this.filters.page - 1) * this.filters.limit, this.filters.page * this.filters.limit)
-      return ret
+      complaintSelect: [
+        {
+          value: '维修投诉'
+        },
+        {
+          value: '扰民投诉'
+        },
+        {
+          value: '安全投诉'
+        },
+        {
+          value: '停车管理的投诉'
+        }
+
+      ],
     }
   },
   methods: {
     handleSelect (num) {
       this.isSelect = num
       console.log(this.isSelect)
-    },
-    // 获取业主所有报修信息
-    getAllOwnerFix () {
-      let ownerInfo = JSON.parse(sessionStorage.getItem('owner'))
-      this.$axios.post('/getOwnerFix', {
-        params: {
-          ownerInfo: ownerInfo
-        }
-      }).then(res => {
-        if (res.data.state === 200) {
-          this.ownerFixList = res.data.ownerFixList
-        }
-      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.owner-fix-container /deep/ .el-select {
-  margin-right: 50px;
+.owner-complaint-container /deep/ .el-select {
+  margin-right: 10px;
 }
-.owner-fix-container /deep/ .el-form-item {
+.owner-complaint-container /deep/ .el-form-item {
   float: left;
   margin-top: 20px;
-  margin-right: 80px;
+  margin-right: 60px;
 }
-.owner-fix-container {
+.owner-complaint-container {
   width: 100%;
-  .fix-select {
+  .complaint-select {
     margin: 10px auto;
     width: 97%;
     height: 40px;
-    .fix-select-item {
+    .complaint-select-item {
       float: left;
       width: 100px;
       height: 40px;
@@ -179,39 +162,31 @@ export default {
       cursor: pointer;
     }
   }
-  .owner-fix-add {
+  .owner-complaint-add {
     width: 97%;
     min-height: 400px;
     margin: 0 20px 20px 20px;
     border-radius: 5px;
     background-color: #fff;
     position: relative;
-    .owner-fix-content {
+    .owner-complaint-content {
       width: 95%;
       margin: 0 auto;
     }
-    .owner-fix-btn {
+    .owner-complaint-btn {
       margin-top: 10px;
       bottom: 10px;
       right: 30px;
       position: absolute;
     }
   }
-  .owner-fix-list {
+  .owner-complaint-list {
     width: 97%;
     min-height: 700px;
     margin: 0 20px 20px 20px;
     border-radius: 5px;
     background-color: #fff;
     position: relative;
-    .owner-fix-table {
-      min-height: 750px;
-    }
-    .pagination {
-      bottom: 0;
-      right: 0;
-      position: absolute;
-    }
   }
 }
 .is-active {
