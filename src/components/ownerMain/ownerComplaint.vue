@@ -7,7 +7,7 @@
              @click="handleSelect(1)"
              :class="[isSelect === 1?'':'is-active']">提交投诉</div>
         <div class="complaint-select-item"
-             @click="handleSelect(2)"
+             @click="handleSelect(2),getOwnerComplaint()"
              :class="[isSelect === 2?'':'is-active']">我的投诉</div>
       </div>
       <!-- 提交投诉 -->
@@ -59,36 +59,53 @@
           </el-button>
         </div>
       </div>
-      <!-- 报修列表 -->
+      <!-- 投诉列表 -->
       <div class="owner-complaint-list"
            v-if="isSelect === 2">
         <div class="owner-complaint-table">
-          <el-table :data="ownerPay"
+          <el-table :data="currentList"
                     style="width: 200%;
                   padding-left:5px;">
-            <el-table-column prop="fixOwner"
+            <el-table-column prop="complaintOwner"
                              label="业主"
                              width="250"
                              align="center">
             </el-table-column>
-            <el-table-column prop="fixContent"
+            <el-table-column prop="complaintType"
+                             label="投诉类型"
+                             width="250"
+                             align="center">
+            </el-table-column>
+            <el-table-column prop="complaintContent"
                              label="内容"
                              width="750"
                              :show-overflow-tooltip="true">
             </el-table-column>
-            <el-table-column prop="fixTime"
+            <el-table-column prop="complaintTime"
                              label="提交时间"
                              align="center">
             </el-table-column>
-            <el-table-column prop="fixType"
+            <el-table-column prop="complaintReply"
                              label="状态"
                              align="center">
             </el-table-column>
-            <el-table-column prop="fixEndTime"
-                             label="完成时间"
-                             align="center">
+            <el-table-column prop="cost"
+                             label="操作">
+              <template slot-scope="scope">
+                <el-button type="primary"
+                           @click="getComplaintDetail(scope.row)">
+                  详情
+                </el-button>
+              </template>
             </el-table-column>
           </el-table>
+        </div>
+        <div class="pagination">
+          <el-pagination layout="prev, pager, next"
+                         :current-page.sync="filters.page"
+                         :page-size="filters.limit"
+                         :total="total">
+          </el-pagination>
         </div>
       </div>
     </div>
@@ -107,6 +124,7 @@ export default {
       isSelect: 1,
       complaintInfo: [],
       textarea: '',
+      ownerInfo: {},
       complaintSelect: [
         {
           value: '维修投诉'
@@ -122,12 +140,45 @@ export default {
         }
 
       ],
+      filters: {
+        page: 0,
+        limit: 10
+      },
+      complaintList: []
+    }
+  },
+  created () {
+    this.ownerInfo = JSON.parse(sessionStorage.getItem('owner'))
+  },
+  computed: {
+    total () {
+      return this.complaintList.length
+    },
+    currentList () {
+      let ret = this.complaintList.slice((this.filters.page - 1) * this.filters.limit, this.filters.page * this.filters.limit)
+      return ret
     }
   },
   methods: {
     handleSelect (num) {
       this.isSelect = num
       console.log(this.isSelect)
+    },
+    // 获取业主的投诉信息
+    getOwnerComplaint () {
+      this.$axios.post('/getOwnerComplaint', {
+        params: {
+          ownerInfo: this.ownerInfo
+        }
+      }).then(res => {
+        if (res.data.state === 200) {
+          this.complaintList = res.data.complaintList
+        }
+      })
+    },
+    // 查看详情
+    getComplaintDetail (row) {
+
     }
   }
 }
@@ -187,6 +238,14 @@ export default {
     border-radius: 5px;
     background-color: #fff;
     position: relative;
+    .owner-complaint-table {
+      min-height: 750px;
+    }
+    .pagination {
+      bottom: 0;
+      right: 0;
+      position: absolute;
+    }
   }
 }
 .is-active {
