@@ -16,12 +16,12 @@
         <el-form label-width="100px">
           <!-- 业主 -->
           <el-form-item label="业主:">
-            <el-input style="width:200px;"
-                      v-model="complaintInfo.complaintOwner"></el-input>
+            <el-input style="width:150px;"
+                      v-model="complaintRefer.complaintOwner"></el-input>
           </el-form-item>
           <!-- 投诉类型 -->
           <el-form-item label="投诉类型：">
-            <el-select v-model="complaintInfo.complaintType"
+            <el-select v-model="complaintRefer.complaintType"
                        placeholder="请选择">
               <el-option v-for="item in complaintSelect"
                          :key="item.value"
@@ -32,29 +32,35 @@
           </el-form-item>
           <!-- 投诉日期 -->
           <el-form-item label="报修提交时间:">
-            <el-date-picker v-model="complaintInfo.complaintTime"
+            <el-date-picker v-model="complaintRefer.complaintTime"
                             type="date"
+                            value-format="yyyy-MM-dd"
                             placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
           <!-- 房屋单位 -->
           <el-form-item label="填写房屋单位:">
-            <el-input style="width:200px"
-                      v-model="complaintInfo.complaintUnit">
+            <el-input style="width:150px"
+                      v-model="complaintRefer.complaintOwnerUnit">
             </el-input>
             <span style="color:#ccc;font-size:13px;margin-right:10px;"> (x栋x区x层xxx门牌)</span>
+            <!-- 联系方式 -->
+          </el-form-item>
+          <el-form-item label="联系方式">
+            <el-input style="width:150px;"
+                      v-model="complaintRefer.complaintOwnerPhone"></el-input>
           </el-form-item>
         </el-form>
         <div class="owner-complaint-content">
           <el-input type="textarea"
-                    :rows="12"
+                    :rows="11"
                     placeholder="请输入内容"
-                    v-model="textarea">
+                    v-model="complaintRefer.complaintContent">
           </el-input>
         </div>
         <div class="owner-complaint-btn">
           <el-button type="primary"
-                     size="mini">
+                     @click="referOwnerComplaint">
             提交投诉
           </el-button>
         </div>
@@ -109,6 +115,50 @@
         </div>
       </div>
     </div>
+    <!-- 投诉详情 -->
+    <div class="complaint-detail"
+         v-if="isComplaint">
+      <div class="complaint-info">
+        <div class="complaint-info-header ">
+          <div class="complaint-header-title">投诉详情</div>
+          <img src="../../assets/icon/close.png"
+               class="complaint-header-close"
+               @click="closePopUp">
+        </div>
+        <div class="complaint-info-container">
+          <el-form label-width="20%">
+            <el-form-item label="投诉时间：">
+              <el-input style="width:300px;"
+                        v-model="complaintDetail.complaintTime"></el-input>
+            </el-form-item>
+            <el-form-item label="投诉业主：">
+              <el-input style="width:300px;"
+                        v-model="complaintDetail.complaintOwner"></el-input>
+            </el-form-item>
+            <el-form-item label="投诉类型：">
+              <el-input style="width:300px;"
+                        v-model="complaintDetail.complaintType"></el-input>
+            </el-form-item>
+            <el-form-item label="投诉内容：">
+              <el-input type="textarea"
+                        :rows="5"
+                        style="margin-bottom:20px;
+                        width:300px;"
+                        v-model="complaintDetail.complaintContent">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="物业回复：">
+              <el-input type="textarea"
+                        :rows="5"
+                        style="margin-bottom:20px;
+                        width:300px;"
+                        v-model="complaintDetail.complaintReply">
+              </el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -122,7 +172,7 @@ export default {
     return {
       title: '投诉提交',
       isSelect: 1,
-      complaintInfo: [],
+      complaintInfo: {},
       textarea: '',
       ownerInfo: {},
       complaintSelect: [
@@ -144,7 +194,10 @@ export default {
         page: 0,
         limit: 10
       },
-      complaintList: []
+      complaintList: [],
+      isComplaint: false,
+      complaintDetail: {},
+      complaintRefer: {}
     }
   },
   created () {
@@ -178,7 +231,35 @@ export default {
     },
     // 查看详情
     getComplaintDetail (row) {
-
+      this.isComplaint = true
+      this.complaintDetail = row
+    },
+    closePopUp () {
+      this.isComplaint = false
+    },
+    // 提交投诉
+    referOwnerComplaint () {
+      this.complaintRefer.complaintOwnerCard = this.ownerInfo.ownerCard
+      this.complaintRefer.readState = false
+      this.complaintRefer.ownerReadState = false
+      this.$confirm('确定提交投诉信息？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/referOwnerComplaint', {
+          params: {
+            complaintRefer: this.complaintRefer
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+          }
+        })
+      })
     }
   }
 }
@@ -186,12 +267,12 @@ export default {
 
 <style lang="scss" scoped>
 .owner-complaint-container /deep/ .el-select {
-  margin-right: 10px;
+  margin-right: 20px;
 }
 .owner-complaint-container /deep/ .el-form-item {
   float: left;
   margin-top: 20px;
-  margin-right: 60px;
+  margin-right: 10px;
 }
 .owner-complaint-container {
   width: 100%;
@@ -245,6 +326,58 @@ export default {
       bottom: 0;
       right: 0;
       position: absolute;
+    }
+  }
+}
+.complaint-detail {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 999;
+  .complaint-info {
+    width: 25%;
+    height: 65%;
+    background-color: #fff;
+    border-radius: 5px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    .complaint-info-header {
+      height: 50px;
+      width: 100%;
+      border-bottom: 1px solid #ccc;
+      position: relative;
+      .complaint-header-title {
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 50px;
+        margin-left: 20px;
+      }
+      .complaint-header-close {
+        width: 40px;
+        height: 40px;
+        right: 10px;
+        top: 50%;
+        transform: translate(0, -50%);
+        position: absolute;
+        cursor: pointer;
+      }
+    }
+    .complaint-info-container {
+      width: 100%;
+      height: 86%;
+      text-align: left;
+      margin-top: 25px;
+      position: relative;
+      .sumbit-btn {
+        right: 50px;
+        bottom: 0px;
+        position: absolute;
+      }
     }
   }
 }

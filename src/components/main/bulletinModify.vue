@@ -5,15 +5,17 @@
       <div class="bulletin-list-container">
         <el-table :data="currentList"
                   style="width: 100%">
-          <el-table-column prop="date"
-                           label="日期"
+          <el-table-column label="日期"
                            width="180">
+            <template slot-scope="scope">
+              <p>{{scope.row.noticeTime|dateFormat}}</p>
+            </template>
           </el-table-column>
-          <el-table-column prop="title"
+          <el-table-column prop="noticeTitle"
                            label="标题"
                            width="180">
           </el-table-column>
-          <el-table-column prop="content"
+          <el-table-column prop="noticeContent"
                            label="内容"
                            width="1000"
                            :show-overflow-tooltip="true">
@@ -48,6 +50,7 @@
         </el-button>
       </div>
     </div>
+    <!-- 修改 -->
     <div class="bulletin-modify"
          v-show="isTextarea">
       <div class="bulletin-modify-content">
@@ -63,19 +66,52 @@
           <el-input placeholder="请输入标题"
                     style="margin:10px 0 0 20px;
                          width:96%;"
-                    v-model="bulletinTitle"></el-input>
+                    v-model="bulletinInfo.noticeTitle"></el-input>
           <el-input type="textarea"
                     :rows="2"
                     placeholder="请输入内容"
-                    v-model="textarea"
+                    v-model="bulletinInfo.noticeContent"
                     style="margin-bottom: 10px;">
           </el-input>
         </div>
         <div class="bulletin-modify-btn">
           <el-button type="primary"
                      size="mini"
-                     v-show="isModify">
+                     @click="modifyNotice">
             修改并保存
+          </el-button>
+        </div>
+      </div>
+    </div>
+    <!-- 新增 -->
+    <div class="bulletin-modify"
+         v-show="isAdd">
+      <div class="bulletin-modify-content">
+        <div class="bulletin-modify-header">
+          <div class="bulletin-modify-title">
+            新增公告
+          </div>
+          <img src="../../assets/icon/close.png"
+               class="modify-close"
+               @click="closeModify">
+        </div>
+        <div class="bullentin-input">
+          <el-input placeholder="请输入标题"
+                    style="margin:10px 0 0 20px;
+                         width:96%;"
+                    v-model="addBulletinNotice.noticeTitle"></el-input>
+          <el-input type="textarea"
+                    :rows="2"
+                    placeholder="请输入内容"
+                    v-model="addBulletinNotice.noticeContent"
+                    style="margin-bottom: 10px;">
+          </el-input>
+        </div>
+        <div class="bulletin-modify-btn">
+          <el-button type="primary"
+                     size="mini"
+                     @click="addNotice">
+            添加
           </el-button>
         </div>
       </div>
@@ -92,77 +128,20 @@ export default {
   data () {
     return {
       title: '公告编辑页',
-      bulletinTitle: '',
-      bulletinList: [{
-        id: 1,
-        date: '2019-12-31',
-        title: '严禁高空抛物的通知',
-        content: '111111111111111111111111111111111111111111111111111111111111111111111111好！近日，小区业主多次到物管服务中心反应，经常有楼上业户向楼下扔烟头和其它杂物，业户非常担心因楼上扔杂物危害他人的人身安全。高空抛物不仅是不文明的行为，还会造成许多安全隐患，对他人的人身安全也造成了极大的威胁，严重的高空抛物还要追究刑事责任。'
-      }, {
-        id: 2,
-        date: '2019-12-31',
-        title: '严禁高空抛物的通知',
-        content: '好！近日，小区业主多次到物管服务中心反应，经常有楼上业户向楼下扔烟头和其它杂物，业户非常担心因楼上扔杂物危害他人的人身安全。高空抛物不仅是不文明的行为，还会造成许多安全隐患，对他人的人身安全也造成了极大的威胁，严重的高空抛物还要追究刑事责任。'
-      }, {
-        id: 3,
-        date: '2019-12-31',
-        title: '严禁高空抛物的通知',
-        content: '好！近日，小区业主多次到物管服务中心反应，经常有楼上业户向楼下扔烟头和其它杂物，业户非常担心因楼上扔杂物危害他人的人身安全。高空抛物不仅是不文明的行为，还会造成许多安全隐患，对他人的人身安全也造成了极大的威胁，严重的高空抛物还要追究刑事责任。'
-      }, {
-        id: 4,
-        date: '2019-12-31',
-        title: '严禁高空抛物的通知',
-        content: '好！近日，小区业主多次到物管服务中心反应，经常有楼上业户向楼下扔烟头和其它杂物，业户非常担心因楼上扔杂物危害他人的人身安全。高空抛物不仅是不文明的行为，还会造成许多安全隐患，对他人的人身安全也造成了极大的威胁，严重的高空抛物还要追究刑事责任。'
-      }, {
-        id: 5,
-        date: '2019-12-31',
-        title: '严禁高空抛物的通知',
-        content: '好！近日，小区业主多次到物管服务中心反应，经常有楼上业户向楼下扔烟头和其它杂物，业户非常担心因楼上扔杂物危害他人的人身安全。高空抛物不仅是不文明的行为，还会造成许多安全隐患，对他人的人身安全也造成了极大的威胁，严重的高空抛物还要追究刑事责任。'
-      }, {
-        id: 6,
-        date: '2019-12-31',
-        title: '严禁高空抛物的通知',
-        content: '好！近日，小区业主多次到物管服务中心反应，经常有楼上业户向楼下扔烟头和其它杂物，业户非常担心因楼上扔杂物危害他人的人身安全。高空抛物不仅是不文明的行为，还会造成许多安全隐患，对他人的人身安全也造成了极大的威胁，严重的高空抛物还要追究刑事责任。'
-      }, {
-        id: 7,
-        date: '2019-12-31',
-        title: '严禁高空抛物的通知',
-        content: '好！近日，小区业主多次到物管服务中心反应，经常有楼上业户向楼下扔烟头和其它杂物，业户非常担心因楼上扔杂物危害他人的人身安全。高空抛物不仅是不文明的行为，还会造成许多安全隐患，对他人的人身安全也造成了极大的威胁，严重的高空抛物还要追究刑事责任。'
-      }, {
-        id: 8,
-        date: '2019-12-31',
-        title: '严禁高空抛物的通知',
-        content: '好！近日，小区业主多次到物管服务中心反应，经常有楼上业户向楼下扔烟头和其它杂物，业户非常担心因楼上扔杂物危害他人的人身安全。高空抛物不仅是不文明的行为，还会造成许多安全隐患，对他人的人身安全也造成了极大的威胁，严重的高空抛物还要追究刑事责任。'
-      }, {
-        id: 9,
-        date: '2019-12-31',
-        title: '严禁高空抛物的通知',
-        content: '好！近日，小区业主多次到物管服务中心反应，经常有楼上业户向楼下扔烟头和其它杂物，业户非常担心因楼上扔杂物危害他人的人身安全。高空抛物不仅是不文明的行为，还会造成许多安全隐患，对他人的人身安全也造成了极大的威胁，严重的高空抛物还要追究刑事责任。'
-      }, {
-        id: 10,
-        date: '2019-12-31',
-        title: '严禁高空抛物的通知',
-        content: '好！近日，小区业主多次到物管服务中心反应，经常有楼上业户向楼下扔烟头和其它杂物，业户非常担心因楼上扔杂物危害他人的人身安全。高空抛物不仅是不文明的行为，还会造成许多安全隐患，对他人的人身安全也造成了极大的威胁，严重的高空抛物还要追究刑事责任。'
-      }, {
-        id: 11,
-        date: '2019-12-31',
-        title: '严禁高空抛物的通知',
-        content: '好！近日，小区业主多次到物管服务中心反应，经常有楼上业户向楼下扔烟头和其它杂物，业户非常担心因楼上扔杂物危害他人的人身安全。高空抛物不仅是不文明的行为，还会造成许多安全隐患，对他人的人身安全也造成了极大的威胁，严重的高空抛物还要追究刑事责任。'
-      }, {
-        id: 12,
-        date: '2019-12-31',
-        title: '严禁高空抛物的通知',
-        content: '好！近日，小区业主多次到物管服务中心反应，经常有楼上业户向楼下扔烟头和其它杂物，业户非常担心因楼上扔杂物危害他人的人身安全。高空抛物不仅是不文明的行为，还会造成许多安全隐患，对他人的人身安全也造成了极大的威胁，严重的高空抛物还要追究刑事责任。'
-      }],
+      bulletinList: [],
+      bulletinInfo: {},
+      addBulletinNotice: {},
       filters: {
         page: 0,
         limit: 10
       },
-      isModify: false,
       isTextarea: false,
       isAdd: false,
       textarea: '',
     }
+  },
+  mounted () {
+    this.getAllNotice()
   },
   computed: {
     total () {
@@ -174,27 +153,71 @@ export default {
     }
   },
   methods: {
-    getBulletin (e) {
+    getBulletin (row) {
       this.isTextarea = true
-      this.isModify = true
-      this.textarea = e.content
-      this.bulletinTitle = e.title
-      console.log(e)
+      this.bulletinInfo = row
     },
     // 关闭
     closeModify () {
-      this.isTextarea = false
-      this.isModify = false
       this.isAdd = false
+      this.isTextarea = false
     },
     // 新增
     bulletinAdd () {
-      this.textarea = ''
-      this.isTextarea = true
       this.isAdd = true
     },
     cell () {
       return 'cell-style'
+    },
+    // 获取所有公告信息
+    getAllNotice () {
+      this.$axios.get('/getAllNotice').then(res => {
+        if (res.data.state === 200) {
+          this.bulletinList = res.data.noticeList
+        }
+      })
+    },
+    // 修改公告信息
+    modifyNotice () {
+      let noticeInfo = this.bulletinInfo
+      noticeInfo.noticeTime = new Date(),
+        this.$confirm('确定要修改公告信息？', '提示', {
+          confirmButtonText: '确定',
+          canceButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$axios.post('/modifyNotice', {
+            params: {
+              noticeInfo: noticeInfo
+            }
+          }).then(res => {
+            if (res.data.state === 200) {
+              this.$message({
+                type: 'success',
+                message: res.data.message
+              })
+            }
+          })
+        })
+    },
+    // 新增公告信息
+    addNotice () {
+      this.addBulletinNotice.noticeTime = new Date(),
+        this.$axios.post('/addNotice', {
+          params: {
+            addBulletinNotice: this.addBulletinNotice
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+          }
+          this.addBulletinNotice = {}
+          this.isAdd = false
+          this.getAllNotice()
+        })
     }
   }
 }

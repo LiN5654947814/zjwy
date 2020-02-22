@@ -5,6 +5,7 @@ import store from './store'
 import './plugins/element.js'
 import axios from 'axios'
 import echarts from 'echarts'
+import moment from 'moment'
 
 Vue.config.productionTip = false
 Vue.prototype.$echarts = echarts
@@ -41,8 +42,11 @@ axiosInstance.interceptors.request
   //   return Promise.reject(error)
   // }
   ()
+// 全局时间过滤器
+Vue.filter('dateFormat', function(dataStr, pattern = 'YYYY-MM-DD') {
+  return moment(dataStr).format(pattern)
+})
 Vue.prototype.$axios = axiosInstance
-
 new Vue({
   router,
   store,

@@ -28,6 +28,7 @@ import parkingRegister from '../components/parking/parkingRegister.vue'
 import complaint from '../components/complaint/complaint.vue'
 import complaintReply from '../components/complaint/complaintReply.vue'
 import ownerComplaint from '../components/ownerMain/ownerComplaint.vue'
+import ownerNotice from '../components/ownerMain/ownerNoticeDetail.vue'
 
 Vue.use(VueRouter)
 const routes = [
@@ -191,6 +192,12 @@ const routes = [
         path: '/ownerComplaint',
         name: 'ownerComplaint',
         component: ownerComplaint
+      },
+      {
+        // 业主公告详情页
+        path: '/ownerNotice/:id',
+        name: 'ownerNotice',
+        component: ownerNotice
       }
     ]
   }

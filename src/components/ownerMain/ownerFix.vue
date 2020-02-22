@@ -23,6 +23,7 @@
           <el-form-item label="报修提交时间:">
             <el-date-picker v-model="fixInfo.fixStartTime"
                             type="date"
+                            value-format="yyyy-MM-dd"
                             placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
@@ -201,7 +202,7 @@ export default {
     },
     // 提交报修
     getOwnerFix () {
-      console.log(this.ownerInfo)
+      this.fixInfo.fixOwnerCard = this.ownerInfo.ownerCard
       this.$confirm('确定要提交报修信息？', '提示', {
         confirmButtonText: '确定',
         canceButtonText: '取消',
