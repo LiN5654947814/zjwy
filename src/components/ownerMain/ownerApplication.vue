@@ -75,25 +75,35 @@
                            label="公摊照明费"
                            align="center">
           </el-table-column>
-          <el-table-column prop="payStartTime"
-                           label="续费时间"
-                           align="center">
-          </el-table-column>
-          <el-table-column prop="payEndTime"
-                           label="到期时间"
+          <el-table-column prop="payDate"
+                           label="缴费月"
                            align="center">
           </el-table-column>
           <el-table-column prop="payState"
                            label="状态"
                            align="center">
           </el-table-column>
-          <el-table-column prop="payState"
+          <el-table-column prop="payCount"
                            label="合计"
                            align="center">
           </el-table-column>
         </el-table>
       </div>
     </div>
+
+    <!-- 弹窗提示 -->
+    <el-dialog title="提示"
+               :visible.sync="dialogVisible"
+               width="30%"
+               :before-close="handleClose">
+      <span>业主您好，请您尽快到物业管理中心处缴清当月的物业管理费，谢谢合作(若已缴请无视)——————————{{dialogDate | dateFormat}}</span>
+      <span slot="footer"
+            class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary"
+                   @click="dialogVisible = false,receiveCalling()">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -112,23 +122,16 @@ export default {
         limit: 7
       },
       ownerInfo: {},
-      ownerPay: [
-        {
-          id: '001',
-          payOwner: '孙笑川',
-          payGarbage: '50',
-          payElevator: '50',
-          payLighting: '50',
-          payState: '正常',
-          payStartTime: '2020-01-01',
-          payEndTime: '2020-01-31'
-        }
-      ]
+      ownerPay: [],
+      dialogVisible: false,
+      dialogDate: ''
     }
   },
   created () {
     this.getOwner()
+    this.getPayMessage()
     this.getAllNotice()
+    this.getPayListInfo()
   },
   computed: {
     total () {
@@ -142,6 +145,27 @@ export default {
   methods: {
     passwordModify () {
       this.$router.push('/ownerPasswordModify')
+    },
+    // 进来先判断是否有缴费信息
+    getPayMessage () {
+      let ownerInfo = JSON.parse(sessionStorage.getItem('owner'))
+      let y = new Date().getFullYear()
+      let m = new Date().getMonth() + 1
+      m = m < 10 ? '0' + m : m
+      ownerInfo.payDate = y + '-' + m
+      this.$axios.post('/getOnwerPay', {
+        params: {
+          ownerInfo: ownerInfo
+        }
+      }).then(res => {
+        if (res.data.state === 200) {
+          let pay = res.data.pay
+          if (pay.payCalling === true) {
+            this.dialogVisible = true
+            this.dialogDate = pay.updatedAt
+          }
+        }
+      })
     },
     // 获取业主信息
     getOwner () {
@@ -172,6 +196,50 @@ export default {
     // 根据公告id获取公告页面
     getBulletinDetails (id) {
       this.$router.push('/ownerNotice/' + id)
+    },
+    // 获取缴费信息
+    getPayListInfo () {
+      let ownerInfo = JSON.parse(sessionStorage.getItem('owner'))
+      let paySearch = {}
+      let y = new Date().getFullYear()
+      let m = new Date().getMonth() + 1
+      m = m < 10 ? '0' + m : m
+      paySearch.payDate = y + '-' + m
+      paySearch.payOwner = ownerInfo.ownerName
+      this.$axios.post('/searchPay', {
+        params: {
+          paySearch: paySearch
+        }
+      }).then(res => {
+        if (res.data.state === 200) {
+          this.ownerPay = res.data.payList
+          this.ownerPay[0].payCount = this.ownerPay[0].payGarbage + this.ownerPay[0].payElevator + this.ownerPay[0].payLighting
+        }
+      })
+    },
+    handleClose (done) {
+      this.$confirm('确认关闭？')
+        .then(_ => {
+          done();
+        })
+        .catch(_ => { });
+    },
+    // 确定接收信息，刷新催缴状态
+    receiveCalling () {
+      let ownerInfo = JSON.parse(sessionStorage.getItem('owner'))
+      let y = new Date().getFullYear()
+      let m = new Date().getMonth() + 1
+      m = m < 10 ? '0' + m : m
+      ownerInfo.payDate = y + '-' + m
+      this.$axios.post('/receiveCalling', {
+        params: {
+          ownerInfo: ownerInfo
+        }
+      }).then(res => {
+        if (res.data.state === 200) {
+          return
+        }
+      })
     }
   }
 }
@@ -183,7 +251,7 @@ export default {
 }
 .ownerApplication-bulletin {
   float: left;
-  width: 60%;
+  width: 65%;
   margin-left: 20px;
   margin-top: 20px;
   height: 300px;
@@ -246,7 +314,7 @@ export default {
 }
 .ownerApplicaiton-info {
   float: left;
-  width: 35%;
+  width: 30%;
   margin-top: 20px;
   margin-left: 20px;
   margin-bottom: 20px;

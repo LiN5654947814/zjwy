@@ -4,15 +4,20 @@
       <div class="arrears-title">当前欠费户</div>
       <el-table :data="currentList"
                 style="width: 100%">
-        <el-table-column prop="date"
+        <el-table-column prop="payDate"
                          label="应缴月"
-                         width="180">
+                         width="100">
         </el-table-column>
-        <el-table-column prop="address"
+        <el-table-column prop="payOwnerUnit"
                          label="单元"
                          width="180">
         </el-table-column>
-        <el-table-column prop="cost"
+        <el-table-column prop="payOwner"
+                         label="业主"
+                         width="110">
+        </el-table-column>
+        <el-table-column prop="count"
+                         width="200"
                          label="金额(元)">
         </el-table-column>
       </el-table>
@@ -32,72 +37,15 @@
 export default {
   data () {
     return {
-      tableData: [{
-        id: '1',
-        date: '2020-1',
-        address: 'A栋-102',
-        cost: '500'
-      },
-      {
-        id: '2',
-        date: '2020-1',
-        address: 'A栋-102',
-        cost: '500'
-      },
-      {
-        id: '3',
-        date: '2020-1',
-        address: 'A栋-102',
-        cost: '500'
-      },
-      {
-        id: '4',
-        date: '2020-1',
-        address: 'A栋-102',
-        cost: '500'
-      },
-      {
-        id: '5',
-        date: '2020-1',
-        address: 'A栋-102',
-        cost: '500'
-      },
-      {
-        id: '6',
-        date: '2020-1',
-        address: 'A栋-102',
-        cost: '500'
-      },
-      {
-        id: '7',
-        date: '2020-1',
-        address: 'A栋-102',
-        cost: '500'
-      },
-      {
-        id: '8',
-        date: '2020-1',
-        address: 'A栋-102',
-        cost: '500'
-      },
-      {
-        id: '9',
-        date: '2020-1',
-        address: 'A栋-102',
-        cost: '500'
-      },
-      {
-        id: '10',
-        date: '2020-1',
-        address: 'A栋-102',
-        cost: '500'
-      }
-      ],
+      tableData: [],
       filters: {
         page: 0,
         limit: 3
       }
     }
+  },
+  mounted () {
+    this.getAllArrears()
   },
   computed: {
     total () {
@@ -108,6 +56,24 @@ export default {
       return ret
     }
   },
+  methods: {
+    // 获取未缴费的信息
+    getAllArrears () {
+      this.$axios.get('/getAllPay').then(res => {
+        if (res.data.state === 200) {
+          let currentList = res.data.payList
+          currentList.forEach(item => {
+            if (item.payState === '未缴费') {
+              this.tableData.push(item)
+            }
+          })
+          this.tableData.forEach(item => {
+            item.count = item.payGarbage + item.payElevator + item.payLighting
+          })
+        }
+      })
+    }
+  }
 
 }
 </script>

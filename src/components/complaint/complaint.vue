@@ -74,7 +74,7 @@
                            width="180"
                            align="center">
           </el-table-column>
-          <el-table-column prop="complainOwnerUnit"
+          <el-table-column prop="complaintOwnerUnit"
                            label="所在单元"
                            width="180"
                            align="center">
@@ -316,7 +316,7 @@ export default {
           }
         })
       })
-    }
+    },
   }
 }
 </script>

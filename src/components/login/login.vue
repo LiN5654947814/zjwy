@@ -114,6 +114,7 @@ export default {
           if (res.data.state === 200) {
             // 登录检测成功后设置token
             const token = localStorage.setItem('token', res.data.token)
+            const author = localStorage.setItem('author', res.data.author)
             // 判断权限
             if (res.data.author === true) {
               this.$message({

@@ -7,8 +7,10 @@
              @click="handleSelect(1)"
              :class="[isSelect === 1?'':'is-active']">提交投诉</div>
         <div class="complaint-select-item"
-             @click="handleSelect(2),getOwnerComplaint()"
+             @click="handleSelect(2)"
              :class="[isSelect === 2?'':'is-active']">我的投诉</div>
+        <div class="message-icon"
+             v-if="messageNum != 0">{{messageNum}}</div>
       </div>
       <!-- 提交投诉 -->
       <div class="owner-complaint-add"
@@ -84,23 +86,33 @@
             </el-table-column>
             <el-table-column prop="complaintContent"
                              label="内容"
-                             width="750"
+                             width="650"
                              :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column prop="complaintTime"
                              label="提交时间"
                              align="center">
             </el-table-column>
-            <el-table-column prop="complaintReply"
-                             label="状态"
+            <el-table-column prop="replyState"
+                             label="回复状态"
+                             align="center">
+            </el-table-column>
+            <el-table-column prop="readed"
+                             label="回复查看"
                              align="center">
             </el-table-column>
             <el-table-column prop="cost"
-                             label="操作">
+                             label="操作"
+                             align="center"
+                             width="200">
               <template slot-scope="scope">
                 <el-button type="primary"
                            @click="getComplaintDetail(scope.row)">
                   详情
+                </el-button>
+                <el-button type="warning"
+                           @click="complaintOwnerRead(scope.row)">
+                  标记已读
                 </el-button>
               </template>
             </el-table-column>
@@ -197,11 +209,14 @@ export default {
       complaintList: [],
       isComplaint: false,
       complaintDetail: {},
-      complaintRefer: {}
+      complaintRefer: {},
+      referList: [],
+      messageNum: ''
     }
   },
   created () {
     this.ownerInfo = JSON.parse(sessionStorage.getItem('owner'))
+    this.getOwnerComplaint()
   },
   computed: {
     total () {
@@ -215,7 +230,6 @@ export default {
   methods: {
     handleSelect (num) {
       this.isSelect = num
-      console.log(this.isSelect)
     },
     // 获取业主的投诉信息
     getOwnerComplaint () {
@@ -226,6 +240,23 @@ export default {
       }).then(res => {
         if (res.data.state === 200) {
           this.complaintList = res.data.complaintList
+          console.log(this.complaintList)
+          this.complaintList.forEach(item => {
+            if (item.complaintReply.trim().length !== 0 && item.ownerReadState == false) {
+              item.replyState = '已回复'
+              item.readed = '未读'
+              this.referList.push(item)
+            }
+            if (item.complaintReply.trim().length === 0) {
+              item.replyState = '未回复'
+              item.readed = '等待回复'
+            }
+            if (item.complaintReply.trim().length !== 0 && item.ownerReadState == true) {
+              item.replyState = '已回复'
+              item.readed = '已读'
+            }
+          })
+          this.messageNum = this.referList.length
         }
       })
     },
@@ -258,9 +289,22 @@ export default {
               message: res.data.message
             })
           }
+          this.getOwnerComplaint()
         })
       })
-    }
+    },
+    // 标注已读
+    complaintOwnerRead (row) {
+      this.$axios.post('/complaintOwnerRead', {
+        params: {
+          complaintInfo: row
+        }
+      }).then(res => {
+        if (res.data.state === 200) {
+          this.messageNum--
+        }
+      })
+    },
   }
 }
 </script>
@@ -280,6 +324,7 @@ export default {
     margin: 10px auto;
     width: 97%;
     height: 40px;
+    position: relative;
     .complaint-select-item {
       float: left;
       width: 100px;
@@ -292,6 +337,17 @@ export default {
       list-style: none;
       border-radius: 10px;
       cursor: pointer;
+    }
+    .message-icon {
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      color: #fff;
+      position: absolute;
+      border-radius: 50%;
+      text-align: center;
+      left: 190px;
+      top: 0;
     }
   }
   .owner-complaint-add {

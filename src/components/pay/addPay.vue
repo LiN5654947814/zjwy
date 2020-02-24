@@ -13,6 +13,11 @@
           <el-input style="width:300px;"
                     v-model="payInfo.payOwnerPhone"></el-input>
         </el-form-item>
+        <!-- 身份证 -->
+        <el-form-item label="身份证:">
+          <el-input style="width:300px;"
+                    v-model="payInfo.payOwnerCard"></el-input>
+        </el-form-item>
         <!-- 所在单元 -->
         <el-form-item label="所在单元:">
           <el-input style="width:300px;"

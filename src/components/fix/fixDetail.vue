@@ -122,7 +122,13 @@ export default {
           }
         }).then(res => {
           if (res.data.state === 200) {
-            console.log(res.data)
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+            setTimeout(() => {
+              this.$router.push('/fix')
+            }, 500)
           }
         })
       })

@@ -162,6 +162,7 @@ export default {
         setTimeout(() => {
           this.$router.push('/login')
           window.localStorage.removeItem('token')
+          window.localStorage.removeItem('author')
           this.$message({
             type: 'success',
             message: '已退出登录'

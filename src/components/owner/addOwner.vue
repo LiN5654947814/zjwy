@@ -38,11 +38,6 @@
           <el-input style="width:300px;"
                     v-model="ownerInfo.originalPassword"></el-input>
         </el-form-item>
-        <!-- 车位拥有数 -->
-        <el-form-item label="车位数:">
-          <el-input style="width:300px;"
-                    v-model="ownerInfo.ownerParking"></el-input>
-        </el-form-item>
       </el-form>
       <div class="sumbit-btn">
         <el-button type="success"

@@ -21,7 +21,19 @@ let axiosInstance = axios.create({
 
 axiosInstance.interceptors.response.use(
   response => {
-    // 在接收响应做些什么，例如跳转到登录页
+    if (response.data.state === 400) {
+      Vue.prototype.$message({
+        type: 'error',
+        message: '请求失败'
+      })
+    } else if (response.data.state === 404) {
+      console.log(1111)
+      Vue.prototype.$message({
+        type: 'error',
+        message: response.data.message
+      })
+      router.replace('/login')
+    }
     return response
   },
   error => {
@@ -29,19 +41,14 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error)
   }
 )
-axiosInstance.interceptors.request
-  .use
-  // config => {
-  //   if (localStorage.getItem('token')) {
-  //     config.headers.commom['token'] = localStorage.getItem('token')
-  //     console.log(11111111111111)
-  //   }
-  //   return config
-  // },
-  // error => {
-  //   return Promise.reject(error)
-  // }
-  ()
+axiosInstance.interceptors.request.use(config => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    // config.headers.Authorization = token
+    config.headers['Authorization'] = `Bearer ${token}`
+  }
+  return config
+})
 // 全局时间过滤器
 Vue.filter('dateFormat', function(dataStr, pattern = 'YYYY-MM-DD') {
   return moment(dataStr).format(pattern)

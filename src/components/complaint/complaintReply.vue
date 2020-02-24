@@ -53,7 +53,8 @@
         </div>
       </div>
       <div class="complaint-btn">
-        <el-button type="primary">
+        <el-button type="primary"
+                   @click="referComplaint">
           回复
         </el-button>
         <el-button type="danger"
@@ -90,6 +91,22 @@ export default {
     // 返回
     goBack () {
       this.$router.push('/complaint')
+    },
+    // 回复业主信息
+    referComplaint () {
+      this.$axios.post('/referComplaint', {
+        params: {
+          complaintInfo: this.complaintInfo
+        }
+      }).then(res => {
+        if (res.data.state === 200) {
+          this.$message({
+            type: 'success',
+            message: res.data.message
+          })
+          this.goBack()
+        }
+      })
     }
   }
 

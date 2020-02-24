@@ -29,6 +29,7 @@ import complaint from '../components/complaint/complaint.vue'
 import complaintReply from '../components/complaint/complaintReply.vue'
 import ownerComplaint from '../components/ownerMain/ownerComplaint.vue'
 import ownerNotice from '../components/ownerMain/ownerNoticeDetail.vue'
+import { Form } from 'element-ui'
 
 Vue.use(VueRouter)
 const routes = [
@@ -38,7 +39,7 @@ const routes = [
     component: Login
   },
   {
-    path: '/',
+    path: '/home',
     name: 'home',
     component: Home,
     children: [
@@ -210,12 +211,17 @@ const router = new VueRouter({
 })
 // 动态路由
 router.beforeEach((to, from, next) => {
-  // 无权限访问login放行
-  if (to.path === '/login') {
-    return next()
-  }
   // 申明一个token
   const tokenStr = window.localStorage.getItem('token')
+  const author = window.localStorage.getItem('author')
+  // 无权限访问login放行
+  if (to.path === '/login') {
+    console.log(to)
+    return next()
+  }
+  if (to.path === '/') {
+    return next('/login')
+  }
   // 判断有无token
   if (!tokenStr) {
     // 没有就强制返回登录页

@@ -273,7 +273,6 @@ export default {
         if (res.data.state === 200) {
           this.houseList = res.data.estate
           console.log(this.houseList)
-          // this.houseList.estateMoveDate = res.data.estate[0].owner.ownerMoveDate
         }
       })
     },

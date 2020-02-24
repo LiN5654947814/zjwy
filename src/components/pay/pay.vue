@@ -113,7 +113,7 @@
                 标记已缴
               </el-button>
               <el-button type="primary"
-                         @click="payModify(scope.row)">
+                         @click="sendCalling(scope.row)">
                 催缴
               </el-button>
               <el-button type="danger"
@@ -357,6 +357,33 @@ export default {
             this.getAllPay()
           }
         })
+      })
+    },
+    // 催缴
+    sendCalling (row) {
+      let payInfo = row
+      this.$axios.post('/sendCalling', {
+        params: {
+          payInfo: payInfo
+        }
+      }).then(res => {
+        if (res.data.state === 202) {
+          this.$message({
+            type: 'warning',
+            message: res.data.message
+          })
+        } else if (res.data.state === 204) {
+          this.$message({
+            type: 'success',
+            message: res.data.message
+          })
+        }
+        else if (res.data.state === 200) {
+          this.$message({
+            type: 'success',
+            message: res.data.message
+          })
+        }
       })
     }
   }
