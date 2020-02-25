@@ -14,14 +14,33 @@
 export default {
   data () {
     return {
-
+      payByMonth: [],
+      data: [0, 3000, 5000, 7000, 9000, 12000, 15000, 6000, 1, 155, 6000, 11]
     }
   },
-  mounted () {
+  async mounted () {
     this.drwaLine()
   },
   methods: {
-    drwaLine () {
+    // 获取并生成每月收费数据
+    async drwaLine () {
+      await this.$axios.get('/getAllPayByMonth').then(res => {
+        if (res.data.state === 200) {
+          let currentList = res.data.currentList
+          for (let i = 0; i < currentList.length; i++) {
+            let month = {}
+            month.count = 0
+            for (let j = 0; j < currentList[i].length; j++) {
+              month.count = currentList[i][j].payLighting + currentList[i][j].payElevator + currentList[i][j].payGarbage + month.count
+            }
+            this.payByMonth.push(JSON.parse(JSON.stringify(month.count)))
+          }
+          // result.forEach((item, index) => {
+          //   this.payByMonth[index] = item.count
+          // })
+          // this.payByMonth = JSON.parse(JSON.stringify(this.payByMonth))
+        }
+      })
       let myChart = this.$echarts.init(document.getElementById('myChart'))
       let option = {
         color: ['#3398DB'],
@@ -56,12 +75,15 @@ export default {
             name: '金额（元）',
             type: 'bar',
             barWidth: '60%',
-            data: [0, 3000, 5000, 7000, 9000, 12000, 15000, 6000, 1, 155, 6000, 11]
+            data: this.payByMonth
           }
         ]
       }
-      myChart.setOption(option)
-    }
+
+      setTimeout(() => {
+        myChart.setOption(option)
+      }, 1000)
+    },
   },
 }
 </script>

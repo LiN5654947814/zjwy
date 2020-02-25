@@ -374,7 +374,13 @@ export default {
             type: 'error',
             message: '请解绑所选业主名下房产信息'
           })
-        } else {
+        } else if (row.parkings.length != 0) {
+          this.$message({
+            type: 'error',
+            message: '请解绑所选业主名下的车位信息'
+          })
+        }
+        else {
           this.$axios.post('/deleteOwner', {
             params: {
               id: row.id,
@@ -411,7 +417,13 @@ export default {
                 message: `请解绑业主(` + owner.ownerName + `)名下房产信息`
               })
             }, 500)
-          } else {
+          } else if (owner.parkings.length != 0) {
+            this.$message({
+              type: 'error',
+              message: `请解绑所选业主(` + owner.ownerName + `)名下的车位信息`
+            })
+          }
+          else {
             this.$axios.post('/deleteOwners', {
               params: {
                 deleteOwners: this.multipleSelection

@@ -144,7 +144,6 @@ export default {
               this.estateUnCount.push(item)
             }
           })
-          console.log(this.estateUnCount)
         }
         this.headerTab[1].useData = this.estateCount.length
         this.headerTab[1].unUseData = this.estateUnCount.length
