@@ -112,7 +112,16 @@
           </el-table-column>
         </el-table>
       </div>
+      <div class="export-btn">
+        <el-button @click="exportExcel"
+                   size="mini"
+                   type="primary">全部导出</el-button>
+        <el-button @click="exportExcelBySelect"
+                   size="mini"
+                   type="primary">勾选导出</el-button>
+      </div>
       <div class="pagination">
+        <div class="pagination-total">共{{total}}条</div>
         <el-pagination layout="prev, pager, next"
                        :current-page.sync="filters.page"
                        :page-size="filters.limit"
@@ -227,7 +236,8 @@ export default {
         }
       ],
       // 显示弹窗信息
-      isEstate: false
+      isEstate: false,
+      multipleSelection: []
     }
   },
   computed: {
@@ -314,6 +324,47 @@ export default {
           this.houseList = res.data.estates
         }
       })
+    },
+    // 导出excel
+    exportExcel () {
+      let name = new Date().getTime()
+      this.$axios.get('/exportEstate', { responseType: 'blob' }).then(ret => {
+        console.log(new Blob([ret.data]))
+        const url = window.URL.createObjectURL(new Blob([ret.data]))
+        const link = document.createElement('a')
+        link.style.display = 'none'
+        link.href = url
+        link.setAttribute('download', `${name}-已登记房产表.xlsx`)
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      })
+    },
+    // 勾选导出
+    exportExcelBySelect () {
+      let name = new Date().getTime()
+      if (this.multipleSelection.length === 0) {
+        this.$message({
+          type: 'warning',
+          message: '请先勾选要导出的数据'
+        })
+      } else {
+        this.$axios.post('/exportEstateList', {
+          params: {
+            exportList: this.multipleSelection
+          }
+        }, { responseType: 'blob' }).then(ret => {
+          console.log(new Blob([ret.data]))
+          const url = window.URL.createObjectURL(new Blob([ret.data]))
+          const link = document.createElement('a')
+          link.style.display = 'none'
+          link.href = url
+          link.setAttribute('download', `${name}-已登记房产表.xlsx`)
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+        })
+      }
     }
   }
 }
@@ -343,12 +394,19 @@ export default {
   background-color: #fff;
   position: relative;
   .estate-table {
-    min-height: 750px;
+    min-height: 710px;
   }
   .pagination {
     bottom: 0;
     right: 0;
     position: absolute;
+    .pagination-total {
+      bottom: 7px;
+      right: 130px;
+      position: absolute;
+      width: 100px;
+      font-size: 15px;
+    }
   }
 }
 .popUpbox {

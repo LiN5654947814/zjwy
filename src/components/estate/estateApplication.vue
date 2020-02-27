@@ -137,8 +137,16 @@
           </el-table-column>
         </el-table>
       </div>
-      <div class="
-                         pagination">
+      <div class="export-btn">
+        <el-button @click="exportExcel"
+                   size="mini"
+                   type="primary">全部导出</el-button>
+        <el-button @click="exportExcelBySelect"
+                   size="mini"
+                   type="primary">勾选导出</el-button>
+      </div>
+      <div class="pagination">
+        <div class="pagination-total">共{{total}}条</div>
         <el-pagination layout="prev, pager, next"
                        :current-page.sync="filters.page"
                        :page-size="filters.limit"
@@ -239,6 +247,7 @@ export default {
   },
   data () {
     return {
+      multipleSelection: [],
       title: '房产登记',
       // 房产信息
       houseInfo: {},
@@ -434,26 +443,73 @@ export default {
     deleteEstateApplicationList () {
       let estateList = []
       estateList = this.multipleSelection
-      this.$confirm('确定要删除多条房产信息？', '提示', {
-        confirmButtonText: '确定',
-        canceButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$axios.post('/deleteEstateApplicationList', {
-          params: {
-            estateList: estateList
-          }
-        }).then(res => {
-          if (res.data.state === 200) {
-            this.$message({
-              type: 'success',
-              message: res.data.message
-            })
-            setTimeout(() => {
-              this.getAllUnSaleEstate()
-            }, 500)
-          }
+      if (estateList.length === 0) {
+        this.$message({
+          type: 'warning',
+          message: '请先勾选所选数据'
         })
+      } else {
+        this.$confirm('确定要删除多条房产信息？', '提示', {
+          confirmButtonText: '确定',
+          canceButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$axios.post('/deleteEstateApplicationList', {
+            params: {
+              estateList: estateList
+            }
+          }).then(res => {
+            if (res.data.state === 200) {
+              this.$message({
+                type: 'success',
+                message: res.data.message
+              })
+              setTimeout(() => {
+                this.getAllUnSaleEstate()
+              }, 500)
+            }
+          })
+        })
+      }
+    },
+    // 导出excel
+    exportExcel () {
+      let name = new Date().getTime()
+      this.$axios.get('/exportUnRegisterEstateExcel', { responseType: 'blob' }).then(ret => {
+        console.log(new Blob([ret.data]))
+        const url = window.URL.createObjectURL(new Blob([ret.data]))
+        const link = document.createElement('a')
+        link.style.display = 'none'
+        link.href = url
+        link.setAttribute('download', `${name}-未登记房产表.xlsx`)
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      })
+    },
+    // 勾选导出
+    exportExcelBySelect () {
+      let name = new Date().getTime()
+      if (this.multipleSelection.length == 0) {
+        this.$message({
+          type: 'warning',
+          message: '请先勾选要导出的数据'
+        })
+      }
+      this.$axios.post('/exportUnRegisterEstateExcelList', {
+        params: {
+          exportList: this.multipleSelection
+        }
+      }, { responseType: 'blob' }).then(ret => {
+        console.log(new Blob([ret.data]))
+        const url = window.URL.createObjectURL(new Blob([ret.data]))
+        const link = document.createElement('a')
+        link.style.display = 'none'
+        link.href = url
+        link.setAttribute('download', `${name}-未登记房产表.xlsx`)
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
       })
     }
   }
@@ -494,12 +550,19 @@ export default {
     border-bottom: 1px solid #ccc;
   }
   .estate-application-table {
-    min-height: 750px;
+    min-height: 710px;
   }
   .pagination {
     bottom: 0;
     right: 0;
     position: absolute;
+    .pagination-total {
+      bottom: 7px;
+      right: 130px;
+      position: absolute;
+      width: 100px;
+      font-size: 15px;
+    }
   }
 }
 .popUpbox {
