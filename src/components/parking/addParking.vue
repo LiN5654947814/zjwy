@@ -1,6 +1,7 @@
 <template>
   <div>
-    <header-nav :title="title"></header-nav>
+    <header-nav :title="title"
+                :position="position"></header-nav>
     <div class="addParking-container">
       <el-form label-width="30%">
         <!-- 车位编号 -->
@@ -45,6 +46,11 @@
                     style="width:300px;"
                     :disabled="isAdd"></el-input>
         </el-form-item>
+        <el-form-item label="车位状态:">
+          <el-input v-model="parkingInfo.parkingStatus"
+                    style="width:300px;"
+                    :disabled="isAdd"></el-input>
+        </el-form-item>
         <el-form-item>
           <el-button type="danger"
                      @click="goBack">返回</el-button>
@@ -64,9 +70,11 @@ export default {
   },
   data () {
     return {
-      title: '新增车位信息',
+      title: '公有车位',
+      position: '增加公有车位',
       parkingInfo: {
-        parkingType: '公有'
+        parkingType: '公有',
+        parkingStatus: '正常'
       },
       parkingTypeSelect: [
         {

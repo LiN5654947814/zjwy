@@ -47,6 +47,7 @@
         <el-table :data="currentList"
                   style="width: 100%;
                   padding-left:5px;"
+                  :cell-style="cellStyle"
                   @selection-change="handleSelectionChange">
           <el-table-column type="selection"
                            width="55">
@@ -76,6 +77,11 @@
                            width="230"
                            align="center">
           </el-table-column>
+          <el-table-column prop="parkingStatus"
+                           label="状态"
+                           width="230"
+                           align="center">
+          </el-table-column>
           <el-table-column label="操作"
                            align="center">
             <template slot-scope="scope">
@@ -91,7 +97,16 @@
           </el-table-column>
         </el-table>
       </div>
+      <div class="export-btn">
+        <el-button @click="exportExcel"
+                   size="mini"
+                   type="primary">全部导出</el-button>
+        <el-button @click="exportExcelBySelect"
+                   size="mini"
+                   type="primary">勾选导出</el-button>
+      </div>
       <div class="pagination">
+        <div class="pagination-total">共{{total}}条</div>
         <el-pagination layout="prev, pager, next"
                        :current-page.sync="filters.page"
                        :page-size="filters.limit"
@@ -127,6 +142,7 @@
             <el-form-item label="车位租赁开始时间:">
               <el-date-picker v-model="parkingInfo.parkingStartTime"
                               type="date"
+                              value-format="yyyy-MM-dd"
                               placeholder="选择日期">
               </el-date-picker>
 
@@ -135,6 +151,7 @@
             <el-form-item label="车位租赁结束时间:">
               <el-date-picker v-model="parkingInfo.parkingEndTime"
                               type="date"
+                              value-format="yyyy-MM-dd"
                               placeholder="选择日期">
               </el-date-picker>
             </el-form-item>
@@ -142,6 +159,16 @@
             <el-form-item label="所属业主:">
               <el-input v-model="parkingInfo.parkingOwner"
                         style="width:300px;"></el-input>
+            </el-form-item>
+            <el-form-item label="状态:">
+              <el-select v-model="parkingInfo.parkingStatus"
+                         placeholder="请选择">
+                <el-option v-for="item in parkingStatusSelect"
+                           :key="item.value"
+                           :label="item.value"
+                           :value="item.value">
+                </el-option>
+              </el-select>
             </el-form-item>
           </el-form>
           <el-button type="primary"
@@ -165,6 +192,7 @@ export default {
     return {
       title: '车位管理',
       position: '私有车位',
+      multipleSelection: [],
       parkingSelect: [
         {
           value: '私有'
@@ -173,7 +201,7 @@ export default {
           value: '公有'
         }
       ],
-      parkingInfo: [],
+      parkingInfo: {},
       // 分页器
       filters: {
         page: 0,
@@ -181,7 +209,14 @@ export default {
       },
       parkingSearch: {},
       parkingList: [],
-      isParking: false
+      isParking: false,
+      parkingStatusSelect: [
+        {
+          value: '正常',
+        }, {
+          value: '过期'
+        }
+      ]
     }
   },
   mounted () {
@@ -242,19 +277,42 @@ export default {
         })
       })
     },
-    // // 编辑登记车位
-    // modifyParkingInfo () {
-    //   this.$axios.post('/modifyRegisterParking', {
-    //     params: {
-    //       parkingInfo: this.parkingInfo
-    //     }
-    //   }).then(res => {
-    //     if (res.data.state === 200) {
-    //       console.log(res.data)
-    //     }
-    //   })
-    // }
-
+    cellStyle (row, column, rowIndex, columnIndex) {
+      if (row.column.label === '状态' && row.row.parkingStatus === '正常') {
+        return {
+          color: 'green',
+          'font-weight': '700'
+        }
+      } else if (row.column.label === '状态' && row.row.parkingStatus === '过期') {
+        return {
+          color: 'red',
+          'font-weight': '700'
+        }
+      }
+    },
+    // 编辑车位信息
+    modifyParkingInfo () {
+      this.$confirm('确定要修改该私有车位信息？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/modifyRegisterParking', {
+          params: {
+            parkingInfo: this.parkingInfo
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+            this.isParking = false
+            this.getAllRegisterParking()
+          }
+        })
+      })
+    },
     // 搜索私有车位
     searchRegisterParking () {
       this.$axios.post('/searchRegisterParking', {
@@ -270,6 +328,47 @@ export default {
     // 清空搜索
     clearUp () {
       this.parkingSearch = {}
+    },
+    // 导出所有私有车位excel
+    exportExcel () {
+      let name = new Date().getTime()
+      this.$axios.get('/exportParking', { responseType: 'blob' }).then(ret => {
+        console.log(new Blob([ret.data]))
+        const url = window.URL.createObjectURL(new Blob([ret.data]))
+        const link = document.createElement('a')
+        link.style.display = 'none'
+        link.href = url
+        link.setAttribute('download', `${name}-车位表.xlsx`)
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      })
+    },
+    // 勾选导出车位
+    exportExcelBySelect () {
+      let name = new Date().getTime()
+      if (this.multipleSelection.length === 0) {
+        this.$message({
+          type: 'warning',
+          message: '请先勾选要导出的数据'
+        })
+        return
+      }
+      this.$axios.post('/exportParkingList', {
+        params: {
+          parkingList: this.multipleSelection
+        }
+      }, { responseType: 'blob' }).then(ret => {
+        console.log(new Blob([ret.data]))
+        const url = window.URL.createObjectURL(new Blob([ret.data]))
+        const link = document.createElement('a')
+        link.style.display = 'none'
+        link.href = url
+        link.setAttribute('download', `${name}-车位表.xlsx`)
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      })
     }
   }
 }
@@ -299,12 +398,19 @@ export default {
   background-color: #fff;
   position: relative;
   .parking-table {
-    min-height: 750px;
+    min-height: 710px;
   }
   .pagination {
     bottom: 0;
     right: 0;
     position: absolute;
+    .pagination-total {
+      bottom: 7px;
+      right: 130px;
+      position: absolute;
+      width: 100px;
+      font-size: 15px;
+    }
   }
 }
 .popUpbox {

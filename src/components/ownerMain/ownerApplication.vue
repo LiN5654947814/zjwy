@@ -1,6 +1,7 @@
 <template>
   <div>
-    <header-nav :title="title"></header-nav>
+    <header-nav :title="title"
+                :mainPath="mainPath"></header-nav>
     <!-- 公告栏 -->
     <div class="ownerApplication-bulletin">
       <div class="bulletin-title">
@@ -57,10 +58,11 @@
     <!-- 收费详情 -->
     <div class="ownerApplication-pay">
       <div class="ownerApplication-pay-title">
-        物业费详情
+        当月物业费详情
       </div>
       <div class="ownerApplication-pay-table">
         <el-table :data="ownerPay"
+                  :cell-style="cellStyle"
                   style="width: 200%;
                   padding-left:5px;">
           <el-table-column prop="payElevator"
@@ -85,6 +87,44 @@
           </el-table-column>
           <el-table-column prop="payCount"
                            label="合计"
+                           align="center">
+          </el-table-column>
+        </el-table>
+      </div>
+    </div>
+
+    <!-- 车位详情 -->
+    <div class="ownerApplication-parking">
+      <div class="ownerApplication-title">
+        车位详情
+      </div>
+      <div class="ownerApplication-table">
+        <el-table :data="parkingList"
+                  :cell-style="parkingStyle"
+                  style="width: 200%;
+                  padding-left:5px;">
+          <el-table-column prop="parkingNum"
+                           label="车位编号"
+                           align="center">
+          </el-table-column>
+          <el-table-column prop="parkingType"
+                           label="车位类型"
+                           align="center">
+          </el-table-column>
+          <el-table-column prop="parkingStartTime"
+                           label="车位租赁开始时间"
+                           align="center">
+          </el-table-column>
+          <el-table-column prop="parkingEndTime"
+                           label="车位租赁结束时间"
+                           align="center">
+          </el-table-column>
+          <el-table-column prop="parkingOwner"
+                           label="业主"
+                           align="center">
+          </el-table-column>
+          <el-table-column prop="parkingStatus"
+                           label="状态"
                            align="center">
           </el-table-column>
         </el-table>
@@ -116,6 +156,7 @@ export default {
   data () {
     return {
       title: '首页',
+      mainPath: '/ownerApplication',
       bulletinList: [],
       filters: {
         page: 0,
@@ -124,7 +165,8 @@ export default {
       ownerInfo: {},
       ownerPay: [],
       dialogVisible: false,
-      dialogDate: ''
+      dialogDate: '',
+      parkingList: []
     }
   },
   created () {
@@ -132,6 +174,7 @@ export default {
     this.getPayMessage()
     this.getAllNotice()
     this.getPayListInfo()
+    this.getParkingInfo()
   },
   computed: {
     total () {
@@ -217,6 +260,20 @@ export default {
         }
       })
     },
+    // 获取当前车位信息
+    getParkingInfo () {
+      let ownerInfo = JSON.parse(sessionStorage.getItem('owner'))
+      this.$axios.post('/getParkingByOwner', {
+        params: {
+          ownerInfo: ownerInfo
+        }
+      }).then(res => {
+        if (res.data.state === 200) {
+          this.parkingList = res.data.parkingList
+          console.log(this.parkingList)
+        }
+      })
+    },
     handleClose (done) {
       this.$confirm('确认关闭？')
         .then(_ => {
@@ -240,7 +297,33 @@ export default {
           return
         }
       })
-    }
+    },
+    cellStyle (row, column, rowIndex, columnIndex) {
+      if (row.column.label === '状态' && row.row.payState === '已缴费') {
+        return {
+          color: 'green',
+          'font-weight': '700'
+        }
+      } else if (row.column.label === '状态' && row.row.payState === '未缴费') {
+        return {
+          color: 'red',
+          'font-weight': '700'
+        }
+      }
+    },
+    parkingStyle (row, column, rowIndex, columnIndex) {
+      if (row.column.label === '状态' && row.row.parkingStatus === '正常') {
+        return {
+          color: 'green',
+          'font-weight': '700'
+        }
+      } else if (row.column.label === '状态' && row.row.parkingStatus === '过期') {
+        return {
+          color: 'red',
+          'font-weight': '700'
+        }
+      }
+    },
   }
 }
 </script>
@@ -359,6 +442,23 @@ export default {
   border-radius: 5px;
   background-color: #fff;
   .ownerApplication-pay-title {
+    height: 50px;
+    padding-left: 20px;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 50px;
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+  }
+}
+.ownerApplication-parking {
+  float: left;
+  margin: 50px 0 0 20px;
+  width: 96%;
+  height: 150px;
+  border-radius: 5px;
+  background-color: #fff;
+  .ownerApplication-title {
     height: 50px;
     padding-left: 20px;
     font-size: 18px;

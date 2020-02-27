@@ -2,9 +2,8 @@
   <div>
     您所在的位置：
     <el-breadcrumb separator-class="el-icon-arrow-right">
-      <el-breadcrumb-item :to="{ path: '/main' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item v-if="title"
-                          :to="{path:titlePath}">{{title}}</el-breadcrumb-item>
+      <el-breadcrumb-item>首页</el-breadcrumb-item>
+      <el-breadcrumb-item v-if="title">{{title}}</el-breadcrumb-item>
       <el-breadcrumb-item v-if="position">{{position}}</el-breadcrumb-item>
     </el-breadcrumb>
   </div>
@@ -12,7 +11,7 @@
 
 <script>
 export default {
-  props: ['title', 'position', 'titlePath'],
+  props: ['title', 'position', 'titlePath', 'mainPath'],
   data () {
     return {
 

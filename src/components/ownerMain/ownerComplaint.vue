@@ -1,6 +1,7 @@
 <template>
   <div>
-    <header-nav :title="title"></header-nav>
+    <header-nav :title="title"
+                :mainPath="mainPath"></header-nav>
     <div class="owner-complaint-container">
       <div class="complaint-select">
         <div class="complaint-select-item"
@@ -182,7 +183,8 @@ export default {
   },
   data () {
     return {
-      title: '投诉提交',
+      title: '投诉管理',
+      mainPath: '/ownerApplication',
       isSelect: 1,
       complaintInfo: {},
       textarea: '',

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <header-nav :title="title"></header-nav>
+    <header-nav :title="title"
+                :mainPath="mainPath"></header-nav>
     <div class="owner-select">
       <span style="margin-right:20px;
                     font-weight:700;">按条件搜索：</span>
@@ -206,6 +207,7 @@ export default {
   data () {
     return {
       title: '业主管理',
+      mainPath: '/main',
       isOwner: false,
       ownerList: [],
       // 房屋单元

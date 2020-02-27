@@ -1,6 +1,7 @@
 <template>
   <div>
-    <header-nav :title="title"></header-nav>
+    <header-nav :title="title"
+                :mainPath="mainPath"></header-nav>
     <div class="owner-fix-container">
       <div class="fix-select">
         <div class="fix-select-item"
@@ -156,7 +157,8 @@ export default {
   },
   data () {
     return {
-      title: '报修提交',
+      title: '报修管理',
+      mainPath: '/ownerApplication',
       isSelect: 1,
       fixInfo: {},
       textarea: '',
