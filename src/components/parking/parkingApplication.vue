@@ -71,6 +71,11 @@
                            width="230"
                            align="center">
           </el-table-column>
+          <el-table-column prop="parkingStatus"
+                           label="状态"
+                           width="230"
+                           align="center">
+          </el-table-column>
           <el-table-column label="操作"
                            align="center">
             <template slot-scope="scope">
@@ -86,7 +91,16 @@
           </el-table-column>
         </el-table>
       </div>
+      <div class="export-btn">
+        <el-button @click="exportExcel"
+                   size="mini"
+                   type="primary">全部导出</el-button>
+        <el-button @click="exportExcelBySelect"
+                   size="mini"
+                   type="primary">勾选导出</el-button>
+      </div>
       <div class="pagination">
+        <div class="pagination-total">共{{total}}条</div>
         <el-pagination layout="prev, pager, next"
                        :current-page.sync="filters.page"
                        :page-size="filters.limit"
@@ -168,6 +182,7 @@ export default {
     return {
       title: '车位管理',
       position: '公有车位',
+      multipleSelection: [],
       // 分页器
       filters: {
         page: 0,
@@ -278,6 +293,13 @@ export default {
     },
     // 批量删除
     deleteParkingList () {
+      if (this.multipleSelection.length === 0) {
+        this.$message({
+          type: 'warning',
+          message: '请先勾选要删除的数据'
+        })
+        return
+      }
       let parkingList = this.multipleSelection
       this.$confirm('确定要删除所选的车位信息？', '确定', {
         confirmButtonText: '确定',
@@ -294,9 +316,52 @@ export default {
               type: 'success',
               message: res.data.message
             })
-            this.getAllParking()
+            setTimeout(() => {
+              this.getAllParking()
+            }, 1000)
           }
         })
+      })
+    },
+    // 导出所有公有车位excel
+    exportExcel () {
+      let name = new Date().getTime()
+      this.$axios.get('/exportPakringApplication', { responseType: 'blob' }).then(ret => {
+        console.log(new Blob([ret.data]))
+        const url = window.URL.createObjectURL(new Blob([ret.data]))
+        const link = document.createElement('a')
+        link.style.display = 'none'
+        link.href = url
+        link.setAttribute('download', `${name}-公有车位表.xlsx`)
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      })
+    },
+    // 勾选导出
+    exportExcelBySelect () {
+      let name = new Date().getTime()
+      if (this.multipleSelection.length === 0) {
+        this.$message({
+          type: 'warning',
+          message: '请先勾选要导出的数据'
+        })
+        return
+      }
+      this.$axios.post('/exportParkingApplicationList', {
+        params: {
+          parkingList: this.multipleSelection
+        }
+      }, { responseType: 'blob' }).then(ret => {
+        console.log(new Blob([ret.data]))
+        const url = window.URL.createObjectURL(new Blob([ret.data]))
+        const link = document.createElement('a')
+        link.style.display = 'none'
+        link.href = url
+        link.setAttribute('download', `${name}-车位表.xlsx`)
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
       })
     }
   }
@@ -329,12 +394,19 @@ export default {
   background-color: #fff;
   position: relative;
   .parkingApplication-table {
-    min-height: 750px;
+    min-height: 710px;
   }
   .pagination {
     bottom: 0;
     right: 0;
     position: absolute;
+    .pagination-total {
+      bottom: 7px;
+      right: 130px;
+      position: absolute;
+      width: 100px;
+      font-size: 15px;
+    }
   }
 }
 .popUpbox {
