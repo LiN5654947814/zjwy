@@ -66,42 +66,47 @@
           </el-table-column>
           <el-table-column prop="payOwner"
                            label="业主"
-                           width="160"
+                           width="140"
                            align="center">
           </el-table-column>
           <el-table-column prop="payOwnerUnit"
                            label="所在单元"
-                           width="160"
+                           width="140"
                            align="center">
           </el-table-column>
           <el-table-column prop="payElevator"
                            label="电梯使用费"
-                           width="160"
+                           width="140"
                            align="center">
           </el-table-column>
           <el-table-column prop="payGarbage"
                            label="垃圾清运费"
-                           width="160"
+                           width="140"
                            align="center">
           </el-table-column>
           <el-table-column prop="payLighting"
                            label="公摊照明费"
-                           width="160"
+                           width="140"
+                           align="center">
+          </el-table-column>
+          <el-table-column prop="payApplication"
+                           label="公共管理"
+                           width="140"
                            align="center">
           </el-table-column>
           <el-table-column prop="payDate"
                            label="续费时间"
-                           width="160"
+                           width="140"
                            align="center">
           </el-table-column>
           <el-table-column prop="payState"
                            label="状态"
-                           width="160"
+                           width="140"
                            align="center">
           </el-table-column>
           <el-table-column prop="payCount"
                            label="合计"
-                           width="160"
+                           width="140"
                            align="center">
           </el-table-column>
           <el-table-column label="操作"
@@ -173,6 +178,10 @@
             <el-form-item label="公摊照明费:">
               <el-input style="width:300px;"
                         v-model="payInfo.payLighting"></el-input>
+            </el-form-item>
+            <el-form-item label="公共管理:">
+              <el-input style="width:300px;"
+                        v-model="payInfo.payApplication"></el-input>
             </el-form-item>
             <!-- 费用续费时间 -->
             <el-form-item label="该缴月:">
@@ -282,7 +291,7 @@ export default {
         if (res.data.state === 200) {
           this.payList = res.data.payList
           this.payList.forEach(item => {
-            item.payCount = item.payGarbage + item.payLighting + item.payElevator
+            item.payCount = item.payGarbage + item.payLighting + item.payElevator + item.payApplication
           })
         }
       })
@@ -364,7 +373,9 @@ export default {
               type: 'success',
               message: res.data.message
             })
-            this.getAllPay()
+            setTimeout(() => {
+              this.getAllPay()
+            }, 1000)
           }
         })
       })

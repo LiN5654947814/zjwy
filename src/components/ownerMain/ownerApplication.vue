@@ -77,6 +77,10 @@
                            label="公摊照明费"
                            align="center">
           </el-table-column>
+          <el-table-column prop="payApplication"
+                           label="公告管理费"
+                           align="center">
+          </el-table-column>
           <el-table-column prop="payDate"
                            label="缴费月"
                            align="center">
@@ -169,11 +173,11 @@ export default {
       parkingList: []
     }
   },
-  created () {
+  mounted () {
     this.getOwner()
     this.getPayMessage()
     this.getAllNotice()
-    this.getPayListInfo()
+    // this.getPayListInfo()
     this.getParkingInfo()
   },
   computed: {
@@ -203,17 +207,24 @@ export default {
       }).then(res => {
         if (res.data.state === 200) {
           let pay = res.data.pay
+          pay.payCount = pay.payGarbage + pay.payElevator + pay.payLighting + pay.payApplication
           if (pay.payCalling === true) {
             this.dialogVisible = true
             this.dialogDate = pay.updatedAt
           }
+          this.ownerPay.push(pay)
+        } else if (res.data.state === 401) {
+          this.$message({
+            type: 'warning',
+            message: res.data.message
+          })
         }
       })
     },
     // 获取业主信息
     getOwner () {
       let ownerInfo = JSON.parse(sessionStorage.getItem('owner'))
-      this.$axios.post('getOwner', {
+      this.$axios.post('/getOwner', {
         params: {
           ownerInfo: ownerInfo
         }
@@ -241,25 +252,27 @@ export default {
       this.$router.push('/ownerNotice/' + id)
     },
     // 获取缴费信息
-    getPayListInfo () {
-      let ownerInfo = JSON.parse(sessionStorage.getItem('owner'))
-      let paySearch = {}
-      let y = new Date().getFullYear()
-      let m = new Date().getMonth() + 1
-      m = m < 10 ? '0' + m : m
-      paySearch.payDate = y + '-' + m
-      paySearch.payOwner = ownerInfo.ownerName
-      this.$axios.post('/searchPay', {
-        params: {
-          paySearch: paySearch
-        }
-      }).then(res => {
-        if (res.data.state === 200) {
-          this.ownerPay = res.data.payList
-          this.ownerPay[0].payCount = this.ownerPay[0].payGarbage + this.ownerPay[0].payElevator + this.ownerPay[0].payLighting
-        }
-      })
-    },
+    // getPayListInfo () {
+    //   let ownerInfo = JSON.parse(sessionStorage.getItem('owner'))
+    //   let paySearch = {}
+    //   let y = new Date().getFullYear()
+    //   let m = new Date().getMonth() + 1
+    //   m = m < 10 ? '0' + m : m
+    //   paySearch.payDate = y + '-' + m
+    //   paySearch.payOwner = '孙亚龙'
+    //   paySearch.payCard = ownerInfo.ownerCard
+    //   this.$axios.post('/searchPay', {
+    //     params: {
+    //       paySearch: paySearch
+    //     }
+    //   }).then(res => {
+    //     if (res.data.state === 200) {
+    //       this.ownerPay = res.data.payList
+    //       console.log(this.ownerPay)
+    //       // this.ownerPay[0].payCount = this.ownerPay[0].payGarbage + this.ownerPay[0].payElevator + this.ownerPay[0].payLighting
+    //     }
+    //   })
+    // },
     // 获取当前车位信息
     getParkingInfo () {
       let ownerInfo = JSON.parse(sessionStorage.getItem('owner'))
@@ -270,7 +283,6 @@ export default {
       }).then(res => {
         if (res.data.state === 200) {
           this.parkingList = res.data.parkingList
-          console.log(this.parkingList)
         }
       })
     },

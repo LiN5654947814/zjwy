@@ -33,9 +33,14 @@
           <el-input style="width:300px;"
                     v-model="payInfo.payGarbage"></el-input>
         </el-form-item>
+        <!-- 公摊照明费 -->
         <el-form-item label="公摊照明费:">
           <el-input style="width:300px;"
                     v-model="payInfo.payLighting"></el-input>
+        </el-form-item>
+        <el-form-item label="公告管理费:">
+          <el-input style="width:300px;"
+                    v-model="payInfo.payApplication"></el-input>
         </el-form-item>
         <!-- 应缴月 -->
         <el-form-item label="应费月份：:">

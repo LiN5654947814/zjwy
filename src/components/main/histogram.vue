@@ -31,7 +31,7 @@ export default {
             let month = {}
             month.count = 0
             for (let j = 0; j < currentList[i].length; j++) {
-              month.count = currentList[i][j].payLighting + currentList[i][j].payElevator + currentList[i][j].payGarbage + month.count
+              month.count = currentList[i][j].payLighting + currentList[i][j].payElevator + currentList[i][j].payGarbage + currentList[i][j].payApplication + month.count
             }
             this.payByMonth.push(JSON.parse(JSON.stringify(month.count)))
           }
