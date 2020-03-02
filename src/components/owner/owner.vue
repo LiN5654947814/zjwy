@@ -299,22 +299,25 @@ export default {
     getAllOwner () {
       this.$axios.get('/getAllOwner').then(res => {
         if (res.data.state === 200) {
-          this.ownerList = res.data.owners
-          this.ownerList.forEach((item, index) => {
+          let currentOwnerList = res.data.owners
+          currentOwnerList.forEach((item, index) => {
             if (item.author === false) {
               if (item.estates.length != 0) {
                 item.ownerMoveDate = item.estates[0].ownerMoveDate
                 item.ownerUnit = item.estates[0].estateBuilds + '-' + item.estates[0].estateUnit + '-' + item.estates[0].estatePlate
                 item.ownerEstate = item.estates.length
               }
-              if (item.parkings) {
+              if (item.parkings.length != 0) {
                 item.ownerParking = item.parkings.length
               }
-            } else if (item.author === true) {
+            }
+          })
+          this.ownerList = currentOwnerList
+          this.ownerList.forEach((item, index) => {
+            if (item.author === true) {
               this.ownerList.splice(index, 1)
             }
           })
-
         }
       })
     },
@@ -326,7 +329,6 @@ export default {
     },
     // 按条件搜索业主
     serachOwner () {
-      this.currentInfo.moveDate[0]
       this.$axios.post('/searchOwner', {
         params: {
           ownerName: this.currentInfo.ownerName,
@@ -336,6 +338,7 @@ export default {
         if (res.data.state === 200) {
           let currentList = []
           currentList = res.data.ownerInfo
+          console.log(currentList)
           if (currentList.length != 0) {
             currentList.forEach(item => {
               if (item.owner != null && item.owner) {

@@ -1,7 +1,12 @@
 <template>
   <div>
     <div class="arrears">
-      <div class="arrears-title">当前欠费户</div>
+      <div class="arrears-title">当前欠费户
+        <div class="color-box"
+             @click="goDetail">
+          详情
+        </div>
+      </div>
       <el-table :data="currentList"
                 style="width: 100%">
         <el-table-column prop="payDate"
@@ -72,6 +77,10 @@ export default {
           })
         }
       })
+    },
+    // 跳转详情
+    goDetail () {
+      this.$router.push('/pay')
     }
   }
 
@@ -97,6 +106,21 @@ export default {
     line-height: 50px;
     padding-left: 10px;
     border-bottom: 1px solid #ccc;
+    .color-box {
+      float: right;
+      font-weight: 500;
+      font-size: 15px;
+      width: 70px;
+      height: 25px;
+      margin-right: 30px;
+      margin-top: 15px;
+      color: #fff;
+      text-align: center;
+      line-height: 25px;
+      border-radius: 5px;
+      background-color: rgb(90, 201, 26);
+      cursor: pointer;
+    }
   }
   .pagination {
     bottom: 0;

@@ -129,6 +129,11 @@ export default {
             setTimeout(() => {
               this.$router.push('/fix')
             }, 500)
+          } else if (res.data.state === 401) {
+            this.$message({
+              type: 'error',
+              message: res.data.message
+            })
           }
         })
       })
