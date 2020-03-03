@@ -252,6 +252,7 @@ export default {
       this.$axios.get('/getAllRegisterParking').then(res => {
         if (res.data.state === 200) {
           this.parkingList = res.data.parkingList
+          console.log(this.parkingList)
         }
       })
     },

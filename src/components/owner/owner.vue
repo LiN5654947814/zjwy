@@ -168,11 +168,13 @@
             <!-- 车位拥有数 -->
             <el-form-item label="车位数:">
               <el-input style="width:300px;"
+                        disabled
                         v-model="ownerInfo.ownerParking"></el-input>
             </el-form-item>
             <!-- 房产数 -->
             <el-form-item label="房产数:">
               <el-input style="width:300px;"
+                        disabled
                         v-model="ownerInfo.ownerEstate"></el-input>
             </el-form-item>
             <!-- 迁入时间 -->
@@ -180,7 +182,7 @@
               <el-date-picker v-model="ownerInfo.ownerMoveDate"
                               type="date"
                               placeholder="选择日期"
-                              disabled=""
+                              disabled
                               style="width:300px;
                               margin-right:80px;">
               </el-date-picker>
@@ -392,11 +394,13 @@ export default {
         canceButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        // 验证业主名下的房产
         if (row.estates.length != 0) {
           this.$message({
             type: 'error',
             message: '请解绑所选业主名下房产信息'
           })
+          // 验证业主名下的车位信息
         } else if (row.parkings.length != 0) {
           this.$message({
             type: 'error',

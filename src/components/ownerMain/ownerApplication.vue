@@ -208,6 +208,7 @@ export default {
         if (res.data.state === 200) {
           let pay = res.data.pay
           pay.payCount = pay.payGarbage + pay.payElevator + pay.payLighting + pay.payApplication
+          // 判断弹窗信息
           if (pay.payCalling === true) {
             this.dialogVisible = true
             this.dialogDate = pay.updatedAt

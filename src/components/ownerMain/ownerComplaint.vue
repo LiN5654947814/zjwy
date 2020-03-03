@@ -57,7 +57,7 @@
         <div class="owner-complaint-content">
           <el-input type="textarea"
                     :rows="11"
-                    placeholder="请输入内容"
+                    placeholder="请输入500字以内的内容"
                     v-model="complaintRefer.complaintContent">
           </el-input>
         </div>
@@ -280,19 +280,27 @@ export default {
         canceButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.post('/referOwnerComplaint', {
-          params: {
-            complaintRefer: this.complaintRefer
-          }
-        }).then(res => {
-          if (res.data.state === 200) {
-            this.$message({
-              type: 'success',
-              message: res.data.message
-            })
-          }
-          this.getOwnerComplaint()
-        })
+        if (this.complaintRefer.complaintContent.trim().length > 500) {
+          this.$message({
+            type: 'warning',
+            message: '投诉内容不能超过500字'
+          })
+        } else {
+          this.$axios.post('/referOwnerComplaint', {
+            params: {
+              complaintRefer: this.complaintRefer
+            }
+          }).then(res => {
+            if (res.data.state === 200) {
+              this.$message({
+                type: 'success',
+                message: res.data.message
+              })
+            }
+            this.complaintRefer = {}
+            this.getOwnerComplaint()
+          })
+        }
       })
     },
     // 标注已读
@@ -303,7 +311,10 @@ export default {
         }
       }).then(res => {
         if (res.data.state === 200) {
-          this.messageNum--
+          this.getOwnerComplaint()
+          setTimeout(() => {
+            this.messageNum--
+          }, 200)
         }
       })
     },

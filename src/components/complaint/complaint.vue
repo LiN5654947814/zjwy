@@ -36,7 +36,8 @@
                      @click="clearUp">
             清空
           </el-button>
-          <el-button type="danger">
+          <el-button type="danger"
+                     @click="deleteCompaintList">
             批量删除
           </el-button>
         </el-form-item>
@@ -172,6 +173,7 @@ export default {
   data () {
     return {
       title: '投诉管理',
+      multipleSelection: [],
       complaintInfo: {},
       complaintSearch: {},
       complaintList: [],
@@ -263,6 +265,14 @@ export default {
       }).then(res => {
         if (res.data.state === 200) {
           this.complaintList = res.data.complaintList
+          this.complaintList.forEach(item => {
+            if (item.readState === false) {
+              item.complaintState = '未读'
+            }
+            else if (item.readState === true) {
+              item.complaintState = '已读'
+            }
+          })
         }
       })
     },
@@ -317,6 +327,30 @@ export default {
         })
       })
     },
+    // 批量删除投诉信息
+    deleteCompaintList () {
+      this.$confirm('确定删除' + this.multipleSelection.length + '条投诉信息？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/deleteComplaintList', {
+          params: {
+            complaintList: this.multipleSelection
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+            setTimeout(() => {
+              this.getAllComplaint()
+            }, 1000)
+          }
+        })
+      })
+    }
   }
 }
 </script>

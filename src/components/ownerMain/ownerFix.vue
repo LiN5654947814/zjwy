@@ -44,7 +44,7 @@
         <div class="owner-fix-content">
           <el-input type="textarea"
                     :rows="11"
-                    placeholder="请输入内容"
+                    placeholder="请输入500字以内的内容"
                     v-model="fixInfo.fixContent">
           </el-input>
         </div>
@@ -210,19 +210,26 @@ export default {
         canceButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.post('/referOwnerFix', {
-          params: {
-            fixInfo: this.fixInfo
-          }
-        }).then(res => {
-          if (res.data.state === 200) {
-            this.$message({
-              type: 'success',
-              message: res.data.message
-            })
-            this.fixInfo = {}
-          }
-        })
+        if (fixInfo.fixContent.trim().length > 500) {
+          this.$message({
+            type: 'warning',
+            message: '报修内容不能超过500字'
+          })
+        } else {
+          this.$axios.post('/referOwnerFix', {
+            params: {
+              fixInfo: this.fixInfo
+            }
+          }).then(res => {
+            if (res.data.state === 200) {
+              this.$message({
+                type: 'success',
+                message: res.data.message
+              })
+              this.fixInfo = {}
+            }
+          })
+        }
       })
     },
     // 查看详情

@@ -71,7 +71,7 @@
           <el-submenu index="/pay">
             <template slot="title">
               <i class="el-icon-document-copy"></i>
-              <span>收费管理</span>
+              <span>缴费管理</span>
             </template>
             <el-menu-item-group>
               <el-menu-item index="/pay">费用列表</el-menu-item>

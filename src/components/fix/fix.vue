@@ -187,7 +187,7 @@ export default {
     searchFix () {
       this.$axios.post('/searchFix', {
         params: {
-          fixInfo: this.clearUp
+          fixInfo: this.fixSearch
         }
       }).then(res => {
         if (res.data.state === 200) {

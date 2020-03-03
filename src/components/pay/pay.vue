@@ -317,21 +317,28 @@ export default {
     },
     // 标记已缴
     payStateChange (row) {
-      this.$confirm('确定已收取该业主的费用？', '提示', {
-        confirmButtonText: '确定',
-        canceButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$axios.post('./payStateChange', {
-          params: {
-            payInfo: row
-          }
-        }).then(res => {
-          if (res.data.state === 200) {
-            this.getAllPay()
-          }
+      if (row.payState === '已缴费') {
+        this.$message({
+          type: 'warning',
+          message: '该业主已缴费'
         })
-      })
+      } else {
+        this.$confirm('确定已收取该业主的费用？', '提示', {
+          confirmButtonText: '确定',
+          canceButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$axios.post('./payStateChange', {
+            params: {
+              payInfo: row
+            }
+          }).then(res => {
+            if (res.data.state === 200) {
+              this.getAllPay()
+            }
+          })
+        })
+      }
     },
     // 删除单条缴费信息
     deletePay (row) {

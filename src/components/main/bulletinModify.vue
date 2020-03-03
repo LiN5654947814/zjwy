@@ -28,7 +28,7 @@
                 编辑
               </el-button>
               <el-button type="danger"
-                         @click="getBulletin(scope.row)">
+                         @click="deleteNotice(scope.row)">
                 删除
               </el-button>
             </template>
@@ -102,7 +102,7 @@
                     v-model="addBulletinNotice.noticeTitle"></el-input>
           <el-input type="textarea"
                     :rows="2"
-                    placeholder="请输入内容"
+                    placeholder="请输入小于500字的内容"
                     v-model="addBulletinNotice.noticeContent"
                     style="margin-bottom: 10px;">
           </el-input>
@@ -202,7 +202,13 @@ export default {
     },
     // 新增公告信息
     addNotice () {
-      this.addBulletinNotice.noticeTime = new Date(),
+      this.addBulletinNotice.noticeTime = new Date()
+      if (this.addBulletinNotice.noticeContent.trim().length > 500) {
+        this.$message({
+          type: 'error',
+          message: '内容不可超过500字'
+        })
+      } else {
         this.$axios.post('/addNotice', {
           params: {
             addBulletinNotice: this.addBulletinNotice
@@ -218,6 +224,31 @@ export default {
           this.isAdd = false
           this.getAllNotice()
         })
+      }
+    },
+    // 删除公告信息
+    deleteNotice (row) {
+      this.$confirm('确定要删除该条公告信息？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/deleteNoticeById', {
+          params: {
+            noticeId: row.id
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+            setTimeout(() => {
+              this.getAllNotice()
+            }, 1000)
+          }
+        })
+      })
     }
   }
 }
