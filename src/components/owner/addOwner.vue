@@ -82,6 +82,7 @@ export default {
           ownerName: this.ownerInfo.ownerName,
           ownerSex: this.ownerInfo.ownerSex,
           ownerEmail: this.ownerInfo.ownerEmail,
+          ownerMoveDate: '',
           author: false,
           originalPassword: this.ownerInfo.originalPassword
         }

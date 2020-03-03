@@ -306,9 +306,15 @@ export default {
                 item.ownerMoveDate = item.estates[0].ownerMoveDate
                 item.ownerUnit = item.estates[0].estateBuilds + '-' + item.estates[0].estateUnit + '-' + item.estates[0].estatePlate
                 item.ownerEstate = item.estates.length
+              } else {
+                item.ownerMoveDate = '未迁入'
+                item.ownerUnit = '未登记'
+                item.ownerEstate = 0
               }
               if (item.parkings.length != 0) {
                 item.ownerParking = item.parkings.length
+              } else {
+                item.ownerParking = 0
               }
             }
           })
@@ -331,8 +337,7 @@ export default {
     serachOwner () {
       this.$axios.post('/searchOwner', {
         params: {
-          ownerName: this.currentInfo.ownerName,
-          ownerMoveDate: this.currentInfo.moveDate
+          currentInfo: this.currentInfo
         }
       }).then(res => {
         if (res.data.state === 200) {
@@ -341,26 +346,30 @@ export default {
           console.log(currentList)
           if (currentList.length != 0) {
             currentList.forEach(item => {
-              if (item.owner != null && item.owner) {
-                item.id = item.owner.id
-                item.ownerName = item.owner.ownerName
-                item.ownerSex = item.owner.ownerSex
-                item.ownerPhone = item.owner.ownerPhone
-                item.ownerParking = item.owner.ownerParking
-                item.ownerEstate = item.owner.ownerEstate
-                item.ownerCard = item.owner.ownerCard
-                item.ownerEmail = item.owner.ownerEmail
-                item.ownerUnit = item.estateBuilds + '-' + item.estateUnit + '-' + item.estatePlate
+              if (item.estates.length != 0) {
+                item.ownerMoveDate = item.estates[0].ownerMoveDate
+                item.ownerUnit = item.estates[0].estateBuilds + '-' + item.estates[0].estateUnit + '-' + item.estates[0].estatePlate
+                item.ownerEstate = item.estates.length
+              } else {
+                item.ownerMoveDate = '未迁入'
+                item.ownerUnit = '未登记'
+                item.ownerEstate = 0
               }
-              if (item.estate != null && item.estate) {
-                item.ownerMoveDate = item.estate.ownerMoveDate
-                item.ownerUnit = item.estate.estateBuilds + '-' + item.estate.estateUnit + '-' + item.estate.estatePlate
+              if (item.parkings.length != 0) {
+                item.ownerParking = item.parkings.length
+              } else {
+                item.ownerParking = 0
               }
               this.ownerList = currentList
             })
           } else {
             this.ownerList = []
           }
+          this.ownerList.forEach((item, index) => {
+            if (item.author === true) {
+              this.ownerList.splice(index, 1)
+            }
+          })
         }
 
       })
