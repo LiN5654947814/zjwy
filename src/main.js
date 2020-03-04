@@ -41,10 +41,12 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+// 发送请求前做点什么
 axiosInstance.interceptors.request.use(config => {
+  // 获取token
   const token = localStorage.getItem('token')
   if (token) {
-    // config.headers.Authorization = token
+    // 携带token
     config.headers['Authorization'] = `Bearer ${token}`
   }
   return config

@@ -141,30 +141,30 @@
         <div class="complaint-info-container">
           <el-form label-width="20%">
             <el-form-item label="投诉时间：">
-              <el-input style="width:300px;"
+              <el-input style="width:400px;"
                         v-model="complaintDetail.complaintTime"></el-input>
             </el-form-item>
             <el-form-item label="投诉业主：">
-              <el-input style="width:300px;"
+              <el-input style="width:400px;"
                         v-model="complaintDetail.complaintOwner"></el-input>
             </el-form-item>
             <el-form-item label="投诉类型：">
-              <el-input style="width:300px;"
+              <el-input style="width:400px;"
                         v-model="complaintDetail.complaintType"></el-input>
             </el-form-item>
             <el-form-item label="投诉内容：">
               <el-input type="textarea"
-                        :rows="5"
+                        :rows="8"
                         style="margin-bottom:20px;
-                        width:300px;"
+                        width:400px;"
                         v-model="complaintDetail.complaintContent">
               </el-input>
             </el-form-item>
             <el-form-item label="物业回复：">
               <el-input type="textarea"
-                        :rows="5"
+                        :rows="7"
                         style="margin-bottom:20px;
-                        width:300px;"
+                        width:400px;"
                         v-model="complaintDetail.complaintReply">
               </el-input>
             </el-form-item>
@@ -407,8 +407,8 @@ export default {
   background-color: rgba(0, 0, 0, 0.4);
   z-index: 999;
   .complaint-info {
-    width: 25%;
-    height: 65%;
+    width: 30%;
+    height: 70%;
     background-color: #fff;
     border-radius: 5px;
     top: 50%;

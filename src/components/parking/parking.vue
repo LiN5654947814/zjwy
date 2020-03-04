@@ -131,7 +131,8 @@
             <!-- 车位编号 -->
             <el-form-item label="车位编号:">
               <el-input style="width:300px;"
-                        v-model="parkingInfo.parkingNum"></el-input>
+                        v-model="parkingInfo.parkingNum"
+                        disabled></el-input>
             </el-form-item>
             <!-- 车位类型 -->
             <el-form-item label="车位类型:">
@@ -158,7 +159,8 @@
             <!-- 所属业主 -->
             <el-form-item label="所属业主:">
               <el-input v-model="parkingInfo.parkingOwner"
-                        style="width:300px;"></el-input>
+                        style="width:300px;"
+                        disabled></el-input>
             </el-form-item>
             <el-form-item label="状态:">
               <el-select v-model="parkingInfo.parkingStatus"
