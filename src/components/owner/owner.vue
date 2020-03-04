@@ -227,7 +227,7 @@ export default {
         moveDate: []
       },
       // 渲染选中业主信息
-      ownerInfo: {},
+      ownerInfo: {}
     }
   },
   mounted () {

@@ -5,43 +5,50 @@
                 :position="position"></header-nav>
 
     <div class="addOwner-container">
-      <el-form label-width="100px">
+      <el-form label-width="110px"
+               :rules="rules">
         <!-- 业主姓名 -->
-        <el-form-item label="业主姓名:">
+        <el-form-item label="业主姓名:"
+                      prop="ownerName">
           <el-input style="width:300px;"
                     v-model="ownerInfo.ownerName"></el-input>
         </el-form-item>
         <!-- 性别 -->
-        <el-form-item label="性别:">
+        <el-form-item label="性别:"
+                      prop="ownerSex">
           <el-radio v-model="ownerInfo.ownerSex"
                     label="男">男</el-radio>
           <el-radio v-model="ownerInfo.ownerSex"
                     label="女">女</el-radio>
         </el-form-item>
         <!-- 手机号 -->
-        <el-form-item label="手机号:">
+        <el-form-item label="手机号:"
+                      prop="ownerPhone">
           <el-input style="width:300px;"
                     v-model="ownerInfo.ownerPhone"></el-input>
         </el-form-item>
         <!-- 身份证号 -->
-        <el-form-item label="身份证号:">
+        <el-form-item label="身份证号:"
+                      prop="ownerCard">
           <el-input style="width:300px;"
                     v-model="ownerInfo.ownerCard"></el-input>
         </el-form-item>
         <!-- 邮箱 -->
-        <el-form-item label="邮箱:">
+        <el-form-item label="邮箱:"
+                      prop="ownerEmail">
           <el-input style="width:300px;"
                     v-model="ownerInfo.ownerEmail"></el-input>
         </el-form-item>
         <!-- 初始登录密码 -->
-        <el-form-item label="初始登录密码:">
+        <el-form-item label="初始登录密码:"
+                      prop="originalPassword">
           <el-input style="width:300px;"
                     v-model="ownerInfo.originalPassword"></el-input>
         </el-form-item>
       </el-form>
       <div class="sumbit-btn">
         <el-button type="success"
-                   @click="addOwner">
+                   @click="addOwner('ownerform')">
           新增
         </el-button>
         <el-button type="danger"
@@ -64,7 +71,28 @@ export default {
       title: '业主管理',
       titlePath: '/owner',
       position: '新增业主',
-      ownerInfo: {}
+      ownerInfo: {
+      },
+      rules: {
+        ownerName: [
+          { required: true, message: "请输入业主姓名", trigger: 'blur' }
+        ],
+        ownerSex: [
+          { required: true, message: '请选择业主性别', trigger: 'blur' }
+        ],
+        ownerCard: [
+          { required: true, message: '请输入业主身份证', trigger: 'blur' }
+        ],
+        ownerPhone: [
+          { required: true, message: '请输入业主手机号', trigger: 'blur' }
+        ],
+        ownerEmail: [
+          { required: true, message: '请输入业主邮箱', trigger: 'blur' }
+        ],
+        originalPassword: [
+          { required: true, message: '请输入业主初始密码', trigger: 'blur' }
+        ]
+      }
     }
   },
   methods: {
@@ -73,8 +101,7 @@ export default {
       this.$router.push('/owner')
     },
     // 新增业主信息
-    addOwner () {
-      console.log(this.ownerInfo.ownerMoveDate)
+    addOwner (ownerform) {
       this.$axios.post('/addOwner', {
         params: {
           ownerCard: this.ownerInfo.ownerCard,
@@ -104,8 +131,11 @@ export default {
         }
       })
     }
+
   }
+
 }
+
 </script>
 
 <style lang="scss">
