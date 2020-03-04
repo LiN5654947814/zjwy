@@ -227,7 +227,8 @@ export default {
         moveDate: []
       },
       // 渲染选中业主信息
-      ownerInfo: {}
+      ownerInfo: {},
+      status: ''
     }
   },
   mounted () {
@@ -270,15 +271,7 @@ export default {
       }).then(() => {
         this.$axios.post('/modifyOwner', {
           params: {
-            id: this.ownerInfo.id,
-            ownerCard: this.ownerInfo.ownerCard,
-            ownerPhone: this.ownerInfo.ownerPhone,
-            ownerName: this.ownerInfo.ownerName,
-            ownerSex: this.ownerInfo.ownerSex,
-            ownerEmail: this.ownerInfo.ownerEmail,
-            ownerParking: this.ownerInfo.ownerParking,
-            ownerEstate: this.ownerInfo.ownerEstate,
-            originalPassword: this.ownerInfo.originalPassword
+            ownerInfo: this.ownerInfo
           }
         }).then(res => {
           if (res.data.state === 200) {
@@ -288,11 +281,6 @@ export default {
             })
             this.isOwner = false
             this.getAllOwner()
-          } else if (res.data.state === 401) {
-            this.$message({
-              type: 'error',
-              message: res.data.message
-            })
           }
         })
       })
@@ -301,6 +289,7 @@ export default {
     getAllOwner () {
       this.$axios.get('/getAllOwner').then(res => {
         if (res.data.state === 200) {
+          this.status = res.data.state
           let currentOwnerList = res.data.owners
           currentOwnerList.forEach((item, index) => {
             if (item.author === false) {

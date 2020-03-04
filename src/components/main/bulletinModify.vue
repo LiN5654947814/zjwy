@@ -96,7 +96,7 @@
                @click="closeModify">
         </div>
         <div class="bullentin-input">
-          <el-input placeholder="请输入标题"
+          <el-input placeholder="请输入100字以内的标题"
                     style="margin:10px 0 0 20px;
                          width:96%;"
                     v-model="addBulletinNotice.noticeTitle"></el-input>
@@ -208,7 +208,13 @@ export default {
           type: 'error',
           message: '内容不可超过500字'
         })
-      } else {
+      } else if (this.addBulletinNotice.noticeTitle.trim().length > 100) {
+        this.$message({
+          type: 'error',
+          message: '标题不可超过100字'
+        })
+      }
+      else {
         this.$axios.post('/addNotice', {
           params: {
             addBulletinNotice: this.addBulletinNotice

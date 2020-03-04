@@ -52,18 +52,29 @@ export default {
       let ownerInfo = JSON.parse(sessionStorage.getItem('owner'))
       ownerInfo.inputOriginalPassword = this.inputOriginalPassword
       ownerInfo.newPassword = this.newPassword
-      this.$confirm('确定要修改密码？', '提示', {
-        confirmButtonText: '确定',
-        canceButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        if (this.newPassword != this.newPassword_) {
-          this.$message({
-            type: 'warning',
-            message: '新密码不一致'
-          })
-          return
-        } else {
+      ownerInfo.newPassword_ = this.newPassword_
+      if (ownerInfo.inputOriginalPassword.trim().length === 0) {
+        this.$message({
+          type: 'error',
+          message: '请输入原密码'
+        })
+      } else if (ownerInfo.newPassword.trim().length === 0) {
+        this.$message({
+          type: 'error',
+          message: '请输入新密码'
+        })
+      } else if (ownerInfo.newPassword_.trim().length === 0) {
+        this.$message({
+          type: 'error',
+          message: '请再次输入原密码'
+        })
+      }
+      else {
+        this.$confirm('确定要修改密码？', '提示', {
+          confirmButtonText: '确定',
+          canceButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
           this.$axios.post('/modifyPassword', {
             params: {
               ownerInfo: ownerInfo
@@ -75,15 +86,11 @@ export default {
                 message: res.data.message
               })
               this.$router.push('/ownerApplication')
-            } else if (res.data.state === 401) {
-              this.$message({
-                type: 'error',
-                message: res.data.message
-              })
             }
           })
-        }
-      })
+
+        })
+      }
     }
   }
 

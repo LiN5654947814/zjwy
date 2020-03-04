@@ -52,10 +52,13 @@
 
       <el-input type="textarea"
                 :rows="15"
-                placeholder="请输入内容"
+                placeholder="请输入500字以内内容"
                 style="margin-bottom:20px;"
-                v-model="fixInfo.fixContent">
+                v-model="fixInfo.fixContent"
+                :maxlength="500">
       </el-input>
+
+      <div class="text-num">你还可以输入{{500-fixInfo.fixContent.trim().length}}个字</div>
 
       <div class="fixInfo-btn">
         <el-button type="success"
@@ -80,7 +83,9 @@ export default {
   data () {
     return {
       title: '新增报修信息',
-      fixInfo: {},
+      fixInfo: {
+        fixContent: ''
+      },
       fixStateSelect: [
         {
           value: '已完成'
@@ -89,7 +94,11 @@ export default {
           value: '未完成'
         }
       ],
+      textNum: 0
     }
+  },
+  watch: {
+
   },
   methods: {
     // 返回
@@ -109,11 +118,6 @@ export default {
             message: res.data.message
           })
           this.$router.push('/fix')
-        } else if (res.data.state === 401) {
-          this.$message({
-            type: 'error',
-            message: res.data.message
-          })
         }
       })
     }

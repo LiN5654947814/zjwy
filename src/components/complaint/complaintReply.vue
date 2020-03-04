@@ -47,9 +47,12 @@
         <div class="reply-content">
           <el-input type="textarea"
                     :rows="13"
+                    placeholder="请输入500字以内内容"
                     style="margin-bottom:20px;"
-                    v-model="complaintInfo.complaintReply">
+                    v-model="complaintInfo.complaintReply"
+                    :maxlength="500">
           </el-input>
+          <div class="text-num">你还可以输入{{500-complaintInfo.complaintReply.trim().length}}个字</div>
         </div>
       </div>
       <div class="complaint-btn">
@@ -77,7 +80,9 @@ export default {
     return {
       title: '投诉管理',
       position: '投诉回复',
-      complaintInfo: {}
+      complaintInfo: {
+        complaintReply: ''
+      }
     }
   },
   mounted () {

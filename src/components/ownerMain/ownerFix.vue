@@ -45,9 +45,11 @@
           <el-input type="textarea"
                     :rows="11"
                     placeholder="请输入500字以内的内容"
-                    v-model="fixInfo.fixContent">
+                    v-model="fixInfo.fixContent"
+                    :maxlength="500">
           </el-input>
         </div>
+        <div class="text-num">你还可以输入{{500-fixInfo.fixContent.length}}个字</div>
         <div class="owner-fix-btn">
           <el-button type="primary"
                      @click="getOwnerFix">
@@ -160,7 +162,9 @@ export default {
       title: '报修管理',
       mainPath: '/ownerApplication',
       isSelect: 1,
-      fixInfo: {},
+      fixInfo: {
+        fixContent: ''
+      },
       textarea: '',
       ownerFixList: [],
       filters: {

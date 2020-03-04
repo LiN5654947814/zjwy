@@ -45,8 +45,14 @@
         </el-form-item>
         <!-- 户型 -->
         <el-form-item label="户型:">
-          <el-input style="width:300px;"
-                    v-model="houseInfo.estateApart"></el-input>
+          <el-select v-model="houseInfo.estateApart"
+                     placeholder="请选择">
+            <el-option v-for="item in houseApartSelect"
+                       :key="item.value"
+                       :label="item.value"
+                       :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
         <!-- 面积 -->
         <el-form-item label="面积(m²):">
@@ -170,16 +176,19 @@ export default {
     },
     // 新增未登记房产
     addEstate () {
+      let estate = {
+        estateBuilds: this.houseInfo.estateBuilds,
+        estateUnit: this.houseInfo.estateUnit,
+        estateFloor: this.houseInfo.estateFloor,
+        estatePlate: this.houseInfo.estatePlate,
+        estateApart: this.houseInfo.estateApart,
+        estateArea: this.houseInfo.estateArea,
+        estateReno: this.houseInfo.estateReno,
+        estateResgister: this.houseInfo.estateResgister,
+      }
       this.$axios.post('/addEstate', {
         params: {
-          estateBuilds: this.houseInfo.estateBuilds,
-          estateUnit: this.houseInfo.estateUnit,
-          estateFloor: this.houseInfo.estateFloor,
-          estatePlate: this.houseInfo.estatePlate,
-          estateApart: this.houseInfo.estateApart,
-          estateArea: this.houseInfo.estateArea,
-          estateReno: this.houseInfo.estateReno,
-          estateResgister: this.houseInfo.estateResgister,
+          estateInfo: estate
         }
       }).then(res => {
         if (res.data.state === 200) {
@@ -190,12 +199,6 @@ export default {
           setTimeout(() => {
             this.$router.push({ name: 'estateApplication' })
           }, 2000)
-        } else if (res.data.state === 401) {
-          this.$message({
-            type: 'error',
-            message: res.data.message
-          })
-          return
         }
       })
     }

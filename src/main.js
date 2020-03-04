@@ -33,6 +33,11 @@ axiosInstance.interceptors.response.use(
         message: response.data.message
       })
       router.replace('/login')
+    } else if (response.data.state === 401) {
+      Vue.prototype.$message({
+        type: 'error',
+        message: response.data.message
+      })
     }
     return response
   },

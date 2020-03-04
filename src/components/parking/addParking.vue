@@ -104,11 +104,6 @@ export default {
             message: res.data.message
           })
           this.$router.push({ name: 'parkingApplication' })
-        } else if (res.data.state === 401) {
-          this.$message({
-            type: 'error',
-            message: res.data.message
-          })
         }
       })
     }

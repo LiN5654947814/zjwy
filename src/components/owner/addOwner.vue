@@ -6,6 +6,7 @@
 
     <div class="addOwner-container">
       <el-form label-width="110px"
+               :model="ownerInfo"
                :rules="rules">
         <!-- 业主姓名 -->
         <el-form-item label="业主姓名:"
@@ -48,6 +49,7 @@
       </el-form>
       <div class="sumbit-btn">
         <el-button type="success"
+                   id="addOwner"
                    @click="addOwner('ownerform')">
           新增
         </el-button>
@@ -72,6 +74,7 @@ export default {
       titlePath: '/owner',
       position: '新增业主',
       ownerInfo: {
+
       },
       rules: {
         ownerName: [
@@ -92,7 +95,7 @@ export default {
         originalPassword: [
           { required: true, message: '请输入业主初始密码', trigger: 'blur' }
         ]
-      }
+      },
     }
   },
   methods: {
@@ -101,20 +104,16 @@ export default {
       this.$router.push('/owner')
     },
     // 新增业主信息
-    addOwner (ownerform) {
+    addOwner () {
+      let owner = this.ownerInfo
       this.$axios.post('/addOwner', {
         params: {
-          ownerCard: this.ownerInfo.ownerCard,
-          ownerPhone: this.ownerInfo.ownerPhone,
-          ownerName: this.ownerInfo.ownerName,
-          ownerSex: this.ownerInfo.ownerSex,
-          ownerEmail: this.ownerInfo.ownerEmail,
-          ownerMoveDate: '',
-          author: false,
-          originalPassword: this.ownerInfo.originalPassword
+          owner: owner
         }
       }).then(res => {
         if (res.data.state === 200) {
+          this.status = res.data.state
+          this.message = res.data.message
           this.$message({
             type: 'success',
             message: '添加成功'
@@ -122,12 +121,6 @@ export default {
           setTimeout(() => {
             this.$router.push({ name: 'owner' })
           }, 2000)
-        } else if (res.data.state === 401) {
-          this.$message({
-            type: 'error',
-            message: res.data.message
-          })
-          return
         }
       })
     }
