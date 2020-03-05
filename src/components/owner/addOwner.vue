@@ -42,6 +42,7 @@
         </el-form-item>
         <!-- 初始登录密码 -->
         <el-form-item label="初始登录密码:"
+                      placeholder="请输入6位数的密码"
                       prop="originalPassword">
           <el-input style="width:300px;"
                     v-model="ownerInfo.originalPassword"></el-input>

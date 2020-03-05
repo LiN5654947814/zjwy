@@ -117,8 +117,8 @@ describe('检查增加业主方法', () => {
 
   it('处了邮箱重复，其他输入新的业主信息，验证错误返回错误401，返回提示"邮箱重复，已存在"', () => {
     let owner = {
-      ownerCard: '1101011990030761210',
-      ownerPhone: '1322412117',
+      ownerCard: '110101199003073917',
+      ownerPhone: '13112995498',
       ownerName: '清理',
       ownerSex: '男',
       ownerEmail: '4396@qq.com',
@@ -168,6 +168,117 @@ describe('检查增加业主方法', () => {
     return test.then(res => {
       expect(res.data.state).toBe(401)
       expect(res.data.message).toBe('手机号重复,已存在')
+    })
+  })
+
+  it('密码带有空格，其他输入新的业主信息，验证错误返回错误401，返回提示"密码不能有空格"', () => {
+    let owner = {
+      ownerCard: '110101199003071111',
+      ownerPhone: '13224557482',
+      ownerName: '李青',
+      ownerSex: '男',
+      ownerEmail: '6934@qq.com',
+      ownerMoveDate: '',
+      author: 'false',
+      originalPassword: '12 346'
+    }
+    let test = new Promise((resolve, reject) => {
+      axios
+        .post('http://localhost:3000/addOwner', {
+          params: {
+            owner: owner
+          }
+        })
+        .then(res => {
+          resolve(res)
+        })
+    })
+    return test.then(res => {
+      expect(res.data.state).toBe(401)
+      expect(res.data.message).toBe('密码不能有空格')
+    })
+  })
+  it('密码输入超过六位数，其他输入新的业主信息，验证错误返回错误401，返回提示"请设置6位数的密码"', () => {
+    let owner = {
+      ownerCard: '110101199003071133',
+      ownerPhone: '13224557481',
+      ownerName: '李青',
+      ownerSex: '男',
+      ownerEmail: '6934@qq.com',
+      ownerMoveDate: '',
+      author: 'false',
+      originalPassword: '1234567'
+    }
+    let test = new Promise((resolve, reject) => {
+      axios
+        .post('http://localhost:3000/addOwner', {
+          params: {
+            owner: owner
+          }
+        })
+        .then(res => {
+          resolve(res)
+        })
+    })
+    return test.then(res => {
+      expect(res.data.state).toBe(401)
+      expect(res.data.message).toBe('请设置6位数的密码')
+    })
+  })
+
+  it('身份证输入错误，验证错误返回错误401，返回提示"请输入正确的身份证号码"', () => {
+    let owner = {
+      ownerCard: '123',
+      ownerPhone: '13224557481',
+      ownerName: '李青',
+      ownerSex: '男',
+      ownerEmail: 'cqcsa@qq.com',
+      ownerMoveDate: '',
+      author: 'false',
+      originalPassword: '123467'
+    }
+    let test = new Promise((resolve, reject) => {
+      axios
+        .post('http://localhost:3000/addOwner', {
+          params: {
+            owner: owner
+          }
+        })
+        .then(res => {
+          resolve(res)
+        })
+    })
+    return test.then(res => {
+      expect(res.data.state).toBe(401)
+      expect(res.data.message).toBe('请输入正确的身份证号码')
+    })
+  })
+
+  it('手机号输入错误，验证错误返回错误401，返回提示"请输入正确的手机号"', () => {
+    let owner = {
+      ownerCard: '110101199003078590',
+      ownerPhone: '132247481',
+      ownerName: '李青',
+      ownerSex: '男',
+      ownerEmail: 'cqcsa@qq.com',
+      ownerMoveDate: '',
+      author: 'false',
+      originalPassword: '123467'
+    }
+    let test = new Promise((resolve, reject) => {
+      axios
+        .post('http://localhost:3000/addOwner', {
+          params: {
+            owner: owner
+          }
+        })
+        .then(res => {
+          resolve(res)
+        })
+    })
+    return test.then(res => {
+      expect(res.data.state).toBe(401)
+      expect(res.data.message).toBe('请输入正确的手机号')
     })
   })
 })

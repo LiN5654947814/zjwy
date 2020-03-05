@@ -437,11 +437,13 @@ export default {
                 message: `请解绑业主(` + owner.ownerName + `)名下房产信息`
               })
             }, 500)
-          } else if (owner.parkings.length != 0) {
+            return
+          } if (owner.parkings.length != 0) {
             this.$message({
               type: 'error',
               message: `请解绑所选业主(` + owner.ownerName + `)名下的车位信息`
             })
+            return
           }
           else {
             this.$axios.post('/deleteOwners', {
@@ -452,7 +454,7 @@ export default {
               if (res.data.state === 200) {
                 this.$message({
                   type: 'success',
-                  message: '删除成功'
+                  message: res.data.message
                 })
                 setTimeout(() => {
                   this.getAllOwner()
