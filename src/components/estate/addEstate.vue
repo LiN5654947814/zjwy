@@ -4,9 +4,12 @@
                 :titlePath="titlePath"
                 :position="position"></header-nav>
     <div class="addEstate-container">
-      <el-form label-width="20%">
+      <el-form label-width="20%"
+               :model="houseInfo"
+               :rules="rules">
         <!-- 楼宇 -->
-        <el-form-item label="楼宇:">
+        <el-form-item label="楼宇:"
+                      prop="estateBuilds">
           <el-select v-model="houseInfo.estateBuilds"
                      placeholder="请选择">
             <el-option v-for="item in buildSelect"
@@ -17,7 +20,8 @@
           </el-select>
         </el-form-item>
         <!-- 单元 -->
-        <el-form-item label="单元:">
+        <el-form-item label="单元:"
+                      prop="estateUnit">
           <el-select v-model="houseInfo.estateUnit"
                      placeholder="请选择">
             <el-option v-for="item in unitSelect"
@@ -28,7 +32,8 @@
           </el-select>
         </el-form-item>
         <!-- 楼层 -->
-        <el-form-item label="楼层:">
+        <el-form-item label="楼层:"
+                      prop="estateFloor">
           <el-select v-model="houseInfo.estateFloor"
                      placeholder="请选择">
             <el-option v-for="item in floorSelect"
@@ -39,12 +44,14 @@
           </el-select>
         </el-form-item>
         <!-- 门牌 -->
-        <el-form-item label="门牌:">
+        <el-form-item label="门牌:"
+                      prop="estatePlate">
           <el-input style="width:300px;"
                     v-model="houseInfo.estatePlate"></el-input>
         </el-form-item>
         <!-- 户型 -->
-        <el-form-item label="户型:">
+        <el-form-item label="户型:"
+                      prop="estateApart">
           <el-select v-model="houseInfo.estateApart"
                      placeholder="请选择">
             <el-option v-for="item in houseApartSelect"
@@ -55,18 +62,21 @@
           </el-select>
         </el-form-item>
         <!-- 面积 -->
-        <el-form-item label="面积(m²):">
+        <el-form-item label="面积(m²):"
+                      prop="estateArea">
           <el-input style="width:300px;"
                     v-model="houseInfo.estateArea"></el-input>
         </el-form-item>
         <!-- 登记状态 -->
-        <el-form-item label="登记状态:">
+        <el-form-item label="登记状态:"
+                      prop="estateResgister">
           <el-input style="width:300px;"
                     v-model="houseInfo.estateResgister"
                     disabled></el-input>
         </el-form-item>
         <!-- 装修 -->
-        <el-form-item label="是否已装修:">
+        <el-form-item label="是否已装修:"
+                      prop="estateReno">
           <el-select v-model="houseInfo.estateReno"
                      placeholder="请选择">
             <el-option v-for="item in houseRenoSelect"
@@ -158,7 +168,30 @@ export default {
         {
           value: '未装修'
         }
-      ]
+      ],
+      rules: {
+        estateBuilds: [
+          { required: true, message: "请选择楼宇", trigger: 'blur' }
+        ],
+        estateUnit: [
+          { required: true, message: "请选择单元", trigger: 'blur' }
+        ],
+        estateFloor: [
+          { required: true, message: "请选择楼层", trigger: 'blur' }
+        ],
+        estatePlate: [
+          { required: true, message: "请输入门牌", trigger: 'blur' }
+        ],
+        estateApart: [
+          { required: true, message: '请选择户型', trigger: 'blur' }
+        ],
+        estateArea: [
+          { required: true, message: '请输入面积', trigger: 'blur' }
+        ],
+        estateReno: [
+          { required: true, message: '选择是否已装修', trigger: 'blur' }
+        ]
+      }
     }
   },
   mounted () {

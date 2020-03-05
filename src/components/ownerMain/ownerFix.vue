@@ -14,14 +14,18 @@
       <!-- 提交报修 -->
       <div class="owner-fix-add"
            v-if="isSelect === 1">
-        <el-form label-width="100px">
+        <el-form label-width="120px"
+                 :model="fixInfo"
+                 :rules="rules">
           <!-- 业主 -->
-          <el-form-item label="业主:">
+          <el-form-item label="业主:"
+                        prop="fixOwner">
             <el-input style="width:200px;"
                       v-model="fixInfo.fixOwner"></el-input>
           </el-form-item>
           <!-- 报修时间 -->
-          <el-form-item label="报修提交时间:">
+          <el-form-item label="报修提交时间:"
+                        prop="fixStartTime">
             <el-date-picker v-model="fixInfo.fixStartTime"
                             type="date"
                             value-format="yyyy-MM-dd"
@@ -29,14 +33,16 @@
             </el-date-picker>
           </el-form-item>
           <!-- 房屋单位 -->
-          <el-form-item label="填写房屋单位:">
+          <el-form-item label="填写房屋单位:"
+                        prop="fixOwnerUnit">
             <el-input style="width:180px"
                       v-model="fixInfo.fixOwnerUnit">
             </el-input>
             <span style="color:#ccc;font-size:13px;margin-right:10px;"> (x栋-x区-xxx门牌)</span>
           </el-form-item>
           <!-- 联系方式 -->
-          <el-form-item label="联系手机号:">
+          <el-form-item label="联系手机号:"
+                        prop="fixOwnerPhone">
             <el-input style="width:200px;"
                       v-model="fixInfo.fixOwnerPhone"></el-input>
           </el-form-item>
@@ -48,14 +54,14 @@
                     v-model="fixInfo.fixContent"
                     :maxlength="500">
           </el-input>
+          <div class="owner-fix-btn">
+            <el-button type="primary"
+                       @click="getOwnerFix">
+              提交报修
+            </el-button>
+          </div>
         </div>
         <div class="text-num">你还可以输入{{500-fixInfo.fixContent.length}}个字</div>
-        <div class="owner-fix-btn">
-          <el-button type="primary"
-                     @click="getOwnerFix">
-            提交报修
-          </el-button>
-        </div>
       </div>
       <!-- 报修列表 -->
       <div class="owner-fix-list"
@@ -173,7 +179,21 @@ export default {
       },
       ownerInfo: {},
       isfix: false,
-      fixDetail: {}
+      fixDetail: {},
+      rules: {
+        fixOwner: [
+          { required: true, message: '请输入姓名', trigger: 'blur' }
+        ],
+        fixStartTime: [
+          { required: true, message: '请输入报修日期', trigger: 'blur' }
+        ],
+        fixOwnerUnit: [
+          { required: true, message: '请输入所在单元', trigger: 'blur' }
+        ],
+        fixOwnerPhone: [
+          { required: true, message: '请输入手机号', trigger: 'blur' }
+        ]
+      }
     }
   },
   mounted () {
@@ -257,6 +277,7 @@ export default {
   margin-top: 20px;
   margin-right: 80px;
 }
+
 .owner-fix-container {
   width: 100%;
   .fix-select {
@@ -279,7 +300,7 @@ export default {
   }
   .owner-fix-add {
     width: 97%;
-    min-height: 400px;
+    min-height: 470px;
     margin: 0 20px 20px 20px;
     border-radius: 5px;
     background-color: #fff;

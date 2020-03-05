@@ -2,48 +2,59 @@
   <div>
     <header-nav :title="title"></header-nav>
     <div class="addPay-container">
-      <el-form label-width="30%">
+      <el-form label-width="30%"
+               :model="payInfo"
+               :rules="rules">
         <!-- 业主名称 -->
-        <el-form-item label="业主名称:">
+        <el-form-item label="业主名称:"
+                      prop="payOwner">
           <el-input style="width:300px;"
                     v-model="payInfo.payOwner"></el-input>
         </el-form-item>
         <!-- 手机号 -->
-        <el-form-item label="手机号:">
+        <el-form-item label="手机号:"
+                      prop="payOwnerPhone">
           <el-input style="width:300px;"
                     v-model="payInfo.payOwnerPhone"></el-input>
         </el-form-item>
         <!-- 身份证 -->
-        <el-form-item label="身份证:">
+        <el-form-item label="身份证:"
+                      prop="payOwnerCard">
           <el-input style="width:300px;"
                     v-model="payInfo.payOwnerCard"></el-input>
         </el-form-item>
         <!-- 所在单元 -->
-        <el-form-item label="所在单元:">
+        <el-form-item label="所在单元:"
+                      prop="payOwnerUnit">
           <el-input style="width:300px;"
                     v-model="payInfo.payOwnerUnit"></el-input>
         </el-form-item>
         <!-- 电梯使用费 -->
-        <el-form-item label="电梯使用费:">
+        <el-form-item label="电梯使用费:"
+                      prop="payElevator">
           <el-input style="width:300px;"
                     v-model="payInfo.payElevator"></el-input>
         </el-form-item>
         <!-- 垃圾清运费 -->
-        <el-form-item label="垃圾清运费:">
+        <el-form-item label="垃圾清运费:"
+                      prop="payElevator">
           <el-input style="width:300px;"
-                    v-model="payInfo.payGarbage"></el-input>
+                    v-model="payInfo.payElevator"></el-input>
         </el-form-item>
         <!-- 公摊照明费 -->
-        <el-form-item label="公摊照明费:">
+        <el-form-item label="公摊照明费:"
+                      prop="payLighting">
           <el-input style="width:300px;"
                     v-model="payInfo.payLighting"></el-input>
         </el-form-item>
-        <el-form-item label="公告管理费:">
+        <el-form-item label="公告管理费:"
+                      prop="payApplication">
           <el-input style="width:300px;"
                     v-model="payInfo.payApplication"></el-input>
         </el-form-item>
         <!-- 应缴月 -->
-        <el-form-item label="应费月份：:">
+        <el-form-item label="应费月份：:"
+                      prop="payDate">
           <el-date-picker v-model="payInfo.payDate"
                           type="month"
                           placeholder="选择月"
@@ -52,7 +63,8 @@
           </el-date-picker>
         </el-form-item>
         <!-- 缴费状态 -->
-        <el-form-item label="状态:">
+        <el-form-item label="状态:"
+                      prop="payState">
           <el-select v-model="payInfo.payState"
                      placeholder="请选择">
             <el-option v-for="item in payState"
@@ -91,6 +103,26 @@ export default {
           value: '未缴费'
         }
       ],
+      rules: {
+        payOwner: [
+          { required: true, message: '请输入业主姓名', trigger: 'blur' }
+        ],
+        payOwnerPhone: [
+          { required: true, message: '请输入业主手机', trigger: 'blur' }
+        ],
+        payOwnerCard: [
+          { required: true, message: '请输入业主身份证', trigger: 'blur' }
+        ],
+        payOwnerUnit: [
+          { required: true, message: '请输入所在单元', trigger: 'blur' }
+        ],
+        payDate: [
+          { required: true, message: '请选择该缴月份', trigger: 'blur' }
+        ],
+        payState: [
+          { required: true, message: '请选择缴费信息', trigger: 'blur' }
+        ]
+      }
     }
   },
   methods: {

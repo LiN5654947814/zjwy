@@ -3,24 +3,30 @@
     <header-nav :title="title"></header-nav>
     <div class="fixInfo-container">
       <div class="fixInfo-tips">
-        <el-form label-width="40%">
+        <el-form label-width="300"
+                 :model="fixInfo"
+                 :rules="rules">
           <!-- 业主 -->
-          <el-form-item label="业主:">
-            <el-input style="width:180px;"
+          <el-form-item label="业主:"
+                        prop="fixOwner">
+            <el-input style="width:170px;"
                       v-model="fixInfo.fixOwner"></el-input>
           </el-form-item>
           <!-- 所在单元 -->
-          <el-form-item label="所在单元:">
-            <el-input style="width:180px;"
+          <el-form-item label="所在单元:"
+                        prop="fixOwnerUnit">
+            <el-input style="width:170px;"
                       v-model="fixInfo.fixOwnerUnit"></el-input>
           </el-form-item>
           <!-- 联系方式 -->
-          <el-form-item label="联系电话:">
-            <el-input style="width:180px;"
+          <el-form-item label="联系电话:"
+                        prop="fixOwnerPhone">
+            <el-input style="width:170px;"
                       v-model="fixInfo.fixOwnerPhone"></el-input>
           </el-form-item>
           <!-- 报修时间 -->
-          <el-form-item label="报修时间:">
+          <el-form-item label="报修时间:"
+                        prop="fixStartTime">
             <el-date-picker v-model="fixInfo.fixStartTime"
                             type="date"
                             value-format="yyyy-MM-dd"
@@ -28,7 +34,8 @@
             </el-date-picker>
           </el-form-item>
           <!-- 报修状态 -->
-          <el-form-item label="报修状态:">
+          <el-form-item label="报修状态:"
+                        prop="fixState">
             <el-select v-model="fixInfo.fixState"
                        placeholder="请选择">
               <el-option v-for="item in fixStateSelect"
@@ -39,11 +46,12 @@
             </el-select>
           </el-form-item>
           <!-- 完成时间 -->
-          <el-form-item label="完成时间:">
+          <el-form-item label="完成时间:"
+                        prop="fixEndTime">
             <el-date-picker v-model="fixInfo.fixEndTime"
                             type="date"
                             value-format="yyyy-MM-dd"
-                            style="width:180px;"
+                            style="width:170px;"
                             placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
@@ -94,7 +102,24 @@ export default {
           value: '未完成'
         }
       ],
-      textNum: 0
+      textNum: 0,
+      rules: {
+        fixOwner: [
+          { required: true, message: '请输入业主姓名', trigger: 'blur' }
+        ],
+        fixOwnerUnit: [
+          { required: true, message: '请输入业主所在单元', trigger: 'blur' }
+        ],
+        fixOwnerPhone: [
+          { required: true, message: '请输入业主手机', trigger: 'blur' }
+        ],
+        fixStartTime: [
+          { required: true, message: '请输入报修日期', trigger: 'blur' }
+        ],
+        fixState: [
+          { required: true, message: '请输入报修状态', trigger: 'blur' }
+        ]
+      }
     }
   },
   watch: {
@@ -128,11 +153,11 @@ export default {
 
 <style lang="scss" scoped>
 .fixInfo-container /deep/ .el-select {
-  margin-right: 10px;
+  margin-right: 5px;
 }
 .fixInfo-container /deep/ .el-form-item {
   float: left;
-  margin-right: 80px;
+  margin-right: 85px;
 }
 .fixInfo-container {
   width: 97%;

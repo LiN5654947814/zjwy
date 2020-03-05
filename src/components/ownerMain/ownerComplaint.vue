@@ -16,14 +16,18 @@
       <!-- 提交投诉 -->
       <div class="owner-complaint-add"
            v-if="isSelect === 1">
-        <el-form label-width="100px">
+        <el-form label-width="110px"
+                 :model="complaintRefer"
+                 :rules="rules">
           <!-- 业主 -->
-          <el-form-item label="业主:">
+          <el-form-item label="业主:"
+                        prop="complaintOwner">
             <el-input style="width:150px;"
                       v-model="complaintRefer.complaintOwner"></el-input>
           </el-form-item>
           <!-- 投诉类型 -->
-          <el-form-item label="投诉类型：">
+          <el-form-item label="投诉类型："
+                        prop="complaintType">
             <el-select v-model="complaintRefer.complaintType"
                        placeholder="请选择">
               <el-option v-for="item in complaintSelect"
@@ -34,7 +38,8 @@
             </el-select>
           </el-form-item>
           <!-- 投诉日期 -->
-          <el-form-item label="投诉提交时间:">
+          <el-form-item label="投诉提交时间:"
+                        prop="complaintTime">
             <el-date-picker v-model="complaintRefer.complaintTime"
                             type="date"
                             value-format="yyyy-MM-dd"
@@ -42,14 +47,16 @@
             </el-date-picker>
           </el-form-item>
           <!-- 房屋单位 -->
-          <el-form-item label="填写房屋单位:">
+          <el-form-item label="填写房屋单位:"
+                        prop="complaintOwnerUnit">
             <el-input style="width:150px"
                       v-model="complaintRefer.complaintOwnerUnit">
             </el-input>
             <span style="color:#ccc;font-size:13px;margin-right:10px;"> (x栋x区x层xxx门牌)</span>
             <!-- 联系方式 -->
           </el-form-item>
-          <el-form-item label="联系方式">
+          <el-form-item label="联系方式"
+                        prop="complaintOwnerPhone">
             <el-input style="width:150px;"
                       v-model="complaintRefer.complaintOwnerPhone"></el-input>
           </el-form-item>
@@ -216,7 +223,24 @@ export default {
         complaintContent: ''
       },
       referList: [],
-      messageNum: ''
+      messageNum: '',
+      rules: {
+        complaintOwner: [
+          { required: true, message: '请输入姓名', trigger: 'blur' }
+        ],
+        complaintType: [
+          { required: true, message: '请选择投诉类型', trigger: 'blur' }
+        ],
+        complaintTime: [
+          { required: true, message: '请选择投诉日期', trigger: 'blur' }
+        ],
+        complaintOwnerUnit: [
+          { required: true, message: '请输入所在单元', trigger: 'blur' }
+        ],
+        complaintOwnerPhone: [
+          { required: true, message: '请输入手机号', trigger: 'blur' }
+        ]
+      }
     }
   },
   created () {

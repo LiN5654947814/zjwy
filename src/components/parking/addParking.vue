@@ -3,9 +3,12 @@
     <header-nav :title="title"
                 :position="position"></header-nav>
     <div class="addParking-container">
-      <el-form label-width="30%">
+      <el-form label-width="30%"
+               :model="parkingInfo"
+               :rules="rules">
         <!-- 车位编号 -->
-        <el-form-item label="车位编号:">
+        <el-form-item label="车位编号:"
+                      prop="parkingNum">
           <el-input style="width:300px;"
                     v-model="parkingInfo.parkingNum"></el-input>
         </el-form-item>
@@ -84,7 +87,12 @@ export default {
           'value': '私有'
         }
       ],
-      isAdd: true
+      isAdd: true,
+      rules: {
+        parkingNum: [
+          { required: true, message: '请输入车位编号', trigger: 'blur' }
+        ]
+      }
     }
   },
   methods: {
