@@ -34,7 +34,7 @@
             </el-select>
           </el-form-item>
           <!-- 投诉日期 -->
-          <el-form-item label="报修提交时间:">
+          <el-form-item label="投诉提交时间:">
             <el-date-picker v-model="complaintRefer.complaintTime"
                             type="date"
                             value-format="yyyy-MM-dd"
@@ -61,6 +61,7 @@
                     v-model="complaintRefer.complaintContent">
           </el-input>
         </div>
+        <div class="text-num">你还可以输入{{500-complaintRefer.complaintContent.length}}个字</div>
         <div class="owner-complaint-btn">
           <el-button type="primary"
                      @click="referOwnerComplaint">
@@ -211,7 +212,9 @@ export default {
       complaintList: [],
       isComplaint: false,
       complaintDetail: {},
-      complaintRefer: {},
+      complaintRefer: {
+        complaintContent: ''
+      },
       referList: [],
       messageNum: ''
     }
@@ -280,27 +283,24 @@ export default {
         canceButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if (this.complaintRefer.complaintContent.trim().length > 500) {
-          this.$message({
-            type: 'warning',
-            message: '投诉内容不能超过500字'
-          })
-        } else {
-          this.$axios.post('/referOwnerComplaint', {
-            params: {
-              complaintRefer: this.complaintRefer
+
+        this.$axios.post('/referOwnerComplaint', {
+          params: {
+            complaintRefer: this.complaintRefer
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+            this.complaintRefer = {
+              complaintContent: ''
             }
-          }).then(res => {
-            if (res.data.state === 200) {
-              this.$message({
-                type: 'success',
-                message: res.data.message
-              })
-            }
-            this.complaintRefer = {}
-            this.getOwnerComplaint()
-          })
-        }
+          }
+          this.getOwnerComplaint()
+        })
+
       })
     },
     // 标注已读
@@ -379,6 +379,10 @@ export default {
       bottom: 10px;
       right: 30px;
       position: absolute;
+    }
+    .text-num {
+      margin-left: 20px;
+      margin-top: 20px;
     }
   }
   .owner-complaint-list {

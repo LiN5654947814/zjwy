@@ -208,32 +208,31 @@ export default {
     },
     // 提交报修
     getOwnerFix () {
-      this.fixInfo.fixOwnerCard = this.ownerInfo.ownerCard
       this.$confirm('确定要提交报修信息？', '提示', {
         confirmButtonText: '确定',
         canceButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        if (fixInfo.fixContent.trim().length > 500) {
-          this.$message({
-            type: 'warning',
-            message: '报修内容不能超过500字'
-          })
-        } else {
-          this.$axios.post('/referOwnerFix', {
-            params: {
-              fixInfo: this.fixInfo
-            }
-          }).then(res => {
-            if (res.data.state === 200) {
-              this.$message({
-                type: 'success',
-                message: res.data.message
-              })
-              this.fixInfo = {}
-            }
-          })
-        }
+
+        this.$axios.post('/referOwnerFix', {
+          params: {
+            fixInfo: this.fixInfo
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+            setTimeout(() => {
+              console.log('121111')
+              this.fixInfo = {
+                fixContent: ''
+              }
+            }, 200)
+          }
+        })
+
       })
     },
     // 查看详情
@@ -294,6 +293,10 @@ export default {
       bottom: 10px;
       right: 30px;
       position: absolute;
+    }
+    .text-num {
+      margin-top: 20px;
+      margin-left: 20px;
     }
   }
   .owner-fix-list {
