@@ -15,14 +15,14 @@
         </el-table-column>
         <el-table-column prop="payOwnerUnit"
                          label="单元"
-                         width="180">
+                         width="150">
         </el-table-column>
         <el-table-column prop="payOwner"
                          label="业主"
                          width="110">
         </el-table-column>
         <el-table-column prop="count"
-                         width="200"
+                         width="100"
                          label="金额(元)">
         </el-table-column>
       </el-table>

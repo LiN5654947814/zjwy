@@ -9,13 +9,13 @@
           <!-- 业主 -->
           <el-form-item label="业主:"
                         prop="fixOwner">
-            <el-input style="width:170px;"
+            <el-input style="width:;"
                       v-model="fixInfo.fixOwner"></el-input>
           </el-form-item>
           <!-- 所在单元 -->
           <el-form-item label="所在单元:"
                         prop="fixOwnerUnit">
-            <el-input style="width:170px;"
+            <el-input style="width:;"
                       v-model="fixInfo.fixOwnerUnit"></el-input>
           </el-form-item>
           <!-- 联系方式 -->
@@ -51,7 +51,6 @@
             <el-date-picker v-model="fixInfo.fixEndTime"
                             type="date"
                             value-format="yyyy-MM-dd"
-                            style="width:170px;"
                             placeholder="选择日期">
             </el-date-picker>
           </el-form-item>
@@ -161,8 +160,8 @@ export default {
 }
 .fixInfo-container {
   width: 97%;
-  min-height: 500px;
-  margin: 20px 0 0 20px;
+  min-height: 620px;
+  margin: 20px 0 20px 20px;
   border-radius: 5px;
   background-color: #fff;
   padding: 10px;

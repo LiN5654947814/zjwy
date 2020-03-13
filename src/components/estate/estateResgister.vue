@@ -130,15 +130,7 @@ export default {
             setTimeout(() => {
               this.$router.push({ name: 'estateApplication' })
             }, 500)
-          } else {
-            if (res.data.state === 401) {
-              this.$message({
-                type: 'error',
-                message: res.data.message
-              })
-              return
-            }
-          }
+          } 
         })
       })
 
@@ -156,13 +148,13 @@ export default {
   width: 98%;
   margin: 20px;
   padding: 20px 10px 10px 0;
-  min-height: 500px;
+  min-height: 675px;
   border-radius: 5px;
   background-color: #fff;
   position: relative;
   .estate-register-btn {
-    left: 50%;
-    top: 85%;
+    left: 65%;
+    top: 95%;
     transform: translate(-50%, -50%);
     position: absolute;
   }

@@ -129,11 +129,6 @@ export default {
             setTimeout(() => {
               this.$router.push('/fix')
             }, 500)
-          } else if (res.data.state === 401) {
-            this.$message({
-              type: 'error',
-              message: res.data.message
-            })
           }
         })
       })
@@ -148,11 +143,11 @@ export default {
 }
 .fixDetail-container /deep/ .el-form-item {
   float: left;
-  margin-right: 80px;
+  margin-right: 100px;
 }
 .fixDetail-container {
   width: 97%;
-  min-height: 500px;
+  min-height: 520px;
   margin: 20px 0 0 20px;
   border-radius: 5px;
   background-color: #fff;
@@ -161,7 +156,7 @@ export default {
   .fixDetail-tips {
     width: 100%;
     margin-top: 10px;
-    height: 50px;
+    height: 100px;
   }
   .fixDetail-content {
     width: 95%;

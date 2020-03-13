@@ -45,6 +45,7 @@
     <div class="parking-container">
       <div class="parking-table">
         <el-table :data="currentList"
+                  height="710"
                   style="width: 100%;
                   padding-left:5px;"
                   :cell-style="cellStyle"
@@ -54,35 +55,36 @@
           </el-table-column>
           <el-table-column prop="parkingNum"
                            label="车位编号"
-                           width="230"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="parkingType"
                            label="车位类型"
-                           width="230"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="parkingStartTime"
                            label="车位租赁开始时间"
-                           width="230"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="parkingEndTime"
                            label="车位租赁结束时间"
-                           width="230"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="parkingOwner"
                            label="业主"
-                           width="230"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="parkingStatus"
                            label="状态"
-                           width="230"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column label="操作"
+                           width="200"
                            align="center">
             <template slot-scope="scope">
               <el-button type="primary"
@@ -106,8 +108,7 @@
                    type="primary">勾选导出</el-button>
       </div>
       <div class="pagination">
-        <div class="pagination-total">共{{total}}条</div>
-        <el-pagination layout="prev, pager, next"
+        <el-pagination layout="prev, pager, next,total,jumper"
                        :current-page.sync="filters.page"
                        :page-size="filters.limit"
                        :total="total">

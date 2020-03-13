@@ -10,7 +10,8 @@
         </el-form-item>
         <el-form-item>
           报修状态：<el-select v-model="fixSearch.fixState"
-                     placeholder="请选择">
+                     placeholder="请选择"
+                     style="width:100px;">
             <el-option v-for="item in fixStateSelect"
                        :key="item.value"
                        :label="item.value"
@@ -22,6 +23,7 @@
           报修提交时间： <el-date-picker v-model="fixSearch.fixStartTime"
                           value-format="yyyy-MM-dd"
                           type="date"
+                          style="width:200px;"
                           placeholder="选择日期">
           </el-date-picker>
         </el-form-item>
@@ -54,6 +56,7 @@
     <div class="fix-container">
       <div class="fix-table">
         <el-table :data="currentList"
+                  height="715"
                   style="width: 100%;
                   padding-left:5px;"
                   @selection-change="handleSelectionChange"
@@ -64,7 +67,7 @@
           </el-table-column>
           <el-table-column prop="fixStartTime"
                            label="报修时间"
-                           width="200"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="fixContent"
@@ -74,20 +77,21 @@
           </el-table-column>
           <el-table-column prop="fixOwner"
                            label="业主"
-                           width="200"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="fixState"
                            label="报修状态"
-                           width="200"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="fixEndTime"
                            label="修理完成时间"
-                           width="200"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column label="操作"
+                           width="200"
                            align="center">
             <template slot-scope="scope">
               <el-button type="primary"
@@ -103,7 +107,7 @@
         </el-table>
       </div>
       <div class="pagination">
-        <el-pagination layout="prev, pager, next"
+        <el-pagination layout="prev, pager, next,total,jumper"
                        :current-page.sync="filters.page"
                        :page-size="filters.limit"
                        :total="total">

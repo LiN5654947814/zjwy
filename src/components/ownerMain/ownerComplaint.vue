@@ -85,21 +85,22 @@
                   padding-left:5px;">
             <el-table-column prop="complaintOwner"
                              label="业主"
-                             width="250"
+                             width=""
                              align="center">
             </el-table-column>
             <el-table-column prop="complaintType"
                              label="投诉类型"
-                             width="250"
+                             width=""
                              align="center">
             </el-table-column>
             <el-table-column prop="complaintContent"
                              label="内容"
-                             width="650"
+                             width="450"
                              :show-overflow-tooltip="true">
             </el-table-column>
             <el-table-column prop="complaintTime"
                              label="提交时间"
+                             width="200"
                              align="center">
             </el-table-column>
             <el-table-column prop="replyState"
@@ -149,22 +150,22 @@
         <div class="complaint-info-container">
           <el-form label-width="20%">
             <el-form-item label="投诉时间：">
-              <el-input style="width:400px;"
+              <el-input style="width:300px;"
                         v-model="complaintDetail.complaintTime"></el-input>
             </el-form-item>
             <el-form-item label="投诉业主：">
-              <el-input style="width:400px;"
+              <el-input style="width:300px;"
                         v-model="complaintDetail.complaintOwner"></el-input>
             </el-form-item>
             <el-form-item label="投诉类型：">
-              <el-input style="width:400px;"
+              <el-input style="width:300px;"
                         v-model="complaintDetail.complaintType"></el-input>
             </el-form-item>
             <el-form-item label="投诉内容：">
               <el-input type="textarea"
                         :rows="8"
                         style="margin-bottom:20px;
-                        width:400px;"
+                        width:300px;"
                         v-model="complaintDetail.complaintContent">
               </el-input>
             </el-form-item>
@@ -172,7 +173,7 @@
               <el-input type="textarea"
                         :rows="7"
                         style="margin-bottom:20px;
-                        width:400px;"
+                        width:300px;"
                         v-model="complaintDetail.complaintReply">
               </el-input>
             </el-form-item>
@@ -389,7 +390,7 @@ export default {
   }
   .owner-complaint-add {
     width: 97%;
-    min-height: 400px;
+    min-height: 480px;
     margin: 0 20px 20px 20px;
     border-radius: 5px;
     background-color: #fff;
@@ -436,7 +437,7 @@ export default {
   z-index: 999;
   .complaint-info {
     width: 30%;
-    height: 70%;
+    height: 90%;
     background-color: #fff;
     border-radius: 5px;
     top: 50%;

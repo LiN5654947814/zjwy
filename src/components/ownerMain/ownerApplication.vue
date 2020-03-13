@@ -214,11 +214,6 @@ export default {
             this.dialogDate = pay.updatedAt
           }
           this.ownerPay.push(pay)
-        } else if (res.data.state === 401) {
-          this.$message({
-            type: 'warning',
-            message: res.data.message
-          })
         }
       })
     },

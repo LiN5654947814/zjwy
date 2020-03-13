@@ -47,6 +47,7 @@
     <div class="complaint-container">
       <div class="complaint-table">
         <el-table :data="currentList"
+                  height="710"
                   style="width: 100%;
                   padding-left:5px;"
                   @selection-change="handleSelectionChange"
@@ -56,36 +57,37 @@
           </el-table-column>
           <el-table-column prop="complaintTime"
                            label="投诉日期"
-                           width="180"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="complaintType"
                            label="投诉类型"
-                           width="180"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="complaintContent"
                            label="投诉内容"
                            :show-overflow-tooltip="true"
-                           width="250"
+                           width="200"
                            align="center">
           </el-table-column>
           <el-table-column prop="complaintOwner"
                            label="投诉业主"
-                           width="180"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="complaintOwnerUnit"
                            label="所在单元"
-                           width="180"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="complaintState"
                            label="阅读状态"
-                           width="180"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column label="操作"
+                           width="400"
                            align="center">
             <template slot-scope="scope">
               <el-button type="warning"
@@ -109,7 +111,7 @@
         </el-table>
       </div>
       <div class="pagination">
-        <el-pagination layout="prev, pager, next"
+        <el-pagination layout="prev, pager, next,total,jumper"
                        :current-page.sync="filters.page"
                        :page-size="filters.limit"
                        :total="total">
@@ -129,30 +131,30 @@
         <div class="complaint-info-container">
           <el-form label-width="20%">
             <el-form-item label="投诉时间：">
-              <el-input style="width:400px;"
+              <el-input style="width:300px;"
                         v-model="complaintInfo.complaintTime"></el-input>
             </el-form-item>
             <el-form-item label="投诉业主：">
-              <el-input style="width:400px;"
+              <el-input style="width:300px;"
                         v-model="complaintInfo.complaintOwner"></el-input>
             </el-form-item>
             <el-form-item label="投诉类型：">
-              <el-input style="width:400px;"
+              <el-input style="width:300px;"
                         v-model="complaintInfo.complaintType"></el-input>
             </el-form-item>
             <el-form-item label="投诉内容：">
               <el-input type="textarea"
-                        :rows="8"
+                        :rows="5"
                         style="margin-bottom:20px;
-                        width:400px;"
+                        width:300px;"
                         v-model="complaintInfo.complaintContent">
               </el-input>
             </el-form-item>
             <el-form-item label="物业回复：">
               <el-input type="textarea"
-                        :rows="7"
+                        :rows="5"
                         style="margin-bottom:20px;
-                        width:400px;"
+                        width:300px;"
                         v-model="complaintInfo.complaintReply">
               </el-input>
             </el-form-item>
@@ -396,7 +398,7 @@ export default {
   z-index: 999;
   .complaint-info {
     width: 30%;
-    height: 70%;
+    height: 80%;
     background-color: #fff;
     border-radius: 5px;
     top: 50%;

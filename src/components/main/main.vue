@@ -195,7 +195,7 @@ export default {
   justify-content: center;
   .admin-box {
     flex: 1;
-    min-width: 390px;
+    min-width: 285px;
     height: 170px;
     margin: 20px;
     border-radius: 5px;

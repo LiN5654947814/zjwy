@@ -12,7 +12,7 @@
         <el-form-item>
           楼宇：<el-select v-model="houseInfo.houseBuilds"
                      placeholder="请选择"
-                     style="width:200px;">
+                     style="width:100px;">
             <el-option v-for="item in buildSelect"
                        :key="item.value"
                        :label="item.value"
@@ -23,7 +23,7 @@
         <el-form-item>
           单元：<el-select v-model="houseInfo.houseUnit"
                      placeholder="请选择"
-                     style="width:200px;">
+                     style="width:100px;">
             <el-option v-for="item in unitSelect"
                        :key="item.value"
                        :label="item.value"
@@ -34,7 +34,7 @@
         <el-form-item>
           楼层：<el-select v-model="houseInfo.houseFloor"
                      placeholder="请选择"
-                     style="width:200px;">
+                     style="width:100px;">
             <el-option v-for="item in floorSelect"
                        :key="item.value"
                        :label="item.value"
@@ -44,7 +44,8 @@
         </el-form-item>
         <el-form-item>
           户型：<el-select v-model="houseInfo.houseApart"
-                     placeholder="请选择">
+                     placeholder="请选择"
+                     style="width:150px;">
             <el-option v-for="item in houseApartSelect"
                        :key="item.value"
                        :label="item.value"
@@ -76,6 +77,7 @@
     <div class="estate-application-container">
       <div class="estate-application-table">
         <el-table :data="currentList"
+                  height="710"
                   style="width: 100%;
                   padding-left:5px;"
                   @selection-change="handleSelectionChange">
@@ -84,41 +86,42 @@
           </el-table-column>
           <el-table-column prop="estateBuilds"
                            label="楼宇"
-                           width="180"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="estateUnit"
                            label="单元"
-                           width="180"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="estateFloor"
                            label="楼层"
-                           width="180"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="estatePlate"
                            label="门牌"
-                           width="180"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="estateApart"
                            label="户型"
-                           width="180"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="estateArea"
                            label="面积(m²)"
-                           width="180"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="estateReno"
                            label="装修"
-                           width="180"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="cost"
                            label="操作"
+                           width="250"
                            align="center">
             <template slot-scope="scope">
               <el-button type="primary"
@@ -146,8 +149,7 @@
                    type="primary">勾选导出</el-button>
       </div>
       <div class="pagination">
-        <div class="pagination-total">共{{total}}条</div>
-        <el-pagination layout="prev, pager, next"
+        <el-pagination layout="prev, pager, next,total,jumper"
                        :current-page.sync="filters.page"
                        :page-size="filters.limit"
                        :total="total">
@@ -574,8 +576,8 @@ export default {
   background-color: rgba(0, 0, 0, 0.4);
   z-index: 999;
   .estateApplication-info {
-    width: 25%;
-    height: 65%;
+    width: 30%;
+    height: 80%;
     background-color: #fff;
     border-radius: 5px;
     top: 50%;

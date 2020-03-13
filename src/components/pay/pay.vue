@@ -10,14 +10,15 @@
                          font-size:17px;">按条件搜索：</span>
         </el-form-item>
         <el-form-item>
-          业主姓名：<el-input style="width:150px;
+          业主姓名：<el-input style="width:100px;
                                     margin-right:10px;"
                     v-model="paySearch.payOwner">
           </el-input>
         </el-form-item>
         <el-form-item>
           缴费状态：<el-select v-model="paySearch.payState "
-                     placeholder="请选择">
+                     placeholder="请选择"
+                     style="width:100px;">
             <el-option v-for="item in payState"
                        :key="item.value"
                        :label="item.value"
@@ -57,6 +58,7 @@
     <div class="pay-container">
       <div class="pay-table">
         <el-table :data="currentList"
+                  height="750"
                   style="width: 200%;
                   padding-left:5px;"
                   :cell-style="cellStyle"
@@ -66,47 +68,47 @@
           </el-table-column>
           <el-table-column prop="payOwner"
                            label="业主"
-                           width="140"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="payOwnerUnit"
                            label="所在单元"
-                           width="140"
+                           width="150"
                            align="center">
           </el-table-column>
           <el-table-column prop="payElevator"
                            label="电梯使用费"
-                           width="140"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="payGarbage"
                            label="垃圾清运费"
-                           width="140"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="payLighting"
                            label="公摊照明费"
-                           width="140"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="payApplication"
                            label="公共管理"
-                           width="140"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="payDate"
                            label="续费时间"
-                           width="140"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="payState"
                            label="状态"
-                           width="140"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="payCount"
                            label="合计"
-                           width="140"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column label="操作"
@@ -138,8 +140,7 @@
                    type="primary">勾选导出</el-button>
       </div>
       <div class="pagination">
-        <div class="pagination-total">共{{total}}条</div>
-        <el-pagination layout="prev, pager, next"
+        <el-pagination layout="prev, pager, next,total,jumper"
                        :current-page.sync="filters.page"
                        :page-size="filters.limit"
                        :total="total">

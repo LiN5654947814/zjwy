@@ -72,7 +72,7 @@
                   padding-left:5px;">
             <el-table-column prop="fixOwner"
                              label="业主"
-                             width="250"
+                             width=""
                              align="center">
             </el-table-column>
             <el-table-column prop="fixContent"
@@ -275,7 +275,7 @@ export default {
 .owner-fix-container /deep/ .el-form-item {
   float: left;
   margin-top: 20px;
-  margin-right: 80px;
+  margin-right: 10px;
 }
 
 .owner-fix-container {
@@ -345,8 +345,8 @@ export default {
     background-color: rgba(0, 0, 0, 0.4);
     z-index: 999;
     .fix-info {
-      width: 25%;
-      height: 65%;
+      width: 30%;
+      height: 85%;
       background-color: #fff;
       border-radius: 5px;
       top: 50%;

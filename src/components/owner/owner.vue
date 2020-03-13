@@ -41,46 +41,48 @@
         <el-table :data="currentList"
                   style="width: 100%;
                   padding-left:5px;"
+                  height="710"
                   @selection-change="handleSelectionChange">
           <el-table-column type="selection"
                            width="55">
           </el-table-column>
           <el-table-column prop="ownerName"
                            label="业主姓名"
-                           width="200"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="ownerSex"
                            label="性别"
-                           width="200"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="ownerPhone"
                            label="联系手机号"
-                           width="200"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="ownerUnit"
                            label="所在楼宇单元"
-                           width="200"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="ownerEstate"
                            label="房产数"
-                           width="200"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="ownerParking"
                            label="车位拥有"
-                           width="200"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="ownerMoveDate"
                            label="迁入时间"
-                           width="200"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="cost"
+                           width="200"
                            label="操作">
             <template slot-scope="scope">
               <el-button type="primary"
@@ -104,8 +106,7 @@
                    type="primary">勾选导出</el-button>
       </div>
       <div class="pagination">
-        <div class="pagination-total">共{{total}}条</div>
-        <el-pagination layout="prev, pager, next"
+        <el-pagination layout="prev, pager, next,total,jumper"
                        :current-page.sync="filters.page"
                        :page-size="filters.limit"
                        :total="total">
@@ -128,7 +129,7 @@
           <el-form label-width="100px">
             <!-- 业主姓名 -->
             <el-form-item label="业主姓名:">
-              <el-input style="width:300px;"
+              <el-input style="width:200px;"
                         v-model="ownerInfo.ownerName"></el-input>
             </el-form-item>
             <!-- 性别 -->
@@ -140,17 +141,17 @@
             </el-form-item>
             <!-- 手机号 -->
             <el-form-item label="手机号:">
-              <el-input style="width:300px;"
+              <el-input style="width:200px;"
                         v-model="ownerInfo.ownerPhone"></el-input>
             </el-form-item>
             <!-- 身份证号 -->
             <el-form-item label="身份证号:">
-              <el-input style="width:300px;"
+              <el-input style="width:200px;"
                         v-model="ownerInfo.ownerCard"></el-input>
             </el-form-item>
             <!-- 邮箱 -->
             <el-form-item label="邮箱:">
-              <el-input style="width:300px;"
+              <el-input style="width:200px;"
                         v-model="ownerInfo.ownerEmail"></el-input>
             </el-form-item>
             <!-- 所在单元 -->
@@ -167,13 +168,13 @@
             </el-form-item>
             <!-- 车位拥有数 -->
             <el-form-item label="车位数:">
-              <el-input style="width:300px;"
+              <el-input style="width:200px;"
                         disabled
                         v-model="ownerInfo.ownerParking"></el-input>
             </el-form-item>
             <!-- 房产数 -->
             <el-form-item label="房产数:">
-              <el-input style="width:300px;"
+              <el-input style="width:200px;"
                         disabled
                         v-model="ownerInfo.ownerEstate"></el-input>
             </el-form-item>
@@ -183,14 +184,15 @@
                               type="date"
                               placeholder="选择日期"
                               disabled
-                              style="width:300px;
-                              margin-right:80px;">
+                              style="width:200px;
+                              margin-right:200px;">
               </el-date-picker>
-              <span style="font-size:10px;">（注：若业主拥有多个房产则以第一套登记迁入时间为主）</span>
+              <span style="font-size:9px;">（注：若业主拥有多个房产则以第一套登记迁入时间为主）</span>
             </el-form-item>
           </el-form>
           <el-button type="primary"
                      class="sumbit-btn"
+                     size="mini"
                      @click="modifyOwner">
             保存
           </el-button>
@@ -560,7 +562,7 @@ export default {
   z-index: 999;
   .owner-info {
     width: 25%;
-    height: 75%;
+    height: 95%;
     background-color: #fff;
     border-radius: 5px;
     top: 50%;
@@ -595,8 +597,8 @@ export default {
       margin-top: 25px;
       position: relative;
       .sumbit-btn {
-        right: 50px;
-        bottom: -5px;
+        right: 60px;
+        bottom: -12px;
         position: absolute;
       }
     }

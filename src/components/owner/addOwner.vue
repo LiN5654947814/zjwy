@@ -134,7 +134,7 @@ export default {
 
 <style lang="scss">
 .addOwner-container /deep/ .el-form-item {
-  margin-left: 265px;
+  margin-left: 345px;
   float: left;
 }
 
@@ -144,7 +144,7 @@ export default {
   margin: 20px;
   border-radius: 5px;
   background-color: #fff;
-  min-height: 300px;
+  min-height: 375px;
   position: relative;
   .sumbit-btn {
     position: absolute;

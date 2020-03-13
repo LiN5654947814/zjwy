@@ -55,6 +55,7 @@
     <div class="estate-container">
       <div class="estate-table">
         <el-table :data="currentList"
+                  height="710"
                   style="width: 100%;
                   padding-left:5px;"
                   @selection-change="handleSelectionChange">
@@ -63,41 +64,42 @@
           </el-table-column>
           <el-table-column prop="estateBuilds"
                            label="楼宇"
-                           width="180"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="estateUnit"
                            label="单元"
-                           width="180"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="estateFloor"
                            label="楼层"
-                           width="180"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="estatePlate"
                            label="门牌"
-                           width="180"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="estateArea"
                            label="面积(m²)"
-                           width="180"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="estateOwner"
                            label="业主"
-                           width="180"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="ownerMoveDate"
                            label="迁入时间"
-                           width="180"
+                           width=""
                            align="center">
           </el-table-column>
           <el-table-column prop="cost"
                            label="操作"
+                           width="200"
                            align="center">
             <template slot-scope="scope">
               <el-button type="primary"
@@ -121,8 +123,7 @@
                    type="primary">勾选导出</el-button>
       </div>
       <div class="pagination">
-        <div class="pagination-total">共{{total}}条</div>
-        <el-pagination layout="prev, pager, next"
+        <el-pagination layout="prev, pager, next,total,jumper"
                        :current-page.sync="filters.page"
                        :page-size="filters.limit"
                        :total="total">
@@ -419,7 +420,7 @@ export default {
   z-index: 999;
   .estate-info {
     width: 25%;
-    height: 65%;
+    height: 80%;
     background-color: #fff;
     border-radius: 5px;
     top: 50%;
