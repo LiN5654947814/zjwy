@@ -4,23 +4,28 @@
     <div class="bulletin-list">
       <div class="bulletin-list-container">
         <el-table :data="currentList"
-                  style="width: 100%">
+                  style="width: 100%"
+                  @selection-change="handleSelectionChange">
+          <el-table-column type="selection"
+                           width="55">
+          </el-table-column>
           <el-table-column label="日期"
-                           width="180">
+                           width="100">
             <template slot-scope="scope">
               <p>{{scope.row.noticeTime|dateFormat}}</p>
             </template>
           </el-table-column>
           <el-table-column prop="noticeTitle"
                            label="标题"
-                           width="180">
+                           width="100">
           </el-table-column>
           <el-table-column prop="noticeContent"
                            label="内容"
-                           width="1000"
+                           width="800"
                            :show-overflow-tooltip="true">
           </el-table-column>
           <el-table-column prop="cost"
+                           width="200"
                            label="操作">
             <template slot-scope="scope">
               <el-button type="primary"
@@ -48,6 +53,11 @@
                    @click="bulletinAdd">
           新增
         </el-button>
+        <el-button type="danger"
+                   size="mini"
+                   @click="deleteNoticeList">
+          批量删除
+        </el-button>
       </div>
     </div>
     <!-- 修改 -->
@@ -74,6 +84,7 @@
                     style="margin-bottom: 10px;">
           </el-input>
         </div>
+        <div class="text-num">你还可以输入{{500-bulletinInfo.noticeContent.length}}个字</div>
         <div class="bulletin-modify-btn">
           <el-button type="primary"
                      size="mini"
@@ -107,6 +118,7 @@
                     style="margin-bottom: 10px;">
           </el-input>
         </div>
+        <div class="text-num">你还可以输入{{500-addBulletinNotice.noticeContent.length}}个字</div>
         <div class="bulletin-modify-btn">
           <el-button type="primary"
                      size="mini"
@@ -129,8 +141,14 @@ export default {
     return {
       title: '公告编辑页',
       bulletinList: [],
-      bulletinInfo: {},
-      addBulletinNotice: {},
+      bulletinInfo: {
+        noticeTitle: '',
+        noticeContent: ''
+      },
+      addBulletinNotice: {
+        noticeTitle: '',
+        noticeContent: ''
+      },
       filters: {
         page: 0,
         limit: 10
@@ -138,6 +156,7 @@ export default {
       isTextarea: false,
       isAdd: false,
       textarea: '',
+      multipleSelection: []
     }
   },
   mounted () {
@@ -153,6 +172,11 @@ export default {
     }
   },
   methods: {
+    // 勾选
+    handleSelectionChange (val) {
+      this.multipleSelection = val;
+      console.log(this.multipleSelection)
+    },
     getBulletin (row) {
       this.isTextarea = true
       this.bulletinInfo = row
@@ -161,6 +185,7 @@ export default {
     closeModify () {
       this.isAdd = false
       this.isTextarea = false
+      this.getAllNotice()
     },
     // 新增
     bulletinAdd () {
@@ -180,7 +205,28 @@ export default {
     // 修改公告信息
     modifyNotice () {
       let noticeInfo = this.bulletinInfo
-      noticeInfo.noticeTime = new Date(),
+      noticeInfo.noticeTime = new Date()
+      if (this.bulletinInfo.noticeTitle.trim().length === 0) {
+        this.$message({
+          type: 'error',
+          message: '公告标题不能为空'
+        })
+      } else if (this.bulletinInfo.noticeContent.trim().length === 0) {
+        this.$message({
+          type: 'error',
+          message: '公告内容不能为空'
+        })
+      } else if (this.bulletinInfo.noticeContent.trim().length > 500) {
+        this.$message({
+          type: 'error',
+          message: '内容不可超过500字'
+        })
+      } else if (this.bulletinInfo.noticeTitle.trim().length > 100) {
+        this.$message({
+          type: 'error',
+          message: '标题不可超过100字'
+        })
+      } else {
         this.$confirm('确定要修改公告信息？', '提示', {
           confirmButtonText: '确定',
           canceButtonText: '取消',
@@ -199,11 +245,22 @@ export default {
             }
           })
         })
+      }
     },
     // 新增公告信息
     addNotice () {
       this.addBulletinNotice.noticeTime = new Date()
-      if (this.addBulletinNotice.noticeContent.trim().length > 500) {
+      if (this.addBulletinNotice.noticeTitle.trim().length === 0) {
+        this.$message({
+          type: 'error',
+          message: '公告标题不能为空'
+        })
+      } else if (this.addBulletinNotice.noticeContent.trim().length === 0) {
+        this.$message({
+          type: 'error',
+          message: '公告内容不能为空'
+        })
+      } else if (this.addBulletinNotice.noticeContent.trim().length > 500) {
         this.$message({
           type: 'error',
           message: '内容不可超过500字'
@@ -226,7 +283,10 @@ export default {
               message: res.data.message
             })
           }
-          this.addBulletinNotice = {}
+          this.addBulletinNotice = {
+            noticeTitle: '',
+            noticeContent: ''
+          }
           this.isAdd = false
           this.getAllNotice()
         })
@@ -242,6 +302,30 @@ export default {
         this.$axios.post('/deleteNoticeById', {
           params: {
             noticeId: row.id
+          }
+        }).then(res => {
+          if (res.data.state === 200) {
+            this.$message({
+              type: 'success',
+              message: res.data.message
+            })
+            setTimeout(() => {
+              this.getAllNotice()
+            }, 1000)
+          }
+        })
+      })
+    },
+    // 批量删除公告信息
+    deleteNoticeList () {
+      this.$confirm('确定要删除' + this.multipleSelection.length + '条公告信息？', '提示', {
+        confirmButtonText: '确定',
+        canceButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/deleteNoticeList', {
+          params: {
+            noticeList: this.multipleSelection
           }
         }).then(res => {
           if (res.data.state === 200) {
@@ -346,5 +430,9 @@ export default {
       position: absolute;
     }
   }
+}
+.text-num {
+  margin-left: 20px;
+  margin-bottom: 20px;
 }
 </style>

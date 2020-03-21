@@ -308,7 +308,6 @@ export default {
         canceButtonText: '取消',
         type: 'warning'
       }).then(() => {
-
         this.$axios.post('/referOwnerComplaint', {
           params: {
             complaintRefer: this.complaintRefer
