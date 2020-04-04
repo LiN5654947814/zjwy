@@ -33,6 +33,7 @@ export default {
             for (let j = 0; j < currentList[i].length; j++) {
               month.count = currentList[i][j].payLighting + currentList[i][j].payElevator + currentList[i][j].payGarbage + currentList[i][j].payApplication + month.count
             }
+            // 通过async/await异步请求完成后得到的数据添加到一个新的空数组中
             this.payByMonth.push(JSON.parse(JSON.stringify(month.count)))
           }
           // result.forEach((item, index) => {
@@ -41,6 +42,7 @@ export default {
           // this.payByMonth = JSON.parse(JSON.stringify(this.payByMonth))
         }
       })
+      // Dom节点渲染图表
       let myChart = this.$echarts.init(document.getElementById('myChart'))
       let option = {
         color: ['#3398DB'],
@@ -75,11 +77,11 @@ export default {
             name: '金额（元）',
             type: 'bar',
             barWidth: '60%',
+            // 将异步请求到的数据挂载到图表数据定义属性上
             data: this.payByMonth
           }
         ]
       }
-
       setTimeout(() => {
         myChart.setOption(option)
       }, 1000)

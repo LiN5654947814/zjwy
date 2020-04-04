@@ -3,6 +3,7 @@ import axios from 'axios'
 
 describe('检查增加业主方法', () => {
   it('不输入业主信息，返回错误码401，返回提示"请输入相应的业主信息"', () => {
+    // 以下省略
     let owner = {
       ownerCard: '',
       ownerPhone: '',

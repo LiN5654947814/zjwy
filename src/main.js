@@ -18,21 +18,25 @@ let axiosInstance = axios.create({
   baseURL: 'http://localhost:3000/',
   timeout: 1000
 })
-
+// 响应拦截器
 axiosInstance.interceptors.response.use(
   response => {
+    // 400错误
     if (response.data.state === 400) {
       Vue.prototype.$message({
         type: 'error',
         message: '请求失败'
       })
+      // 404错误
     } else if (response.data.state === 404) {
       console.log(1111)
       Vue.prototype.$message({
         type: 'error',
         message: response.data.message
       })
+      // 强制返回登录页
       router.replace('/login')
+      // 401错误
     } else if (response.data.state === 401) {
       Vue.prototype.$message({
         type: 'error',
@@ -51,7 +55,7 @@ axiosInstance.interceptors.request.use(config => {
   // 获取token
   const token = localStorage.getItem('token')
   if (token) {
-    // 携带token
+    // 设置请求头，发送token
     config.headers['Authorization'] = `Bearer ${token}`
   }
   return config

@@ -73,7 +73,7 @@ export default {
             }
           })
           this.tableData.forEach(item => {
-            item.count = item.payGarbage + item.payElevator + item.payLighting
+            item.count = item.payGarbage + item.payElevator + item.payLighting + item.payApplication
           })
         }
       })

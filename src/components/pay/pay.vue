@@ -95,7 +95,7 @@
                            align="center">
           </el-table-column>
           <el-table-column prop="payDate"
-                           label="续费时间"
+                           label="应缴月份"
                            width="140"
                            align="center">
           </el-table-column>

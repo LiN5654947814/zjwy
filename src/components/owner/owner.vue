@@ -41,6 +41,7 @@
         <el-table :data="currentList"
                   style="width: 100%;
                   padding-left:5px;"
+                  height="710"
                   @selection-change="handleSelectionChange">
           <el-table-column type="selection"
                            width="55">
@@ -104,10 +105,10 @@
                    type="primary">勾选导出</el-button>
       </div>
       <div class="pagination">
-        <div class="pagination-total">共{{total}}条</div>
-        <el-pagination layout="prev, pager, next"
+        <el-pagination layout="total, sizes, prev, pager, next, jumper"
                        :current-page.sync="filters.page"
                        :page-size="filters.limit"
+                       :page-sizes="[10, 20, 30, 50]"
                        :total="total">
         </el-pagination>
       </div>
