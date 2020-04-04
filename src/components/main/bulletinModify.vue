@@ -77,14 +77,16 @@
                     style="margin:10px 0 0 20px;
                          width:96%;"
                     v-model="bulletinInfo.noticeTitle"></el-input>
-          <el-input type="textarea"
+          <!-- <el-input type="textarea"
                     :rows="2"
                     placeholder="请输入内容"
                     v-model="bulletinInfo.noticeContent"
                     style="margin-bottom: 10px;">
-          </el-input>
+          </el-input> -->
+          <div class="tinymce-content">
+            <tinymce-editor v-model="bulletinInfo.noticeContent"></tinymce-editor>
+          </div>
         </div>
-        <div class="text-num">你还可以输入{{500-bulletinInfo.noticeContent.length}}个字</div>
         <div class="bulletin-modify-btn">
           <el-button type="primary"
                      size="mini"
@@ -111,14 +113,16 @@
                     style="margin:10px 0 0 20px;
                          width:96%;"
                     v-model="addBulletinNotice.noticeTitle"></el-input>
-          <el-input type="textarea"
+          <div class="tinymce-content">
+            <tinymce-editor v-model="addBulletinNotice.noticeContent"></tinymce-editor>
+          </div>
+          <!-- <el-input type="textarea"
                     :rows="2"
                     placeholder="请输入小于500字的内容"
                     v-model="addBulletinNotice.noticeContent"
                     style="margin-bottom: 10px;">
-          </el-input>
+          </el-input> -->
         </div>
-        <div class="text-num">你还可以输入{{500-addBulletinNotice.noticeContent.length}}个字</div>
         <div class="bulletin-modify-btn">
           <el-button type="primary"
                      size="mini"
@@ -133,9 +137,11 @@
 
 <script>
 import headerNav from '../headerNav'
+import tinymceEditor from '../tinymceComponent/tinymce'
 export default {
   components: {
-    headerNav
+    headerNav,
+    tinymceEditor
   },
   data () {
     return {
@@ -216,12 +222,8 @@ export default {
           type: 'error',
           message: '公告内容不能为空'
         })
-      } else if (this.bulletinInfo.noticeContent.trim().length > 500) {
-        this.$message({
-          type: 'error',
-          message: '内容不可超过500字'
-        })
-      } else if (this.bulletinInfo.noticeTitle.trim().length > 100) {
+      }
+      else if (this.bulletinInfo.noticeTitle.trim().length > 100) {
         this.$message({
           type: 'error',
           message: '标题不可超过100字'
@@ -260,12 +262,8 @@ export default {
           type: 'error',
           message: '公告内容不能为空'
         })
-      } else if (this.addBulletinNotice.noticeContent.trim().length > 500) {
-        this.$message({
-          type: 'error',
-          message: '内容不可超过500字'
-        })
-      } else if (this.addBulletinNotice.noticeTitle.trim().length > 100) {
+      }
+      else if (this.addBulletinNotice.noticeTitle.trim().length > 100) {
         this.$message({
           type: 'error',
           message: '标题不可超过100字'
@@ -392,7 +390,7 @@ export default {
   z-index: 99;
   .bulletin-modify-content {
     width: 50%;
-    min-height: 400px;
+    min-height: 500px;
     border-radius: 5px;
     top: 50%;
     left: 50%;
@@ -422,9 +420,11 @@ export default {
     }
     .bullentin-input {
       margin-bottom: 25px;
+      .tinymce-content {
+        margin: 20px 20px 35px 20px;
+      }
     }
     .bulletin-modify-btn {
-      margin-top: 10px;
       bottom: 10px;
       right: 30px;
       position: absolute;

@@ -6,7 +6,7 @@
         {{noticeInfo.noticeTitle}}
       </div>
       <div class="bulletin-container">
-        {{noticeInfo.noticeContent}}
+        <p v-html="noticeInfo.noticeContent"></p>
       </div>
       <div class="bulletin-date">{{noticeInfo.noticeTime | dateFormat}}
       </div>

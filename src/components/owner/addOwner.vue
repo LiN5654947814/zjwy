@@ -94,7 +94,7 @@ export default {
           { required: true, message: '请输入业主邮箱', trigger: 'blur' }
         ],
         originalPassword: [
-          { required: true, message: '请输入业主初始密码', trigger: 'blur' }
+          { required: true, message: '请输入业主6位数的初始密码', trigger: 'blur' }
         ]
       },
     }

@@ -1,0 +1,77 @@
+<template>
+  <div class="tinymce-box">
+    <editor v-model="myValue"
+            :init="init"
+            :disabled="disabled">
+    </editor>
+  </div>
+</template>
+
+<script>
+import tinymce from 'tinymce/tinymce' //tinymce默认hidden，不引入不显示
+import Editor from '@tinymce/tinymce-vue'
+import 'tinymce/themes/silver'
+import 'tinymce/plugins/image'// 插入上传图片插件
+import 'tinymce/plugins/media'// 插入视频插件
+import 'tinymce/plugins/table'// 插入表格插件
+import 'tinymce/plugins/lists'// 列表插件
+import 'tinymce/plugins/wordcount'// 字数统计插件
+export default {
+  components: {
+    Editor
+  },
+  name: 'tinymce',
+  props: {
+    value: {
+      type: String,
+      default: ''
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    plugins: {
+      type: [String, Array],
+      default: 'lists image media table wordcount'
+    },
+    toolbar: {
+      type: [String, Array],
+      default: 'undo redo |  formatselect | bold italic forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | lists image media table | removeformat'
+    }
+  },
+  data () {
+    return {
+      init: {
+        language_url: '/tinymce/langs/zh_CN.js',
+        language: 'zh_CN',
+        skin_url: '/tinymce/skins/ui/oxide',
+        height: 350,
+        plugins: this.plugins,
+        toolbar: this.toolbar,
+        branding: false,
+        menubar: false,
+        images_upload_handler: (blobInfo, success, failure) => {
+          const img = 'data:image/jpeg;base64,' + blobInfo.base64()
+          success(img)
+        }
+      },
+      myValue: this.value
+    }
+  },
+  mounted () {
+    tinymce.init({})
+  },
+  methods: {
+  },
+  watch: {
+    value (newValue) {
+      this.myValue = newValue
+    },
+    myValue (newValue) {
+      this.$emit('input', newValue)
+    }
+  }
+}
+</script>
+<style scoped>
+</style>

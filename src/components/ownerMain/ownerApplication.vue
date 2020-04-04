@@ -13,7 +13,7 @@
               v-for="item in currentList"
               :key="item.id"
               @click="getBulletinDetails(item.id)">
-            <div class="bulletin-item-text">{{item.noticeContent}}</div>
+            <div class="bulletin-item-text">{{item.noticeTitle}}</div>
             <div class="bulletin-date">{{item.noticeTime | dateFormat}}</div>
           </li>
         </ul>
