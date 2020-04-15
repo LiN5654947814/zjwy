@@ -33,7 +33,7 @@ import error from '../components/error.vue'
 
 const routerPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
-  return routerPush.call(this, location).catch(error => error)
+  return routerPush.call(this, location).catch((error) => error)
 }
 
 Vue.use(VueRouter)
@@ -41,13 +41,13 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: Login
+    component: Login,
   },
   {
     path: '/home',
     name: 'home',
     meta: {
-      roles: ['admin']
+      roles: ['admin'],
     },
     component: Home,
     children: [
@@ -56,188 +56,188 @@ const routes = [
         path: '/main',
         name: 'main',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: Main
+        component: Main,
       },
       // 公告详情页
       {
         path: '/bulletinDetails/:id',
         name: 'bulletinDetails',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: BulletinDetails
+        component: BulletinDetails,
       },
       // 公告编辑页
       {
         path: '/bulletinModify',
         name: 'bulletinModify',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: BulletinModify
+        component: BulletinModify,
       },
       {
         // 业主管理
         path: '/owner',
         name: 'owner',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: Owner
+        component: Owner,
       },
       {
         // 新增业主
         path: '/owner/addowner',
         name: 'addowner',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: AddOwner
+        component: AddOwner,
       },
       {
         // 房产列表
         path: '/estate',
         name: 'estate',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: Estate
+        component: Estate,
       },
       {
         // 新增房产信息
         path: '/estate/addEstateApplication',
         name: 'addEstate',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: AddEstate
+        component: AddEstate,
       },
       {
         // 房产销售管理
         path: '/estateApplication',
         name: 'estateApplication',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: EstateApplication
+        component: EstateApplication,
       },
       {
         // 房产销售登记
         path: '/estateRegister',
         name: 'estateRegister',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: EstateRegister
+        component: EstateRegister,
       },
       {
         // 报修管理
         path: '/fix',
         name: 'fix',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: Fix
+        component: Fix,
       },
       {
         // 报修详情页
         path: '/fixDetail',
         name: 'fixDetail',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: FixDetail
+        component: FixDetail,
       },
       {
         // 新增报修信息
         path: '/addFix',
         name: 'addFix',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: AddFix
+        component: AddFix,
       },
       {
         // 投诉管理
         path: '/complaint',
         name: 'complaint',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: complaint
+        component: complaint,
       },
       {
         // 投诉详情
         path: '/complaintReply',
         name: 'complaintReply',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: complaintReply
+        component: complaintReply,
       },
       {
         // 公有车位管理
         path: '/parking',
         name: 'parking',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: Parking
+        component: Parking,
       },
       {
         // 私有车位
         path: '/parkingApplication',
         name: 'parkingApplication',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: parkingApplication
+        component: parkingApplication,
       },
       {
         // 新增车位信息
         path: '/addParking',
         name: 'addParking',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: addParking
+        component: addParking,
       },
       {
         // 登记车位
         path: '/parkingRegister',
         name: 'parkingRegister',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: parkingRegister
+        component: parkingRegister,
       },
       {
         // 费用列表
         path: '/pay',
         name: 'pay',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: Pay
+        component: Pay,
       },
       {
         // 新增费用信息
         path: '/addPay',
         name: 'addPay',
         meta: {
-          roles: ['admin']
+          roles: ['admin'],
         },
-        component: AddPay
-      }
-    ]
+        component: AddPay,
+      },
+    ],
   },
   {
     path: '/ownerHome',
     name: 'ownerHome',
     meta: {
-      roles: ['owner']
+      roles: ['owner'],
     },
     component: OwnerHome,
     children: [
@@ -246,62 +246,62 @@ const routes = [
         path: '/ownerApplication',
         name: 'ownerApplication',
         meta: {
-          roles: ['owner']
+          roles: ['owner'],
         },
-        component: OwnerApplication
+        component: OwnerApplication,
       },
       {
         // 业主报修页
         path: '/ownerFix',
         name: 'ownerFix',
         meta: {
-          roles: ['owner']
+          roles: ['owner'],
         },
-        component: OwnerFix
+        component: OwnerFix,
       },
       {
         // 业主修改密码
         path: '/ownerPasswordModify',
         name: 'ownerPasswordModify',
         meta: {
-          roles: ['owner']
+          roles: ['owner'],
         },
-        component: OwnerPasswordModify
+        component: OwnerPasswordModify,
       },
       {
         // 业主投诉页
         path: '/ownerComplaint',
         name: 'ownerComplaint',
         meta: {
-          roles: ['owner']
+          roles: ['owner'],
         },
-        component: ownerComplaint
+        component: ownerComplaint,
       },
       {
         // 业主公告详情页
         path: '/ownerNotice/:id',
         name: 'ownerNotice',
         meta: {
-          roles: ['owner']
+          roles: ['owner'],
         },
-        component: ownerNotice
-      }
-    ]
+        component: ownerNotice,
+      },
+    ],
   },
   {
-    path: '/error',
+    path: '*',
     name: error,
     meta: {
-      roles: ['admin', 'owner']
+      roles: ['admin', 'owner'],
     },
-    component: error
-  }
+    component: error,
+  },
 ]
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
 })
 // 动态路由
 router.beforeEach((to, from, next) => {
@@ -327,7 +327,7 @@ router.beforeEach((to, from, next) => {
     // 没有就强制返回登录页
     Vue.prototype.$message({
       type: 'error',
-      message: '没有权限，请重新登陆'
+      message: '没有权限，请重新登陆',
     })
     return next('/login')
     // 判断后端传来的值与即将跳转的页面权限是否匹配
@@ -338,7 +338,7 @@ router.beforeEach((to, from, next) => {
     // 不匹配返回登录
     Vue.prototype.$message({
       type: 'error',
-      message: '没有权限，请重新登陆'
+      message: '没有权限，请重新登陆',
     })
     next('/login')
   }
