@@ -58,7 +58,7 @@ export default {
   position: relative;
   .bulletin-title {
     width: 100%;
-    height: 50px;
+    min-height: 50px;
     font-size: 25px;
     line-height: 50px;
     text-align: center;

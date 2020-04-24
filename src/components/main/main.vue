@@ -76,7 +76,7 @@ export default {
           title: '报修统计量',
           color: '#E44B59',
           tips: '未修理',
-          useData: '16',
+          useData: '',
           unUseData: '200',
           icon: require('../../assets/icon/wrench.png'),
           pathName: 'fix'
@@ -85,7 +85,7 @@ export default {
           title: '车位使用量',
           color: '#11AC89',
           tips: '未停放',
-          useData: '13',
+          useData: '',
           unUseData: '200',
           icon: require('../../assets/icon/parking.png'),
           pathName: 'parking'

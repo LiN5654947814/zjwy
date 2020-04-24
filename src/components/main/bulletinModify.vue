@@ -17,11 +17,12 @@
           </el-table-column>
           <el-table-column prop="noticeTitle"
                            label="标题"
-                           width="100">
+                           width="200"
+                           :show-overflow-tooltip="true">
           </el-table-column>
           <el-table-column prop="noticeContent"
                            label="内容"
-                           width="800"
+                           width="700"
                            :show-overflow-tooltip="true">
           </el-table-column>
           <el-table-column prop="cost"

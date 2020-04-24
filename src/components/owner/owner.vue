@@ -258,7 +258,7 @@ export default {
       console.log(this.ownerInfo)
       this.currentTitle = '编辑'
       row.estates.forEach((item, index) => {
-        this.houseUnit.push({ id: index, value: item.estateBuilds + '-' + item.estateUnit + '-' + item.estatePlate })
+        this.houseUnit.push({ id: item.id, value: item.estateBuilds + '-' + item.estateUnit + '-' + item.estatePlate })
       })
     },
     changeUnit () {
@@ -286,6 +286,7 @@ export default {
           }
         })
       })
+      this.houseUnit = []
     },
     // 请求所有业主信息
     getAllOwner () {

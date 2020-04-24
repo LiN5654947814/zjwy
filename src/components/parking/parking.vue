@@ -427,7 +427,7 @@ export default {
   z-index: 999;
   .parking-info {
     width: 30%;
-    height: 55%;
+    height: 70%;
     background-color: #fff;
     border-radius: 5px;
     top: 50%;
