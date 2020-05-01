@@ -85,7 +85,8 @@ export default {
                 type: 'success',
                 message: res.data.message
               })
-              this.$router.push('/ownerApplication')
+              this.$router.push('/login')
+              localStorage.removeItem('token')
             }
           })
 

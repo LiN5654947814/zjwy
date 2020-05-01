@@ -382,7 +382,7 @@ export default {
 }
 .bulletin-modify {
   width: 100%;
-  height: 100%;
+  height: 108%;
   border-radius: 5px;
   background-color: rgba(0, 0, 0, 0.4);
   top: 0;

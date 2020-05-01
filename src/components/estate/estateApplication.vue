@@ -121,7 +121,7 @@
           </el-table-column>
           <el-table-column prop="cost"
                            label="操作"
-                           width="250"
+                           width="300"
                            align="center">
             <template slot-scope="scope">
               <el-button type="primary"
@@ -577,7 +577,7 @@ export default {
   z-index: 999;
   .estateApplication-info {
     width: 30%;
-    height: 80%;
+    height: 75%;
     background-color: #fff;
     border-radius: 5px;
     top: 50%;

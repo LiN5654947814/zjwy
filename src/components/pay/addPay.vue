@@ -39,7 +39,7 @@
         <el-form-item label="垃圾清运费:"
                       prop="payElevator">
           <el-input style="width:300px;"
-                    v-model="payInfo.payElevator"></el-input>
+                    v-model="payInfo.payGarbage"></el-input>
         </el-form-item>
         <!-- 公摊照明费 -->
         <el-form-item label="公摊照明费:"

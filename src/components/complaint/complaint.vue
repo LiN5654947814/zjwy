@@ -390,7 +390,7 @@ export default {
 }
 .complaint-detail {
   width: 100%;
-  height: 100%;
+  height: 108%;
   top: 0;
   left: 0;
   position: absolute;

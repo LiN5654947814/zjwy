@@ -227,6 +227,7 @@ export default {
 }
 
 .el-main {
+  height: 100%;
   background-color: #f2f0f4;
   color: #333;
   margin: 0;

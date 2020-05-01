@@ -555,7 +555,7 @@ export default {
 
 .popUpbox {
   width: 100%;
-  height: 100%;
+  height: 108% !important;
   top: 0;
   left: 0;
   position: absolute;
@@ -563,7 +563,7 @@ export default {
   z-index: 999;
   .owner-info {
     width: 25%;
-    height: 95%;
+    height: 90%;
     background-color: #fff;
     border-radius: 5px;
     top: 50%;
