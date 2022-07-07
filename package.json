@@ -14,7 +14,7 @@
     "echarts": "^4.6.0",
     "element-ui": "^2.4.5",
     "js-base64": "^2.5.2",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "tinymce": "^5.2.1",
     "vue": "^2.6.10",
     "vue-router": "^3.1.3",
